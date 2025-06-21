@@ -1,0 +1,86 @@
+MUBIN UL ISLAM CHOWDHURY
+Software Engineer
+[ uic.mubin@gmail.com Ó (+880) 1303215559 ½ Mohakhali Ja Block, Wireless ¯ mubinuic  mubinui
+EDUCATION
+ACMP-4.0
+IBA, Dhaka University
+ JAN 2025 – MAR 2025
+B.Sc in Computer Science and
+Engineering
+Brac University
+ January 2018 – July 2022 CGPA : 3.54
+HSC (Science Group)
+Collectorate School and College, Rangpur
+ Jan 2014 – Jan 2017 GPA : 5.00
+SKILLS
+Java Python Rabbitmq Kafka
+Redis Docker Keykloak
+Springboot Typescript Angular
+N8N CSS SQL Git Vectorshift
+C/C++ NLP RAG CAG
+Prompt Engineering Machine Learning
+Deep Learning
+ACHIEVEMENTS
+. 2nd Runners Up AI Hackathon 2025 (By Brain Station 23 and Poridhi)
+• Best Team Performer (BRAC IT, Townhall
+2023)
+• Achieved 3rd Place in 3rd Kibo Krpc by
+Jaxa (National) 2022
+CERTIFICATIONS
+• Programming for Everybody (Getting
+Started with Python) - Coursera
+• Introduction to Data Science in Python -
+DataCamp
+• Introduction to Statistics in Python -
+DataCamp
+• Problem Solving Certificate - HackerRank
+• Supervised Learning with scikit-learn -
+DataCamp
+• Unsupervised Learning in Python -
+DataCamp
+• Spring 6 and Spring Boot 3 First Look -
+LinkedIn
+EXPERIENCE
+Software Engineer (Research and Development)
+Brac IT Services Ltd.
+ October 2022 – Now
+• Flowable Modeler Generator (Springboot, Langchain4j)
+• SQL Generator [3 versions Java:(Springboot, Langchaing4j),
+Python:Langchain4j, N8N ]
+. Damaged Poster Detector (Python, OpenCV, SteamLit)
+. Put It On [Virtual Dressor](Python, OpenCV, SteamLit, Gemini-2.0-flash {Image Generator})
+• Automated Agent Selector, Chatbots (N8N)
+• Conducted a workshop on " AI-Powered Development: Enhancing
+coding with intelligent integration".
+• Developed business process modeler with Activiti and Flowable
+support(Springboot, Angular)
+• Developed two-factor authentication using Quarkus(Springboot).
+• Developed Brac University Management System (USIS) both
+front-end (Angular) and back-end (Sprinboot)
+• Developing notification system with Reactive Spring web (WebFlux)
+• Designed, Developed, and Optimized fingerprint extension for
+Postgres and PHP using C and C++ (Used Afis Algorithm and as a
+reference used SourceAFIS).
+• Developed Ollama-based Bangla document RAG. (Gemma)
+• Developed Online Exam monitoring system (OpenCV)
+• Modified open-source Imgproxy project and integrated premium
+features.(Go)
+Team Lead
+BracU Mongol-Tori (Semi-Autonomous Mars Rover)
+ January 2022–October2022
+• Developed rock classification model using YOLO-v5 (It can detect 9
+types of rocks).
+• Developed mechanical tool detector using YOLO-v5, SSD MobileNet.
+• Developed Arrow and Aruco Marker detector using OpenCV.
+• Successfully managed a team with 17 members.
+Campus Representative
+Brac University
+ Summer and Fall Semesters 2019
+• Arranged events and seminars.
+• Represented Brac University on multiple occasions.
+RESEARCH
+• Precision Repairs: Achieving Accuracy During Repair Missions at the
+International Space Station. (IEEE Xplore)
+• Predicting Suicidal Intent from Social Media Text Post Using ML
+(Dspace Bracu)
+• Personal projects: Based on ML and DL (Please visit Github)

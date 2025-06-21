@@ -1,0 +1,46 @@
+# 🚀 GitHub Pages Deployment Commands
+
+## Prerequisites
+- Git installed on your computer
+- GitHub account created
+- Repository created on GitHub
+
+## Quick Deployment Commands
+
+```bash
+# 1. Initialize Git in your project folder
+cd "/Users/mubinuic/Home/Frontends/Portfolio website"
+git init
+
+# 2. Add all files to Git
+git add .
+
+# 3. Make your first commit
+git commit -m "Initial commit: Portfolio website with glassmorphism design"
+
+# 4. Add your GitHub repository as remote origin
+# Replace 'your-username' and 'repository-name' with your actual details
+git remote add origin https://github.com/your-username/repository-name.git
+
+# 5. Push to GitHub
+git push -u origin main
+
+# If you get an error about 'master' vs 'main', use:
+git branch -M main
+git push -u origin main
+```
+
+## Enable GitHub Pages
+1. Go to your repository on GitHub
+2. Settings → Pages
+3. Source: Deploy from a branch
+4. Branch: main, Folder: / (root)
+5. Save
+
+## Your live website will be at:
+https://your-username.github.io/repository-name
+
+## For Custom Domain (Optional)
+1. Add a CNAME file with your domain
+2. Configure DNS with your domain provider
+3. Enable "Enforce HTTPS" in GitHub Pages settings

@@ -9,6 +9,7 @@ const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelectorAll('.nav-link');
 const sections = document.querySelectorAll('.section');
 const heroSection = document.querySelector('#home');
+const body = document.body;
 
 // ========================================
 // NAVIGATION FUNCTIONALITY
@@ -18,6 +19,7 @@ const heroSection = document.querySelector('#home');
 hamburger?.addEventListener('click', () => {
     navMenu.classList.toggle('active');
     hamburger.classList.toggle('active');
+    body.classList.toggle('menu-open');
     
     // Animate hamburger lines
     const spans = hamburger.querySelectorAll('span');
@@ -38,6 +40,7 @@ navLinks.forEach(link => {
     link.addEventListener('click', () => {
         navMenu.classList.remove('active');
         hamburger.classList.remove('active');
+        body.classList.remove('menu-open');
         
         // Reset hamburger animation
         const spans = hamburger.querySelectorAll('span');
@@ -46,6 +49,38 @@ navLinks.forEach(link => {
             span.style.opacity = '1';
         });
     });
+});
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        navMenu.classList.remove('active');
+        hamburger.classList.remove('active');
+        body.classList.remove('menu-open');
+        
+        // Reset hamburger animation
+        const spans = hamburger.querySelectorAll('span');
+        spans.forEach(span => {
+            span.style.transform = 'none';
+            span.style.opacity = '1';
+        });
+    }
+});
+
+// Handle escape key for mobile menu
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+        navMenu.classList.remove('active');
+        hamburger.classList.remove('active');
+        body.classList.remove('menu-open');
+        
+        // Reset hamburger animation
+        const spans = hamburger.querySelectorAll('span');
+        spans.forEach(span => {
+            span.style.transform = 'none';
+            span.style.opacity = '1';
+        });
+    }
 });
 
 // Smooth scrolling for navigation links
@@ -69,8 +104,21 @@ navLinks.forEach(link => {
 // SCROLL EFFECTS
 // ========================================
 
+// Throttle function for better performance
+function throttle(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 // Navbar background on scroll
-window.addEventListener('scroll', () => {
+const handleNavbarScroll = throttle(() => {
     if (window.scrollY > 100) {
         navbar.style.background = 'rgba(0, 0, 0, 0.95)';
         navbar.style.backdropFilter = 'blur(20px)';
@@ -78,10 +126,12 @@ window.addEventListener('scroll', () => {
         navbar.style.background = 'rgba(255, 255, 255, 0.1)';
         navbar.style.backdropFilter = 'blur(20px)';
     }
-});
+}, 10);
+
+window.addEventListener('scroll', handleNavbarScroll);
 
 // Active navigation link based on scroll position
-window.addEventListener('scroll', () => {
+const handleActiveNavLink = throttle(() => {
     let current = '';
     
     sections.forEach(section => {
@@ -99,7 +149,9 @@ window.addEventListener('scroll', () => {
             link.classList.add('active');
         }
     });
-});
+}, 16);
+
+window.addEventListener('scroll', handleActiveNavLink);
 
 // ========================================
 // SCROLL ANIMATIONS

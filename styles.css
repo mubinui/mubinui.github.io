@@ -710,6 +710,195 @@ textarea {
 }
 
 /* ========================================
+   ABOUT SECTION - CLASSIC DESIGN
+======================================== */
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xxl);
+    align-items: start;
+}
+
+.about-text,
+.about-achievements {
+    padding: var(--space-xl);
+}
+
+.about-text h3,
+.about-achievements h3 {
+    color: var(--text-primary);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin-bottom: var(--space-lg);
+}
+
+.about-text p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+    font-size: var(--font-size-base);
+}
+
+.quick-stats {
+    display: flex;
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--glass-border);
+}
+
+.stat {
+    flex: 1;
+    text-align: center;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+}
+
+.stat h4 {
+    color: var(--primary-color);
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: var(--space-xs);
+}
+
+.stat span {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.achievement-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.achievement-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+}
+
+.achievement-item:hover {
+    background: var(--glass-hover);
+    transform: translateX(4px);
+}
+
+.achievement-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.achievement-text h4 {
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+}
+
+.achievement-text p {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    margin: 0;
+}
+
+/* ========================================
+   SKILLS SECTION - CLASSIC DESIGN
+======================================== */
+.skills-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-xl);
+}
+
+.skills-category {
+    padding: var(--space-xl);
+}
+
+.skills-category h3 {
+    color: var(--text-primary);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin-bottom: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.skills-category h3 i {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.skill-tag {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    transition: var(--transition-fast);
+    backdrop-filter: blur(10px);
+}
+
+.skill-tag:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.certification-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.cert-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+}
+
+.cert-item:hover {
+    background: var(--glass-hover);
+}
+
+.cert-item i {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    width: 20px;
+    flex-shrink: 0;
+}
+
+.cert-item span {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+}
+
+/* ========================================
    EXPERIENCE TIMELINE
 ======================================== */
 .experience-timeline {
@@ -1251,6 +1440,71 @@ textarea {
     .projects-grid {
         grid-template-columns: 1fr;
         gap: var(--space-lg);
+    }
+}
+
+/* Responsive About and Skills Sections */
+@media (max-width: 1024px) {
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+    
+    .skills-content {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--space-lg);
+    }
+}
+
+@media (max-width: 768px) {
+    .quick-stats {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+    
+    .stat {
+        padding: var(--space-sm);
+    }
+    
+    .achievement-item {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-sm);
+    }
+    
+    .achievement-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .skills-content {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+    
+    .skills-category {
+        padding: var(--space-lg);
+    }
+}
+
+@media (max-width: 480px) {
+    .about-text,
+    .about-achievements {
+        padding: var(--space-lg);
+    }
+    
+    .quick-stats {
+        gap: var(--space-sm);
+    }
+    
+    .skill-tags {
+        gap: var(--space-xs);
+    }
+    
+    .skill-tag {
+        font-size: var(--font-size-xs);
+        padding: 6px var(--space-sm);
     }
 }
 

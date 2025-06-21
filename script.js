@@ -209,69 +209,137 @@ document.addEventListener('DOMContentLoaded', () => {
 // ========================================
 
 const contactForm = document.querySelector('.form');
+const formInputs = document.querySelectorAll('.form-group input, .form-group textarea');
+const submitButton = document.querySelector('.contact-form .btn');
 
-contactForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
+// Form validation and submission
+if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = new FormData(contactForm);
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const subject = formData.get('subject');
+        const message = formData.get('message');
+        
+        // Validate form
+        if (!name || !email || !subject || !message) {
+            showNotification('Please fill in all fields', 'error');
+            return;
+        }
+        
+        if (!isValidEmail(email)) {
+            showNotification('Please enter a valid email address', 'error');
+            return;
+        }
+        
+        // Show loading state
+        const originalText = submitButton.innerHTML;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        submitButton.disabled = true;
+        
+        try {
+            // Simulate form submission (replace with actual API call)
+            await simulateFormSubmission({ name, email, subject, message });
+            
+            // Success
+            showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
+            contactForm.reset();
+            
+            // Reset labels
+            formInputs.forEach(input => {
+                const label = input.nextElementSibling;
+                if (label && label.tagName === 'LABEL') {
+                    label.style.top = '';
+                    label.style.fontSize = '';
+                    label.style.color = '';
+                    label.style.transform = '';
+                }
+            });
+            
+        } catch (error) {
+            showNotification('Failed to send message. Please try again later.', 'error');
+        } finally {
+            // Reset button
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+        }
+    });
+}
+
+// Enhanced input interactions
+formInputs.forEach(input => {
+    // Add focus/blur effects
+    input.addEventListener('focus', (e) => {
+        e.target.parentElement.classList.add('focused');
+    });
     
-    const formData = new FormData(contactForm);
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
+    input.addEventListener('blur', (e) => {
+        e.target.parentElement.classList.remove('focused');
+        if (!e.target.value) {
+            e.target.parentElement.classList.remove('filled');
+        } else {
+            e.target.parentElement.classList.add('filled');
+        }
+    });
     
-    // Show loading state
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-    submitBtn.disabled = true;
-    
-    try {
-        // Simulate form submission (replace with actual endpoint)
-        await new Promise(resolve => setTimeout(resolve, 2000));
+    // Real-time validation
+    input.addEventListener('input', (e) => {
+        const value = e.target.value;
+        const type = e.target.type;
         
-        // Show success message
-        submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-        submitBtn.style.background = 'var(--success-color)';
-        
-        // Reset form
-        contactForm.reset();
-        
-        // Reset button after 3 seconds
-        setTimeout(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            submitBtn.style.background = '';
-        }, 3000);
-        
-        // Show success notification
-        showNotification('Message sent successfully!', 'success');
-        
-    } catch (error) {
-        // Show error message
-        submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error!';
-        submitBtn.style.background = 'var(--error-color)';
-        
-        setTimeout(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            submitBtn.style.background = '';
-        }, 3000);
-        
-        showNotification('Failed to send message. Please try again.', 'error');
-    }
+        if (type === 'email' && value) {
+            if (isValidEmail(value)) {
+                e.target.style.borderColor = 'var(--success-color)';
+            } else {
+                e.target.style.borderColor = 'var(--error-color)';
+            }
+        } else if (value) {
+            e.target.style.borderColor = 'var(--primary-color)';
+        } else {
+            e.target.style.borderColor = '';
+        }
+    });
 });
 
-// ========================================
-// NOTIFICATION SYSTEM
-// ========================================
+// Utility functions
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+async function simulateFormSubmission(data) {
+    // Simulate API call delay
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            // 95% success rate simulation
+            if (Math.random() > 0.05) {
+                resolve(data);
+            } else {
+                reject(new Error('Submission failed'));
+            }
+        }, 2000);
+    });
+}
 
 function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    // Create notification
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
         <div class="notification-content">
             <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
             <span>${message}</span>
+            <button class="notification-close"><i class="fas fa-times"></i></button>
         </div>
-        <button class="notification-close">
-            <i class="fas fa-times"></i>
-        </button>
     `;
     
     // Add notification styles
@@ -279,17 +347,39 @@ function showNotification(message, type = 'info') {
         position: fixed;
         top: 20px;
         right: 20px;
+        z-index: 9999;
         background: var(--glass-bg);
         backdrop-filter: blur(20px);
         border: 1px solid var(--glass-border);
-        border-radius: var(--radius-md);
-        padding: var(--space-md);
+        border-radius: var(--radius-lg);
+        padding: var(--space-md) var(--space-lg);
         color: var(--text-primary);
-        z-index: var(--z-tooltip);
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
-        max-width: 350px;
         box-shadow: var(--shadow-lg);
+        transform: translateX(400px);
+        transition: all var(--transition-normal);
+        max-width: 400px;
+        border-left: 4px solid ${type === 'success' ? 'var(--success-color)' : type === 'error' ? 'var(--error-color)' : 'var(--primary-color)'};
+    `;
+    
+    // Notification content styles
+    const content = notification.querySelector('.notification-content');
+    content.style.cssText = `
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+    `;
+    
+    // Close button styles
+    const closeBtn = notification.querySelector('.notification-close');
+    closeBtn.style.cssText = `
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 4px;
+        margin-left: auto;
+        border-radius: 4px;
+        transition: var(--transition-fast);
     `;
     
     // Add to DOM
@@ -300,129 +390,104 @@ function showNotification(message, type = 'info') {
         notification.style.transform = 'translateX(0)';
     }, 100);
     
-    // Close button functionality
-    const closeBtn = notification.querySelector('.notification-close');
+    // Close functionality
     closeBtn.addEventListener('click', () => {
         notification.style.transform = 'translateX(400px)';
-        setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 300);
+        setTimeout(() => notification.remove(), 300);
     });
     
-    // Auto close after 5 seconds
+    // Auto remove after 5 seconds
     setTimeout(() => {
-        if (document.body.contains(notification)) {
+        if (notification.parentElement) {
             notification.style.transform = 'translateX(400px)';
-            setTimeout(() => {
-                if (document.body.contains(notification)) {
-                    document.body.removeChild(notification);
-                }
-            }, 300);
+            setTimeout(() => notification.remove(), 300);
         }
     }, 5000);
 }
 
 // ========================================
-// SCROLL INDICATOR
+// ENHANCED PROJECT CARD INTERACTIONS
 // ========================================
 
-const scrollIndicator = document.querySelector('.scroll-indicator');
-
-scrollIndicator?.addEventListener('click', () => {
-    const aboutSection = document.querySelector('#about');
-    if (aboutSection) {
-        aboutSection.scrollIntoView({ behavior: 'smooth' });
-    }
-});
-
-// Hide scroll indicator after first scroll
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 100 && scrollIndicator) {
-        scrollIndicator.style.opacity = '0';
-        scrollIndicator.style.pointerEvents = 'none';
-    } else if (scrollIndicator) {
-        scrollIndicator.style.opacity = '1';
-        scrollIndicator.style.pointerEvents = 'auto';
-    }
-});
-
-// ========================================
-// SKILL TAGS HOVER EFFECTS
-// ========================================
-
-const skillTags = document.querySelectorAll('.skill-tag');
-
-skillTags.forEach(tag => {
-    tag.addEventListener('mouseenter', () => {
-        tag.style.background = `linear-gradient(135deg, ${getRandomColor()}, ${getRandomColor()})`;
-        tag.style.color = '#ffffff';
-        tag.style.transform = 'translateY(-3px) scale(1.05)';
-    });
-    
-    tag.addEventListener('mouseleave', () => {
-        tag.style.background = 'var(--glass-bg)';
-        tag.style.color = 'var(--text-primary)';
-        tag.style.transform = 'none';
-    });
-});
-
-function getRandomColor() {
-    const colors = [
-        '#667eea', '#764ba2', '#f093fb', '#f5576c',
-        '#4facfe', '#00f2fe', '#fa709a', '#fee140',
-        '#a8edea', '#fed6e3', '#d299c2', '#fef9d7'
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-}
-
-// ========================================
-// PROJECT CARD INTERACTIONS
-// ========================================
-
+// Project card hover effects
 const projectCards = document.querySelectorAll('.project-card');
 
 projectCards.forEach(card => {
     card.addEventListener('mouseenter', () => {
-        const icon = card.querySelector('.project-icon');
-        icon.style.transform = 'rotate(10deg) scale(1.1)';
-        icon.style.transition = 'transform 0.3s ease';
+        // Add subtle tilt effect
+        card.style.transform = 'translateY(-8px) rotateX(5deg)';
+        card.style.transformStyle = 'preserve-3d';
+        
+        // Enhance project links
+        const links = card.querySelectorAll('.project-link');
+        links.forEach((link, index) => {
+            setTimeout(() => {
+                link.style.transform = 'scale(1.1) translateY(-2px)';
+            }, index * 50);
+        });
     });
     
     card.addEventListener('mouseleave', () => {
-        const icon = card.querySelector('.project-icon');
-        icon.style.transform = 'none';
+        card.style.transform = '';
+        
+        // Reset project links
+        const links = card.querySelectorAll('.project-link');
+        links.forEach(link => {
+            link.style.transform = '';
+        });
+    });
+    
+    // Add click effect
+    card.addEventListener('mousedown', () => {
+        card.style.transform = 'translateY(-6px) scale(0.98)';
+    });
+    
+    card.addEventListener('mouseup', () => {
+        card.style.transform = 'translateY(-8px)';
     });
 });
 
 // ========================================
-// FORM FIELD ANIMATIONS
+// EXPERIENCE TIMELINE ENHANCEMENTS
 // ========================================
 
-const formGroups = document.querySelectorAll('.form-group');
+// Timeline item interactions
+const timelineItems = document.querySelectorAll('.timeline-item');
 
-formGroups.forEach(group => {
-    const input = group.querySelector('input, textarea');
-    const label = group.querySelector('label');
+timelineItems.forEach(item => {
+    // Add scroll-triggered animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                
+                // Animate highlights
+                const highlights = entry.target.querySelectorAll('.experience-highlights li');
+                highlights.forEach((highlight, index) => {
+                    setTimeout(() => {
+                        highlight.style.opacity = '1';
+                        highlight.style.transform = 'translateX(0)';
+                    }, index * 100);
+                });
+            }
+        });
+    });
     
-    if (input && label) {
-        input.addEventListener('focus', () => {
-            group.style.transform = 'scale(1.02)';
-            label.style.color = 'var(--text-accent)';
-        });
-        
-        input.addEventListener('blur', () => {
-            group.style.transform = 'none';
-            if (!input.value) {
-                label.style.color = 'var(--text-muted)';
-            }
-        });
-        
-        input.addEventListener('input', () => {
-            if (input.value) {
-                label.style.color = 'var(--text-accent)';
-            }
-        });
-    }
+    // Set initial state
+    item.style.opacity = '0';
+    item.style.transform = 'translateY(20px)';
+    item.style.transition = 'all 0.6s ease-out';
+    
+    // Set initial state for highlights
+    const highlights = item.querySelectorAll('.experience-highlights li');
+    highlights.forEach(highlight => {
+        highlight.style.opacity = '0';
+        highlight.style.transform = 'translateX(-20px)';
+        highlight.style.transition = 'all 0.4s ease-out';
+    });
+    
+    observer.observe(item);
 });
 
 // ========================================

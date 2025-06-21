@@ -1012,10 +1012,10 @@ textarea {
     left: -12px;
 }
 
-/* Enhanced Timeline Dates */
+/* Enhanced Timeline Dates - Positioned for better visibility */
 .timeline-date {
     position: absolute;
-    top: 25px;
+    top: -15px;
     z-index: 4;
     width: auto;
     max-width: 200px;
@@ -1025,17 +1025,18 @@ textarea {
     display: inline-block;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
-    padding: 8px 16px;
+    padding: 6px 12px;
     border-radius: var(--radius-lg);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
     white-space: nowrap;
     position: relative;
     overflow: hidden;
     text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .timeline-date span::before {
@@ -1056,15 +1057,13 @@ textarea {
     left: 100%;
 }
 
-/* Position dates - improved positioning with better visibility */
+/* Position dates - closer to timeline line for better visibility */
 .timeline-item:nth-child(odd) .timeline-date {
-    right: calc(100% + 30px);
-    text-align: right;
+    right: calc(100% + 10px);
 }
 
 .timeline-item:nth-child(even) .timeline-date {
-    left: calc(100% + 30px);
-    text-align: left;
+    left: calc(100% + 10px);
 }
 
 /* Ensure dates are always visible with proper container width */
@@ -1186,6 +1185,24 @@ textarea {
     letter-spacing: 0.5px;
     text-transform: uppercase;
     box-shadow: var(--shadow-sm);
+}
+
+/* Timeline Duration Badge - Inside cards for better visibility */
+.timeline-duration {
+    margin-top: var(--space-xs);
+}
+
+.duration-badge {
+    display: inline-block;
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--primary-color);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(0, 122, 255, 0.2);
+    white-space: nowrap;
 }
 
 /* ========================================

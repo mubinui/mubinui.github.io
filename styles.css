@@ -1006,6 +1006,67 @@ textarea {
     min-width: 200px;
 }
 
+/* Responsive Contact Section */
+@media (max-width: 1024px) {
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-item {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-sm);
+    }
+    
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .social-links {
+        gap: var(--space-sm);
+    }
+    
+    .social-link {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    .contact-form .btn {
+        width: 100%;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-info,
+    .contact-form {
+        padding: var(--space-lg);
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        padding: var(--space-sm);
+    }
+    
+    .form-group label {
+        top: var(--space-sm);
+        left: var(--space-sm);
+    }
+    
+    .form-group input:focus + label,
+    .form-group textarea:focus + label,
+    .form-group input:valid + label,
+    .form-group textarea:valid + label {
+        top: -6px;
+    }
+}
+
 /* ========================================
    FOOTER
 ======================================== */

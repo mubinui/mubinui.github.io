@@ -654,3 +654,219 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+// ========================================
+// APPLE-INSPIRED ENHANCED INTERACTIONS
+// ========================================
+
+// Enhanced profile image interactions
+const profileImage = document.querySelector('.profile-image');
+const imageContainer = document.querySelector('.image-container');
+
+if (profileImage && imageContainer) {
+    // Add magnetic effect to profile image
+    imageContainer.addEventListener('mousemove', (e) => {
+        const rect = imageContainer.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        const deltaX = (e.clientX - centerX) * 0.1;
+        const deltaY = (e.clientY - centerY) * 0.1;
+        
+        profileImage.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.02)`;
+    });
+    
+    imageContainer.addEventListener('mouseleave', () => {
+        profileImage.style.transform = 'translate(0px, 0px) scale(1)';
+    });
+    
+    // Add click ripple effect
+    imageContainer.addEventListener('click', (e) => {
+        const ripple = document.createElement('div');
+        const rect = imageContainer.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        
+        ripple.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}px;
+            top: ${y}px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+            z-index: 10;
+        `;
+        
+        imageContainer.appendChild(ripple);
+        
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    });
+}
+
+// Enhanced button interactions
+const buttons = document.querySelectorAll('.btn');
+buttons.forEach(button => {
+    button.addEventListener('mouseenter', (e) => {
+        const rect = button.getBoundingClientRect();
+        const ripple = document.createElement('div');
+        
+        ripple.style.cssText = `
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: buttonHover 0.5s ease-out forwards;
+            pointer-events: none;
+            z-index: 1;
+        `;
+        
+        button.appendChild(ripple);
+        
+        setTimeout(() => {
+            if (ripple.parentNode) {
+                ripple.remove();
+            }
+        }, 500);
+    });
+});
+
+// Parallax effect for floating shapes
+const floatingShapes = document.querySelectorAll('.shape');
+if (floatingShapes.length > 0) {
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * -0.5;
+        
+        floatingShapes.forEach((shape, index) => {
+            const speed = (index + 1) * 0.2;
+            shape.style.transform = `translateY(${rate * speed}px) rotate(${scrolled * 0.1 * (index + 1)}deg)`;
+        });
+    });
+}
+
+// Enhanced glass card interactions
+const glassCards = document.querySelectorAll('.glass-card');
+glassCards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / 10;
+        const rotateY = (centerX - x) / 10;
+        
+        card.style.transform = `
+            translateY(-12px) 
+            scale(1.03) 
+            rotateX(${rotateX}deg) 
+            rotateY(${rotateY}deg)
+            perspective(1000px)
+        `;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0) scale(1) rotateX(0) rotateY(0)';
+    });
+});
+
+// Add CSS for new animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes ripple {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes buttonHover {
+        to {
+            transform: translate(-50%, -50%) scale(20);
+            opacity: 0;
+        }
+    }
+    
+    .image-container {
+        transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    .profile-image {
+        transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    .glass-card {
+        transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+`;
+document.head.appendChild(style);
+
+// Enhanced scroll reveal animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+        }
+    });
+}, observerOptions);
+
+// Observe all sections and cards for reveal animations
+document.querySelectorAll('.section, .glass-card, .timeline-item, .project-card').forEach(el => {
+    observer.observe(el);
+});
+
+// Apple-style elastic scroll effect
+let scrollTimeout;
+window.addEventListener('scroll', () => {
+    document.body.style.setProperty('--scroll-position', window.pageYOffset);
+    
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        // Add elastic bounce effect at scroll end
+        document.body.style.transition = 'transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+        document.body.style.transform = 'translateY(0)';
+    }, 150);
+});
+
+// Enhanced typing effect for hero text
+const heroTitle = document.querySelector('.hero-title .name');
+if (heroTitle) {
+    const text = heroTitle.textContent;
+    heroTitle.textContent = '';
+    heroTitle.style.borderRight = '2px solid var(--primary-color)';
+    
+    let i = 0;
+    const typeWriter = () => {
+        if (i < text.length) {
+            heroTitle.textContent += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, 100);
+        } else {
+            // Remove cursor after typing is complete
+            setTimeout(() => {
+                heroTitle.style.borderRight = 'none';
+            }, 1000);
+        }
+    };
+    
+    // Start typing effect after a short delay
+    setTimeout(typeWriter, 1000);
+}

@@ -448,47 +448,182 @@ projectCards.forEach(card => {
 });
 
 // ========================================
-// EXPERIENCE TIMELINE ENHANCEMENTS
+// ENHANCED EXPERIENCE TIMELINE ANIMATIONS
 // ========================================
 
-// Timeline item interactions
+// Timeline item interactions with enhanced animations
 const timelineItems = document.querySelectorAll('.timeline-item');
 
-timelineItems.forEach(item => {
-    // Add scroll-triggered animations
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+// Initialize timeline animations
+function initTimelineAnimations() {
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-                
-                // Animate highlights
-                const highlights = entry.target.querySelectorAll('.experience-highlights li');
-                highlights.forEach((highlight, index) => {
-                    setTimeout(() => {
-                        highlight.style.opacity = '1';
-                        highlight.style.transform = 'translateX(0)';
-                    }, index * 100);
-                });
+                // Add staggered animation delay
+                setTimeout(() => {
+                    entry.target.classList.add('animate');
+                    
+                    // Animate the content elements inside
+                    const content = entry.target.querySelector('.timeline-content');
+                    const highlights = entry.target.querySelectorAll('.experience-highlights li');
+                    const date = entry.target.querySelector('.timeline-date');
+                    
+                    // Animate content with delay
+                    if (content) {
+                        setTimeout(() => {
+                            content.style.opacity = '1';
+                            content.style.transform = 'translateY(0) scale(1)';
+                        }, 200);
+                    }
+                    
+                    // Animate date badge
+                    if (date) {
+                        setTimeout(() => {
+                            date.style.opacity = '1';
+                            date.style.transform = 'translateY(0) scale(1)';
+                        }, 100);
+                    }
+                    
+                    // Animate highlights with stagger
+                    highlights.forEach((highlight, highlightIndex) => {
+                        setTimeout(() => {
+                            highlight.style.opacity = '1';
+                            highlight.style.transform = 'translateX(0)';
+                        }, 300 + (highlightIndex * 100));
+                    });
+                }, index * 200);
             }
         });
+    }, observerOptions);
+
+    timelineItems.forEach(item => {
+        // Set initial states
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(50px)';
+        
+        const content = item.querySelector('.timeline-content');
+        const highlights = item.querySelectorAll('.experience-highlights li');
+        const date = item.querySelector('.timeline-date');
+        
+        // Set initial states for child elements
+        if (content) {
+            content.style.opacity = '0';
+            content.style.transform = 'translateY(20px) scale(0.95)';
+            content.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        }
+        
+        if (date) {
+            date.style.opacity = '0';
+            date.style.transform = 'translateY(-10px) scale(0.9)';
+            date.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        }
+        
+        highlights.forEach(highlight => {
+            highlight.style.opacity = '0';
+            highlight.style.transform = 'translateX(-30px)';
+            highlight.style.transition = 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        });
+        
+        timelineObserver.observe(item);
+    });
+}
+
+// Enhanced hover effects for timeline items
+timelineItems.forEach(item => {
+    const content = item.querySelector('.timeline-content');
+    const date = item.querySelector('.timeline-date span');
+    
+    item.addEventListener('mouseenter', () => {
+        // Add enhanced hover effects
+        if (content) {
+            content.style.transform = 'translateY(-5px) scale(1.02)';
+            content.style.boxShadow = '0 25px 70px rgba(0, 0, 0, 0.2)';
+        }
+        
+        // Trigger shimmer effect on date
+        if (date && date.querySelector('::before')) {
+            date.style.animationPlayState = 'running';
+        }
     });
     
-    // Set initial state
-    item.style.opacity = '0';
-    item.style.transform = 'translateY(20px)';
-    item.style.transition = 'all 0.6s ease-out';
-    
-    // Set initial state for highlights
-    const highlights = item.querySelectorAll('.experience-highlights li');
-    highlights.forEach(highlight => {
-        highlight.style.opacity = '0';
-        highlight.style.transform = 'translateX(-20px)';
-        highlight.style.transition = 'all 0.4s ease-out';
+    item.addEventListener('mouseleave', () => {
+        if (content) {
+            content.style.transform = 'translateY(0) scale(1)';
+            content.style.boxShadow = '0 10px 40px rgba(0, 0, 0, 0.1)';
+        }
     });
     
-    observer.observe(item);
+    // Add click effect for mobile
+    item.addEventListener('touchstart', () => {
+        if (content) {
+            content.style.transform = 'translateY(-3px) scale(1.01)';
+        }
+    });
+    
+    item.addEventListener('touchend', () => {
+        setTimeout(() => {
+            if (content) {
+                content.style.transform = 'translateY(0) scale(1)';
+            }
+        }, 150);
+    });
 });
+
+// Initialize timeline on page load
+document.addEventListener('DOMContentLoaded', () => {
+    initTimelineAnimations();
+});
+
+// Add scroll progress indicator for timeline
+function addTimelineProgress() {
+    const timeline = document.querySelector('.experience-timeline');
+    if (!timeline) return;
+    
+    const progressBar = document.createElement('div');
+    progressBar.className = 'timeline-progress';
+    progressBar.style.cssText = `
+        position: absolute;
+        width: 4px;
+        background: linear-gradient(180deg, var(--accent-color), var(--primary-color));
+        top: 60px;
+        left: 50%;
+        margin-left: -2px;
+        border-radius: 2px;
+        transform-origin: top;
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+        z-index: 2;
+    `;
+    
+    timeline.appendChild(progressBar);
+    
+    // Update progress on scroll
+    const updateProgress = () => {
+        const timelineRect = timeline.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const timelineHeight = timeline.offsetHeight;
+        
+        let progress = 0;
+        if (timelineRect.top < windowHeight && timelineRect.bottom > 0) {
+            const visibleHeight = Math.min(windowHeight - Math.max(timelineRect.top, 0), timelineHeight);
+            progress = visibleHeight / timelineHeight;
+        }
+        
+        progressBar.style.height = `${timelineHeight - 120}px`;
+        progressBar.style.transform = `scaleY(${Math.max(0, Math.min(1, progress))})`;
+    };
+    
+    window.addEventListener('scroll', updateProgress);
+    updateProgress();
+}
+
+// Initialize timeline progress indicator
+addTimelineProgress();
 
 // ========================================
 // PERFORMANCE OPTIMIZATIONS

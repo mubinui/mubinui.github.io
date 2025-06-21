@@ -894,11 +894,12 @@ textarea {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    padding: var(--space-sm);
-    border-radius: var(--radius-sm);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
     transition: var(--transition-fast);
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.05);
+    min-height: 60px;
 }
 
 .cert-item:hover {
@@ -923,12 +924,12 @@ textarea {
 ======================================== */
 .experience-timeline {
     position: relative;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: var(--space-xl) 0;
+    padding: var(--space-xl) var(--space-lg);
 }
 
-/* Enhanced Timeline Line */
+/* Enhanced Timeline Line - Left Side */
 .experience-timeline::before {
     content: '';
     position: absolute;
@@ -939,21 +940,25 @@ textarea {
         var(--accent-color) 100%);
     top: 60px;
     bottom: 60px;
-    left: 50%;
-    margin-left: -2px;
+    left: 40px;
     border-radius: 2px;
     box-shadow: 0 0 20px rgba(0, 122, 255, 0.3);
+    z-index: 1;
 }
 
-/* Timeline Items */
+/* Timeline Items - Wider boxes with left line */
 .timeline-item {
     padding: 0;
     position: relative;
-    width: 45%;
+    width: calc(100% - 80px);
+    left: 80px;
     margin-bottom: var(--space-xxl);
     opacity: 0;
     transform: translateY(50px);
     transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    text-align: left;
+    background: transparent;
+    border: none;
 }
 
 .timeline-item.animate {
@@ -961,7 +966,7 @@ textarea {
     transform: translateY(0);
 }
 
-/* Timeline Dots */
+/* Timeline Dots - Connected to Left Line */
 .timeline-item::after {
     content: '';
     position: absolute;
@@ -970,6 +975,7 @@ textarea {
     background: var(--bg-primary);
     border: 4px solid var(--primary-color);
     top: 40px;
+    left: -34px;
     border-radius: 50%;
     z-index: 3;
     box-shadow: 0 0 20px rgba(0, 122, 255, 0.4);
@@ -999,52 +1005,46 @@ textarea {
     }
 }
 
-/* Alternating Layout */
-.timeline-item:nth-child(odd) {
-    left: 0;
-    text-align: right;
-}
-
-.timeline-item:nth-child(odd)::after {
-    right: -12px;
-}
-
-.timeline-item:nth-child(even) {
-    left: 55%;
+/* Remove old positioning rules and replace with new ones */
+/* All Cards on Right Side with Wider Layout */
+.timeline-item {
+    left: 80px;
     text-align: left;
 }
 
-.timeline-item:nth-child(even)::after {
-    left: -12px;
+.timeline-item::after {
+    left: -34px;
 }
 
-/* Enhanced Timeline Dates - Made more visible and prominent */
+/* Enhanced Timeline Dates - More Visible Inside Cards */
 .timeline-date {
-    position: absolute;
-    top: -25px;
+    position: relative;
+    top: 0;
+    left: 0;
     z-index: 15;
     width: auto;
-    max-width: 280px;
+    max-width: 100%;
+    margin-bottom: var(--space-md);
 }
 
 .timeline-date span {
     display: inline-block;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
-    padding: 10px 18px;
-    border-radius: 25px;
-    font-size: 12px;
+    padding: 14px 24px;
+    border-radius: 30px;
+    font-size: 14px;
     font-weight: 800;
-    letter-spacing: 0.8px;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    box-shadow: 0 10px 30px rgba(0, 122, 255, 0.5);
+    box-shadow: 0 12px 35px rgba(0, 122, 255, 0.6);
     white-space: nowrap;
     position: relative;
     overflow: hidden;
     text-align: center;
-    border: 3px solid rgba(255, 255, 255, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(15px);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .timeline-date span::before {
@@ -1065,26 +1065,17 @@ textarea {
     left: 100%;
 }
 
-/* Position dates - improved visibility with better spacing */
-.timeline-item:nth-child(odd) .timeline-date {
-    right: calc(100% + 25px);
-    text-align: right;
-}
-
-.timeline-item:nth-child(even) .timeline-date {
-    left: calc(100% + 25px);
-    text-align: left;
-}
+/* Position dates - now inside cards for better visibility */
 
 /* Ensure dates are always visible with proper container width */
 @media (min-width: 1024px) {
     .experience-timeline {
-        max-width: 1100px;
-        padding: var(--space-xl) 60px;
+        max-width: 1400px;
+        padding: var(--space-xl) 80px;
     }
 }
 
-/* Enhanced Timeline Content */
+/* Enhanced Timeline Content - Uniform Glass Box */
 .timeline-content {
     background: var(--glass-bg);
     backdrop-filter: blur(25px);
@@ -1096,31 +1087,17 @@ textarea {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     transition: all var(--transition-normal);
     overflow: hidden;
-}
-
-.timeline-content::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, 
-        var(--primary-color), 
-        var(--secondary-color), 
-        var(--accent-color));
-    z-index: 1;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    z-index: 2;
 }
 
 .timeline-content:hover {
     transform: translateY(-5px);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     border-color: rgba(0, 122, 255, 0.3);
-}
-
-.timeline-content {
-    position: relative;
-    text-align: left;
 }
 
 .timeline-content h3 {
@@ -1140,15 +1117,6 @@ textarea {
     align-items: center;
     gap: var(--space-sm);
     text-align: left;
-}
-
-.timeline-content h4::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background: var(--primary-color);
-    border-radius: 50%;
-    flex-shrink: 0;
 }
 
 .experience-highlights {
@@ -1204,17 +1172,18 @@ textarea {
 
 .duration-badge {
     display: inline-block;
-    background: rgba(0, 122, 255, 0.15);
+    background: rgba(0, 122, 255, 0.2);
     color: var(--primary-color);
-    padding: 6px 12px;
+    padding: 8px 16px;
     border-radius: var(--radius-md);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.5px;
-    border: 2px solid rgba(0, 122, 255, 0.3);
+    border: 2px solid rgba(0, 122, 255, 0.4);
     white-space: nowrap;
     text-transform: uppercase;
-    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+    margin-top: var(--space-xs);
 }
 
 /* Enhanced Timeline Header for better date visibility */
@@ -1224,6 +1193,9 @@ textarea {
     align-items: flex-start;
     margin-bottom: var(--space-lg);
     gap: var(--space-md);
+    border: none;
+    border-top: none;
+    border-bottom: none;
 }
 
 .timeline-info {
@@ -1537,22 +1509,6 @@ textarea {
 }
 
 /* ========================================
-   PROJECT CARD 3D EFFECTS
-======================================== */
-.project-card {
-    perspective: 1000px;
-    transform-style: preserve-3d;
-}
-
-.project-card:hover .project-icon {
-    transform: rotateY(10deg) scale(1.05);
-}
-
-.project-card:hover .tech-tag {
-    transform: translateY(-2px) rotateX(5deg);
-}
-
-/* ========================================
    SMOOTH SCROLL BEHAVIOR
 ======================================== */
 html {
@@ -1582,34 +1538,39 @@ html {
 ======================================== */
 @media (max-width: 1024px) {
     .experience-timeline {
-        max-width: 800px;
+        max-width: 1200px;
+        padding: var(--space-xl) var(--space-lg);
     }
     
     .timeline-item {
-        width: 48%;
+        width: calc(100% - 80px);
+        left: 80px;
     }
     
-    .timeline-item:nth-child(even) {
-        left: 52%;
+    .timeline-item::after {
+        left: -34px;
+    }
+    
+    .experience-timeline::before {
+        left: 30px;
     }
     
     .timeline-date span {
-        font-size: 10px;
-        padding: 6px 12px;
-        letter-spacing: 0.5px;
+        font-size: 12px;
+        padding: 10px 16px;
+        letter-spacing: 0.6px;
     }
 }
 
 @media (max-width: 768px) {
     .experience-timeline::before {
-        left: 30px;
-        margin-left: 0;
+        left: 20px;
         width: 3px;
     }
     
     .timeline-item {
-        width: calc(100% - 80px);
-        left: 80px !important;
+        width: calc(100% - 60px);
+        left: 60px !important;
         text-align: left;
         margin-bottom: var(--space-xl);
         opacity: 1;
@@ -1617,7 +1578,7 @@ html {
     }
     
     .timeline-item::after {
-        left: -44px !important;
+        left: -24px !important;
         top: 25px;
         width: 20px;
         height: 20px;
@@ -1642,6 +1603,7 @@ html {
     .timeline-content {
         padding: var(--space-lg);
         margin-top: 0;
+        min-height: 250px;
     }
     
     .timeline-content h3 {
@@ -1655,21 +1617,21 @@ html {
 
 @media (max-width: 480px) {
     .experience-timeline {
-        padding: var(--space-lg) 0;
+        padding: var(--space-lg) var(--space-sm);
     }
     
     .experience-timeline::before {
-        left: 20px;
+        left: 15px;
         width: 2px;
     }
     
     .timeline-item {
-        width: calc(100% - 60px);
-        left: 60px !important;
+        width: calc(100% - 50px);
+        left: 50px !important;
     }
     
     .timeline-item::after {
-        left: -34px !important;
+        left: -19px !important;
         width: 16px;
         height: 16px;
         border-width: 3px;
@@ -1677,6 +1639,7 @@ html {
     
     .timeline-content {
         padding: var(--space-md);
+        min-height: auto;
     }
     
     .timeline-content h3 {
@@ -1937,22 +1900,26 @@ html {
 @media (max-width: 768px) {
     .projects-grid {
         grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .project-card {
-        padding: 1rem;
+        gap: var(--space-md);
         margin: 0 0.5rem;
     }
     
+    .project-card {
+        padding: var(--space-lg);
+        min-height: auto;
+    }
+    
     .project-header {
-        margin-bottom: 0.75rem;
+        flex-direction: row;
+        align-items: center;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-md);
     }
     
     .project-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
     }
     
     .project-link {
@@ -1962,15 +1929,13 @@ html {
     }
     
     .project-card h3 {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-        line-height: 1.3;
+        font-size: var(--font-size-lg);
+        line-height: 1.4;
     }
     
     .project-card p {
-        font-size: 0.8rem;
+        font-size: var(--font-size-sm);
         line-height: 1.5;
-        margin-bottom: 0.75rem;
     }
     
     .project-tech {
@@ -1978,8 +1943,8 @@ html {
     }
     
     .tech-tag {
-        font-size: 0.65rem;
-        padding: 0.25rem 0.5rem;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.6rem;
     }
 }
 
@@ -2266,6 +2231,27 @@ html {
     .project-card {
         margin: 0;
         padding: 1.25rem;
+        min-height: auto;
+    }
+    
+    .project-header {
+        margin-bottom: var(--space-sm);
+    }
+    
+    .project-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .project-card h3 {
+        font-size: var(--font-size-base);
+        line-height: 1.3;
+    }
+    
+    .project-card p {
+        font-size: var(--font-size-sm);
+        line-height: 1.4;
     }
     
     /* Skills section mobile */
@@ -2291,93 +2277,321 @@ html {
 }
 
 /* ========================================
-   UNIFORM GLASS CARD SIZING
+   RESEARCH SECTION - Restored Original Design
 ======================================== */
-
-/* Standard glass card heights for uniformity */
-.about-text,
-.about-achievements,
-.skills-category,
-.contact-info,
-.contact-form,
-.project-card {
-    min-height: 400px;
-    display: flex;
-    flex-direction: column;
+.research {
+    padding: var(--space-xxl) 0;
 }
 
-/* Timeline cards uniform sizing */
-.timeline-content {
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
+.research-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-/* Project cards uniform sizing */
-.project-card {
-    min-height: 350px;
-    justify-content: space-between;
-}
-
-.project-card .project-header {
-    flex-shrink: 0;
-}
-
-.project-card .project-tech {
-    margin-top: auto;
-    padding-top: var(--space-md);
-}
-
-/* Skills category uniform sizing */
-.skills-category {
-    min-height: 250px;
-}
-
-.skills-category .skill-tags,
-.skills-category .certification-list {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-/* Contact cards uniform sizing */
-.contact-info,
-.contact-form {
-    min-height: 500px;
-}
-
-.contact-form .form {
-    flex-grow: 1;
-    justify-content: space-between;
-}
-
-/* Research cards uniform sizing */
 .research-item {
-    min-height: 320px;
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    backdrop-filter: var(--glass-backdrop);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition-normal);
+}
+
+.research-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+    background: var(--glass-hover);
+}
+
+.research-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.research-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+}
+
+.research-meta {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-items: flex-end;
+    gap: 0.25rem;
 }
 
-.research-item .research-tags {
-    margin-top: auto;
-    padding-top: var(--space-md);
+.research-venue {
+    font-size: var(--font-size-xs);
+    color: var(--primary-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-/* Mobile adjustments for uniform sizing */
+.research-type {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.research-item h3 {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    line-height: 1.3;
+}
+
+.research-item p {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-md);
+}
+
+.research-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.research-tag {
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--primary-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    border: 1px solid rgba(0, 122, 255, 0.2);
+    transition: var(--transition-fast);
+}
+
+.research-tag:hover {
+    background: rgba(0, 122, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* Mobile Research Section */
 @media (max-width: 768px) {
-    .about-text,
-    .about-achievements,
-    .skills-category,
-    .contact-info,
-    .contact-form,
-    .project-card,
-    .research-item {
-        min-height: auto;
+    .research {
+        padding: var(--space-xl) 0;
     }
     
-    .timeline-content {
-        min-height: auto;
+    .research-content {
+        gap: var(--space-md);
+        margin: 0 0.5rem;
     }
+    
+    .research-item {
+        padding: var(--space-lg);
+    }
+    
+    .research-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+    
+    .research-meta {
+        align-items: flex-start;
+        width: 100%;
+    }
+    
+    .research-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    .research-item h3 {
+        font-size: var(--font-size-lg);
+        line-height: 1.4;
+    }
+    
+    .research-item p {
+        font-size: var(--font-size-sm);
+        line-height: 1.5;
+    }
+    
+    .research-tags {
+        gap: 0.25rem;
+    }
+    
+    .research-tag {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .research-item {
+        padding: var(--space-md);
+        margin: 0;
+    }
+    
+    .research-item h3 {
+        font-size: var(--font-size-base);
+        line-height: 1.3;
+    }
+    
+    .research-item p {
+        font-size: 0.85rem;
+    }
+}
+
+/* ========================================
+   PROJECTS SECTION - Matching Research Design
+======================================== */
+.projects {
+    padding: var(--space-xxl) 0;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: var(--space-xl);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.project-card {
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    backdrop-filter: var(--glass-backdrop);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition-normal);
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+    background: var(--glass-hover);
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.project-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+}
+
+.project-links {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.project-link {
+    width: 36px;
+    height: 36px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    transition: var(--transition-fast);
+}
+
+.project-link:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.05);
+}
+
+.project-card h3 {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    line-height: 1.3;
+}
+
+.project-card p {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-md);
+    flex-grow: 1;
+}
+
+.project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.tech-tag {
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--primary-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    border: 1px solid rgba(0, 122, 255, 0.2);
+    transition: var(--transition-fast);
+}
+
+.tech-tag:hover {
+    background: rgba(0, 122, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* ========================================
+   ENHANCED EXPERIENCE TIMELINE
+======================================== */
+
+/* Ensure no unwanted lines in timeline content */
+.timeline-content,
+.timeline-content *,
+.timeline-content *::before,
+.timeline-content *::after {
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+/* Except for the timeline-date span which should keep its styling */
+.timeline-date span,
+.timeline-date span::before {
+    border: 3px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+.timeline-date span::before {
+    border: none !important;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent) !important;
 }

@@ -929,7 +929,7 @@ textarea {
     padding: var(--space-xl) var(--space-lg);
 }
 
-/* Enhanced Timeline Line - Left Side */
+/* Enhanced Timeline Line - Left Side - Properly Positioned */
 .experience-timeline::before {
     content: '';
     position: absolute;
@@ -943,7 +943,7 @@ textarea {
     left: 40px;
     border-radius: 2px;
     box-shadow: 0 0 20px rgba(0, 122, 255, 0.3);
-    z-index: 1;
+    z-index: -10;
 }
 
 /* Timeline Items - Wider boxes with left line */
@@ -959,6 +959,13 @@ textarea {
     text-align: left;
     background: transparent;
     border: none;
+    z-index: 5;
+}
+
+/* Ensure timeline items don't create any lines */
+.timeline-item::before {
+    display: none !important;
+    content: none !important;
 }
 
 .timeline-item.animate {
@@ -966,7 +973,7 @@ textarea {
     transform: translateY(0);
 }
 
-/* Timeline Dots - Connected to Left Line */
+/* Ensure timeline dots work for ALL items including first */
 .timeline-item::after {
     content: '';
     position: absolute;
@@ -982,15 +989,33 @@ textarea {
     transition: all var(--transition-normal);
 }
 
-.timeline-item:hover::after {
-    transform: scale(1.2);
-    border-color: var(--accent-color);
-    box-shadow: 0 0 30px rgba(255, 149, 0, 0.6);
+/* First timeline item should also have the dot */
+.timeline-item:first-child::after {
+    content: '' !important;
+    display: block !important;
+    position: absolute !important;
+    width: 24px !important;
+    height: 24px !important;
+    background: var(--bg-primary) !important;
+    border: 4px solid var(--primary-color) !important;
+    top: 40px !important;
+    left: -34px !important;
+    border-radius: 50% !important;
+    z-index: 3 !important;
+    box-shadow: 0 0 20px rgba(0, 122, 255, 0.4) !important;
+    transition: all var(--transition-normal) !important;
 }
 
-/* Pulse Animation for Current Position */
+.timeline-item:hover::after,
+.timeline-item:first-child:hover::after {
+    transform: scale(1.2) !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 30px rgba(255, 149, 0, 0.6) !important;
+}
+
+/* Pulse animation for current position (first item) */
 .timeline-item:first-child::after {
-    animation: pulse 2s infinite;
+    animation: pulse 2s infinite !important;
 }
 
 @keyframes pulse {
@@ -1091,7 +1116,7 @@ textarea {
     display: flex;
     flex-direction: column;
     text-align: left;
-    z-index: 2;
+    z-index: 10;
 }
 
 .timeline-content:hover {
@@ -1124,6 +1149,10 @@ textarea {
     padding: 0;
     margin: 0;
     text-align: left;
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    background: none !important;
 }
 
 .experience-highlights li {
@@ -2577,9 +2606,31 @@ html {
 .timeline-content,
 .timeline-content *,
 .timeline-content *::before,
-.timeline-content *::after {
+.timeline-content *::after,
+.timeline-header,
+.timeline-header *,
+.timeline-header *::before,
+.timeline-header *::after,
+.timeline-info,
+.timeline-info *,
+.timeline-info *::before,
+.timeline-info *::after {
     border-top: none !important;
     border-bottom: none !important;
+    background-image: none !important;
+}
+
+/* Remove any potential horizontal lines */
+.timeline-content::before,
+.timeline-content::after,
+.timeline-header::before,
+.timeline-header::after,
+.timeline-info::before,
+.timeline-info::after {
+    display: none !important;
+    content: none !important;
+    background: none !important;
+    border: none !important;
 }
 
 /* Except for the timeline-date span which should keep its styling */
@@ -2594,4 +2645,102 @@ html {
         transparent, 
         rgba(255, 255, 255, 0.3), 
         transparent) !important;
+}
+
+/* Clean first timeline item - remove weird elements */
+.timeline-item:first-child,
+.timeline-item:first-child .timeline-content,
+.timeline-item:first-child .timeline-header,
+.timeline-item:first-child .timeline-info {
+    border: none !important;
+    background-image: none !important;
+}
+
+/* Remove any unwanted pseudo-elements from first timeline item */
+.timeline-item:first-child .timeline-content::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.04) 50%,
+        rgba(255, 255, 255, 0.02) 100%) !important;
+    border-radius: inherit !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+}
+
+/* Hide any other weird pseudo-elements */
+.timeline-item:first-child .timeline-header::before,
+.timeline-item:first-child .timeline-header::after,
+.timeline-item:first-child .timeline-info::before,
+.timeline-item:first-child .timeline-info::after {
+    display: none !important;
+    content: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Force clean container and section for experience */
+#experience,
+#experience *,
+#experience .container,
+#experience .section-header,
+#experience .experience-timeline {
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    background-image: none !important;
+}
+
+/* Restore proper glassmorphism for first timeline content */
+.timeline-item:first-child .timeline-content {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-xl) !important;
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    z-index: 10 !important;
+}
+
+/* Clean glassmorphism gradient overlay for first timeline content */
+.timeline-item:first-child .timeline-content::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.04) 50%,
+        rgba(255, 255, 255, 0.02) 100%) !important;
+    border-radius: inherit !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Ensure content appears above the gradient */
+.timeline-item:first-child .timeline-content > * {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+/* Restore hover effects for first timeline content */
+.timeline-item:first-child .timeline-content:hover {
+    background: var(--glass-hover) !important;
+    transform: translateY(-5px) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+    border-color: rgba(0, 122, 255, 0.3) !important;
 }

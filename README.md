@@ -46,7 +46,7 @@ A stunning, modern portfolio website featuring Apple-inspired liquid glass desig
 
 1. **Clone or Download**
    ```bash
-   git clone https://github.com/mubinuic/portfolio-website.git
+   git clone https://github.com/mubinui/mubinuic.github.io.git
    cd portfolio-website
    ```
 
@@ -143,8 +143,8 @@ The website uses CSS custom properties for easy theming:
 - **Email**: uic.mubin@gmail.com
 - **Phone**: +880 1303 215559
 - **Location**: Mohakhali Ja Block, Wireless, Dhaka
-- **GitHub**: [mubinuic](https://github.com/mubinuic)
-- **LinkedIn**: [mubinui](https://linkedin.com/in/mubinui)
+- **GitHub**: [mubinui](https://github.com/mubinui)
+- **LinkedIn**: [mubinuic](https://www.linkedin.com/in/mubinuic/)
 
 ## 🏆 Professional Highlights
 
@@ -160,7 +160,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/mubinuic/portfolio-website/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/mubinui/mubinuic.github.io/issues).
 
 ## 📈 Future Enhancements
 

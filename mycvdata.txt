@@ -1,5 +1,5 @@
 MUBIN UL ISLAM CHOWDHURY
-Software Engineer
+Software & AI Engineer
 [ uic.mubin@gmail.com Ó (+880) 1303215559 ½ Mohakhali Ja Block, Wireless ¯ mubinuic  mubinui
 EDUCATION
 ACMP-4.0
@@ -11,7 +11,7 @@ Brac University
  January 2018 – July 2022 CGPA : 3.54
 HSC (Science Group)
 Collectorate School and College, Rangpur
- Jan 2014 – Jan 2017 GPA : 5.00
+ Jan 2014 – Jan 2016 GPA : 5.00
 SKILLS
 Java Python Rabbitmq Kafka
 Redis Docker Keykloak

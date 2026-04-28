@@ -685,7 +685,7 @@ input, textarea { font: inherit; border: none; outline: none; color: inherit; }
 .gallery {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 200px;
+    grid-auto-rows: minmax(200px, auto);
     gap: 14px;
 }
 .gallery-item {
@@ -703,9 +703,16 @@ input, textarea { font: inherit; border: none; outline: none; color: inherit; }
     object-fit: cover;
     transition: transform 600ms var(--ease), filter var(--t);
 }
+.gallery-contain {
+    height: auto;
+    overflow: visible;
+}
 .gallery-contain img {
-    object-fit: contain;
-    object-position: center;
+    height: auto;
+    width: 100%;
+    object-fit: unset;
+    display: block;
+    object-position: unset;
 }
 .gallery-item::after {
     content: "";

@@ -18,12 +18,14 @@ A stunning, modern portfolio website featuring Apple-inspired liquid glass desig
 - **Accessibility**: Keyboard navigation and screen reader friendly
 
 ### 📱 Sections
-- **Hero**: Eye-catching introduction with animated elements
-- **About**: Personal information and achievements
-- **Experience**: Professional timeline with detailed descriptions
-- **Projects**: Showcase of featured projects with tech stacks
-- **Skills**: Technical skills organized by categories
-- **Contact**: Contact information and working contact form
+- **Hero**: Editorial-style intro with animated grid + glow orbs
+- **About**: Bio, highlights, and key stats
+- **Showcase**: Filterable masonry gallery of awards, hackathons, leadership & training photos with full-screen **lightbox** (keyboard + swipe friendly)
+- **Experience**: Professional timeline with grouped contributions
+- **Projects**: Featured work with per-card accent gradients
+- **Research & Workshops**: Publications plus a dedicated training/workshop photo strip
+- **Skills**: Engineering, AI/cloud stack, and credentials
+- **Contact**: Floating-label contact form with toast notifications
 
 ## 🛠️ Technologies Used
 

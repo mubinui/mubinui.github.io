@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Local CV (kept out of public repo)
+Md Mubin UL Islam Chowdhury CV.pdf
+*.pdf
+
+# Editor & OS
+Thumbs.db
+.idea/
+.vscode/

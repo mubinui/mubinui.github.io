@@ -3,747 +3,769 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Mubin Ul Islam Chowdhury - Software Engineer</title>
-    <meta name="description" content="Software Engineer with 3+ years experience specializing in AI, Machine Learning, MCP, and Full-Stack Development">
-    <meta name="keywords" content="Software Engineer, AI, Machine Learning, MCP, Model Context Protocol, Full Stack Developer, Java, Python, React, Mathematics">
+    <title>Mubin Ul Islam Chowdhury — Software Engineer · AI / R&D</title>
+    <meta name="description" content="Software Engineer (R&D) at BRAC IT Services. AI/ML, MCP, full-stack, and applied research. 2nd Runners Up — AI Hackathon 2025.">
+    <meta name="keywords" content="Mubin Ul Islam Chowdhury, Software Engineer, AI, Machine Learning, MCP, Model Context Protocol, Full Stack, Java, SpringBoot, Python, Angular, RAG, LangChain4j, Computer Vision">
     <meta name="author" content="Mubin Ul Islam Chowdhury">
-    
-    <!-- Mobile Optimization -->
+
     <meta name="format-detection" content="telephone=no">
     <meta name="mobile-web-app-capable" content="yes">
-    
-    <!-- PWA -->
+
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#007AFF">
+    <meta name="theme-color" content="#0A84FF">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Mubin Portfolio">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Mubin Ul Islam Chowdhury - Software Engineer">
-    <meta property="og:description" content="Software Engineer with 3+ years experience specializing in AI, Machine Learning, MCP, and Full-Stack Development">
+
+    <meta property="og:title" content="Mubin Ul Islam Chowdhury — Software Engineer · AI / R&D">
+    <meta property="og:description" content="Software Engineer (R&D), AI/ML, MCP, full-stack engineer. 2nd Runners Up — AI Hackathon 2025.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mubinuic.github.io">
-    <meta property="og:image" content="https://mubinuic.github.io/og-image.jpg">
-    
-    <!-- Twitter Card -->
+    <meta property="og:image" content="profile-photo/46964914.jpeg">
+
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Mubin Ul Islam Chowdhury - Software Engineer">
-    <meta name="twitter:description" content="Software Engineer with 3+ years experience specializing in AI, Machine Learning, MCP, and Full-Stack Development">
-    <meta name="twitter:image" content="https://mubinuic.github.io/og-image.jpg">
-    
-    <!-- Fonts -->
+    <meta name="twitter:title" content="Mubin Ul Islam Chowdhury — Software Engineer · AI / R&D">
+    <meta name="twitter:description" content="AI / R&D engineer. MCP, RAG, full-stack systems.">
+    <meta name="twitter:image" content="profile-photo/46964914.jpeg">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Custom CSS -->
+
+    <link rel="preload" as="image" href="profile-photo/46964914.jpeg">
+
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a class="skip-link" href="#home">Skip to content</a>
+
     <!-- Navigation -->
-    <nav class="navbar glass-effect">
+    <nav class="navbar" aria-label="Primary">
         <div class="nav-container">
-            <div class="nav-logo">
-                <span class="logo-text">M<span class="accent">U</span>IC</span>
-            </div>
-            <ul class="nav-menu">
+            <a href="#home" class="nav-logo" aria-label="Home">
+                <span class="logo-mark">M</span>
+                <span class="logo-text">Mubin<span class="logo-dot">.</span></span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#showcase" class="nav-link">Showcase</a></li>
                 <li><a href="#experience" class="nav-link">Experience</a></li>
-                <li><a href="#research" class="nav-link">Research</a></li>
                 <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#research" class="nav-link">Research</a></li>
                 <li><a href="#skills" class="nav-link">Skills</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="#contact" class="nav-link nav-cta">Contact</a></li>
             </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section id="home" class="hero">
-        <div class="hero-background">
-            <div class="floating-shapes">
-                <div class="shape shape-1"></div>
-                <div class="shape shape-2"></div>
-                <div class="shape shape-3"></div>
-                <div class="shape shape-4"></div>
-                <div class="shape shape-5"></div>
-            </div>
-        </div>
-        <div class="hero-content">
+        <div class="hero-grid-bg" aria-hidden="true"></div>
+        <div class="hero-orb orb-a" aria-hidden="true"></div>
+        <div class="hero-orb orb-b" aria-hidden="true"></div>
+        <div class="hero-orb orb-c" aria-hidden="true"></div>
+
+        <div class="container hero-container">
             <div class="hero-text">
+                <span class="eyebrow">
+                    <span class="eyebrow-dot"></span>
+                    Open for graduate research · NASA/MIT collaborator
+                </span>
                 <h1 class="hero-title">
-                    <span class="greeting">Hello, I'm</span>
-                    <span class="name">Mubin Ul Islam Chowdhury</span>
-                    <span class="title">Software Engineer & AI Enthusiast</span>
+                    <span class="hero-line">Building intelligent</span>
+                    <span class="hero-line accent">systems &amp; agents.</span>
                 </h1>
-                <p class="hero-description">
-                    Passionate about building intelligent systems and scalable applications with 3+ years of experience. 
-                    Specialized in AI/ML, Full-Stack Development, MCP (Model Context Protocol), and Research & Development 
-                    with strong mathematical foundations.
+                <p class="hero-lede">
+                    I'm <strong>Mubin Ul Islam Chowdhury</strong> — a Software Engineer
+                    (R&amp;D) and AI Researcher at <strong>BRAC IT Services Ltd.</strong>,
+                    collaborating with a <strong>NASA/MIT Astrobee scientist</strong> on
+                    autonomous space robotics. I architect enterprise-grade AI systems —
+                    RAG, LLMs, computer vision — and the backends that carry them.
                 </p>
-                <div class="hero-buttons">
-                    <a href="#contact" class="btn-enhanced btn-primary-enhanced">
-                        <i class="fas fa-envelope"></i>
-                        Get In Touch
+
+                <div class="hero-roles" aria-hidden="true">
+                    <span class="role-chip">AI Researcher</span>
+                    <span class="role-chip">MCP &amp; Agents</span>
+                    <span class="role-chip">RAG · LLMs</span>
+                    <span class="role-chip">Computer Vision</span>
+                    <span class="role-chip">Full-Stack</span>
+                </div>
+
+                <div class="hero-cta">
+                    <a href="#showcase" class="btn btn-primary">
+                        <i class="fas fa-image"></i>
+                        View Showcase
                     </a>
-                    <a href="#projects" class="btn-enhanced btn-secondary-enhanced">
-                        <i class="fas fa-code"></i>
-                        View Projects
+                    <a href="#contact" class="btn btn-ghost">
+                        <i class="fas fa-paper-plane"></i>
+                        Get in touch
                     </a>
                 </div>
+
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <strong>4+</strong>
+                        <span>Years in R&amp;D</span>
+                    </div>
+                    <div class="hero-stat">
+                        <strong>5</strong>
+                        <span>Major recognitions</span>
+                    </div>
+                    <div class="hero-stat">
+                        <strong>2</strong>
+                        <span>Publications</span>
+                    </div>
+                </div>
             </div>
-            <div class="hero-image glass-card">
-                <div class="image-container">
-                    <img src="profile-photo/46964914.jpeg" alt="Mubin Ul Islam Chowdhury" class="profile-image">
-                    <div class="image-glow"></div>
-                    <div class="image-border"></div>
+
+            <div class="hero-visual">
+                <div class="hero-card hero-card-main">
+                    <img src="profile-photo/46964914.jpeg" alt="Portrait of Mubin Ul Islam Chowdhury" loading="eager">
+                    <div class="hero-card-badge">
+                        <i class="fas fa-bolt"></i>
+                        Software Engineer · R&amp;D
+                    </div>
+                </div>
+                <div class="hero-card hero-card-mini hero-card-mini-1">
+                    <img src="profile-photo/achievements/Achievements/1761374388215.jpeg" alt="Achievement moment" loading="lazy">
+                </div>
+                <div class="hero-card hero-card-mini hero-card-mini-2">
+                    <img src="profile-photo/achievements/Achievements/1745765338695.jpeg" alt="Achievement moment" loading="lazy">
+                </div>
+                <div class="hero-floating-pill" aria-hidden="true">
+                    <span class="pulse-dot"></span>
+                    Currently shipping at BRAC IT
                 </div>
             </div>
         </div>
-        <div class="scroll-indicator">
-            <div class="scroll-arrow">
-                <i class="fas fa-chevron-down"></i>
+
+        <a href="#about" class="scroll-indicator" aria-label="Scroll to About">
+            <span></span>
+        </a>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section about">
+        <div class="container">
+            <header class="section-header">
+                <span class="section-kicker">01 — About</span>
+                <h2 class="section-title">Engineer, researcher, builder.</h2>
+                <p class="section-subtitle">
+                    Three years deep in applied R&amp;D — turning AI research into shipped
+                    products, internal platforms, and developer tools.
+                </p>
+            </header>
+
+            <div class="about-grid">
+                <article class="about-bio">
+                    <p>
+                        I'm a results-driven <strong>Software Engineer and AI Researcher</strong>
+                        specializing in machine learning, computer vision, and NLP.
+                        At <strong>BRAC IT Services Ltd.</strong> I architect and deploy
+                        enterprise-grade AI — RAG systems, LLM agents, biometric extensions —
+                        and the SpringBoot / Quarkus / Angular backends behind them.
+                    </p>
+                    <p>
+                        I actively collaborate with a <strong>NASA/MIT Astrobee scientist</strong>
+                        through STEMX365 on autonomous-navigation research for space robotics.
+                        With <strong>ACMP-4.0 (IBA, Dhaka University)</strong> and a
+                        <strong>B.Sc in CSE from BRAC University</strong>, I'm now pursuing
+                        graduate funding to keep pushing on cutting-edge laboratory innovation.
+                    </p>
+
+                    <ul class="about-highlights">
+                        <li><i class="fas fa-rocket"></i> Collaborating with a <strong>NASA/MIT Astrobee scientist</strong> via STEMX365</li>
+                        <li><i class="fas fa-award"></i> Best Mentor Award — <strong>BRAC IT 2026</strong> (3 training cohorts)</li>
+                        <li><i class="fas fa-trophy"></i> 2nd Runners Up — <strong>AI Hackathon 2025</strong> (Brain Station 23 &amp; Poridhi)</li>
+                        <li><i class="fas fa-medal"></i> 3rd Place — <strong>Kibo-RPC by JAXA (National)</strong> 2022</li>
+                        <li><i class="fas fa-users"></i> Team Lead — <strong>BracU Mongol-Tori</strong> Mars Rover (17 members)</li>
+                    </ul>
+                </article>
+
+                <aside class="about-stats" aria-label="Quick facts">
+                    <div class="stat-card">
+                        <span class="stat-value">3+</span>
+                        <span class="stat-label">Years in R&amp;D</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">15+</span>
+                        <span class="stat-label">Production systems</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">17</span>
+                        <span class="stat-label">Engineers led</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">7+</span>
+                        <span class="stat-label">Certifications</span>
+                    </div>
+                </aside>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="about section">
+    <!-- Showcase / Achievement Gallery -->
+    <section id="showcase" class="section showcase">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">About Me</h2>
-                <p class="section-subtitle">Get to know more about my journey and passion</p>
+            <header class="section-header">
+                <span class="section-kicker">02 — Showcase</span>
+                <h2 class="section-title">Achievements, in pictures.</h2>
+                <p class="section-subtitle">
+                    Moments from competitions, awards, leadership, and workshops —
+                    the work behind the résumé.
+                </p>
+            </header>
+
+            <ul class="awards-list" aria-label="Recognitions">
+                <li><span class="award-year">2026</span><i class="fas fa-award"></i><span>Best Mentor Award · BRAC IT</span></li>
+                <li><span class="award-year">2025</span><i class="fas fa-trophy"></i><span>2nd Runners Up · AI Hackathon (BS23 × Poridhi)</span></li>
+                <li><span class="award-year">2023</span><i class="fas fa-star"></i><span>Best Team Performer · BRAC IT Townhall</span></li>
+                <li><span class="award-year">2022</span><i class="fas fa-medal"></i><span>3rd Place · Kibo-RPC by JAXA (National)</span></li>
+                <li><span class="award-year">Now</span><i class="fas fa-satellite"></i><span>Active Member · STEMX365</span></li>
+            </ul>
+
+            <div class="gallery-filters" role="tablist" aria-label="Gallery filters">
+                <button class="filter-btn active" role="tab" aria-selected="true" data-filter="all">All</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="awards">Awards</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="hackathon">Hackathon</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="leadership">Leadership</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="training">Training</button>
             </div>
-            <div class="about-content">
-                <div class="about-text glass-card">
-                    <h3>Software Engineer & Researcher</h3>
-                    <p>
-                        I'm a passionate Software Engineer with over 3+ years of experience in Research & Development 
-                        at BRAC IT Services Ltd. My expertise spans across AI/ML, full-stack development, MCP (Model Context Protocol), 
-                        and innovative technology solutions that drive business transformation.
-                    </p>
-                    <p>
-                        I have successfully completed ACMP-4.0 from IBA, Dhaka University, and hold a B.Sc in Computer Science 
-                        and Engineering from BRAC University. My work focuses on developing intelligent systems, 
-                        from AI-powered applications to complex backend architectures, leveraging strong mathematical foundations 
-                        in linear algebra, calculus, probability, and statistics.
-                    </p>
-                    <div class="quick-stats">
-                        <div class="stat glass-effect">
-                            <h4>3+</h4>
-                            <span>Years Experience</span>
-                        </div>
-                        <div class="stat glass-effect">
-                            <h4>15+</h4>
-                            <span>Projects Completed</span>
-                        </div>
-                        <div class="stat glass-effect">
-                            <h4>8+</h4>
-                            <span>Certifications</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="about-achievements glass-card">
-                    <h3>Recent Achievements</h3>
-                    <div class="achievement-list">
-                        <div class="achievement-item">
-                            <div class="achievement-icon">
-                                <i class="fas fa-trophy"></i>
-                            </div>
-                            <div class="achievement-text">
-                                <h4>2nd Runners Up</h4>
-                                <p>AI Hackathon 2025 (Brain Station 23 & Poridhi)</p>
-                            </div>
-                        </div>
-                        <div class="achievement-item">
-                            <div class="achievement-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="achievement-text">
-                                <h4>Best Team Performer</h4>
-                                <p>BRAC IT Townhall 2023</p>
-                            </div>
-                        </div>
-                        <div class="achievement-item">
-                            <div class="achievement-icon">
-                                <i class="fas fa-medal"></i>
-                            </div>
-                            <div class="achievement-text">
-                                <h4>3rd Place</h4>
-                                <p>3rd Kibo Krpc by JAXA (National) 2022</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+            <div class="gallery" id="gallery">
+                <!-- Achievements -->
+                <figure class="gallery-item gallery-tall" data-cat="awards">
+                    <img src="profile-photo/achievements/Achievements/1657218058083.jpeg" alt="Award ceremony moment" loading="lazy">
+                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="awards">
+                    <img src="profile-photo/achievements/Achievements/1660414549463.jpeg" alt="Award ceremony moment" loading="lazy">
+                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="hackathon">
+                    <img src="profile-photo/achievements/Achievements/1734594758255.jpeg" alt="Hackathon stage" loading="lazy">
+                    <figcaption><span class="tag tag-blue">Hackathon</span></figcaption>
+                </figure>
+                <figure class="gallery-item gallery-wide" data-cat="hackathon">
+                    <img src="profile-photo/achievements/Achievements/1734594760587.jpeg" alt="AI Hackathon 2025" loading="lazy">
+                    <figcaption><span class="tag tag-blue">AI Hackathon 2025</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="hackathon">
+                    <img src="profile-photo/achievements/Achievements/1734594761384.jpeg" alt="Hackathon team" loading="lazy">
+                    <figcaption><span class="tag tag-blue">Hackathon</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="leadership">
+                    <img src="profile-photo/achievements/Achievements/1745765338695.jpeg" alt="Leadership moment" loading="lazy">
+                    <figcaption><span class="tag tag-violet">Leadership</span></figcaption>
+                </figure>
+                <figure class="gallery-item gallery-tall" data-cat="leadership">
+                    <img src="profile-photo/achievements/Achievements/1745765344689.jpeg" alt="Leadership moment" loading="lazy">
+                    <figcaption><span class="tag tag-violet">Leadership</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="leadership">
+                    <img src="profile-photo/achievements/Achievements/1745765344940.jpeg" alt="Leadership moment" loading="lazy">
+                    <figcaption><span class="tag tag-violet">Leadership</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="awards">
+                    <img src="profile-photo/achievements/Achievements/1756500448593.jpeg" alt="Recognition" loading="lazy">
+                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
+                </figure>
+                <figure class="gallery-item gallery-wide" data-cat="awards">
+                    <img src="profile-photo/achievements/Achievements/1761374384285.jpeg" alt="Recognition moment" loading="lazy">
+                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="awards">
+                    <img src="profile-photo/achievements/Achievements/1761374388022.jpeg" alt="Recognition moment" loading="lazy">
+                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="awards">
+                    <img src="profile-photo/achievements/Achievements/1761374388215.jpeg" alt="Recognition moment" loading="lazy">
+                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
+                </figure>
+
+                <!-- Training -->
+                <figure class="gallery-item" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/1769681991969.jpeg" alt="Training session" loading="lazy">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
+                <figure class="gallery-item gallery-wide" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/1773308815442.jpeg" alt="Conducting workshop" loading="lazy">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/1773308816290.jpeg" alt="Conducting workshop" loading="lazy">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/Media (1).jpeg" alt="Conducting workshop" loading="lazy">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/Media (2).jpeg" alt="Conducting workshop" loading="lazy">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
+                <figure class="gallery-item gallery-tall" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/image001.png" alt="Conducting workshop" loading="lazy">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
             </div>
+
+            <p class="gallery-note">
+                <i class="fas fa-keyboard"></i>
+                Click any photo to open. Use <kbd>←</kbd> <kbd>→</kbd> to navigate, <kbd>Esc</kbd> to close.
+            </p>
         </div>
     </section>
 
-    <!-- Experience Section -->
-    <section id="experience" class="experience section">
+    <!-- Experience -->
+    <section id="experience" class="section experience">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Professional Experience</h2>
-                <p class="section-subtitle">My career journey and professional achievements</p>
-            </div>
-            <div class="experience-timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">
-                        <span>Oct 2022 - Present</span>
-                    </div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <div class="timeline-info">
-                                <h3>Software Engineer (Research & Development)</h3>
-                                <h4>BRAC IT Services Ltd.</h4>
-                            </div>
+            <header class="section-header">
+                <span class="section-kicker">03 — Experience</span>
+                <h2 class="section-title">Where I've built &amp; shipped.</h2>
+                <p class="section-subtitle">A timeline of roles, teams, and the systems that came out of them.</p>
+            </header>
+
+            <ol class="timeline">
+                <li class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-meta">
+                            <span class="timeline-period">2022 — Present</span>
+                            <span class="timeline-company">NASA/MIT · STEMX365 Collaborative Research</span>
                         </div>
-                        <ul class="experience-highlights">
-                            <li>Developed Flowable Modeler Generator using SpringBoot & LangChain4j. </li>
-                            <li>Built SQL Generator with 3 versions: Java (SpringBoot, LangChain4j), Python (LangChain4j), N8N implementing probability-based query optimization</li>
-                            <li>Created Damaged Poster Detector using Python, OpenCV & Streamlit.</li>
-                            <li>Developed Virtual Dresser "Put It On" with OpenCV & Gemini-2.0-flash leveraging mathematical modeling</li>
-                            <li>Built Automated Agent Selector and Chatbots using N8N for intelligent workflow automation</li>
-                            <li>Implemented MCP (Model Context Protocol) servers for advanced AI model integration</li>
-                            <li>Conducted workshop on "AI-Powered Development: Enhancing coding with intelligent integration"</li>
-                            <li>Developed business process modeler with Activiti and Flowable support (SpringBoot, Angular)</li>
-                            <li>Built two-factor authentication system using Quarkus (SpringBoot) for enhanced security</li>
-                            <li>Created BRAC University Management System (USIS) - Full Stack with Angular frontend and SpringBoot backend</li>
-                            <li>Developed notification system with Reactive Spring web (WebFlux) for real-time communications</li>
-                            <li>Designed, developed, and optimized fingerprint extension for PostgreSQL using C/C++ with AFIS algorithm</li>
-                            <li>Created Ollama-based Bangla document RAG system using Gemma model with probability theory applications</li>
-                            <li>Developed Online Exam monitoring system using OpenCV for real-time proctoring</li>
-                            <li>Modified open-source Imgproxy project and integrated premium features using Go</li>
+                        <h3 class="timeline-role">Space Technology &amp; AI Integration Researcher</h3>
+                        <p class="timeline-summary">
+                            Collaborating with an Astrobee scientist (NASA/MIT) on AI for
+                            autonomous navigation in space robotics, alongside cross-disciplinary
+                            R&amp;D bridging AI, mechanical robotics, and space science.
+                        </p>
+                        <ul class="bullet-list">
+                            <li>Autonomous-systems research applied to Astrobee operational simulations</li>
+                            <li>AI integration for navigation, perception, and mission planning</li>
+                            <li>International educational outreach across STEM and space programs</li>
+                            <li>Cross-functional contributions spanning AI, mechanical robotics, and space science</li>
                         </ul>
                     </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">
-                        <span>Jan 2022 - Oct 2022</span>
+                </li>
+
+                <li class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-meta">
+                            <span class="timeline-period">Oct 2022 — Present</span>
+                            <span class="timeline-company">BRAC IT Services Ltd.</span>
+                        </div>
+                        <h3 class="timeline-role">Software Engineer · Research &amp; Development</h3>
+                        <p class="timeline-summary">
+                            Driving R&amp;D across AI agents, enterprise systems, computer vision,
+                            biometrics, and developer tooling. Mentor for AI-powered development.
+                        </p>
+
+                        <div class="cluster-grid">
+                            <div class="cluster">
+                                <h4><i class="fas fa-robot"></i> AI Agents &amp; Automation</h4>
+                                <ul>
+                                    <li>Flowable Modeler Generator (SpringBoot, LangChain4j)</li>
+                                    <li>SQL Generator — Java (LangChain4j), Python, N8N variants</li>
+                                    <li>MCP servers for advanced model integration</li>
+                                    <li>Automated agent selectors &amp; chatbots on N8N</li>
+                                </ul>
+                            </div>
+                            <div class="cluster">
+                                <h4><i class="fas fa-cubes"></i> Enterprise Systems</h4>
+                                <ul>
+                                    <li>BRAC University Management System (USIS) — Angular + SpringBoot</li>
+                                    <li>Business process modeler (Activiti / Flowable)</li>
+                                    <li>Two-factor authentication on Quarkus</li>
+                                    <li>Reactive notification system (Spring WebFlux)</li>
+                                </ul>
+                            </div>
+                            <div class="cluster">
+                                <h4><i class="fas fa-eye"></i> Computer Vision &amp; ML</h4>
+                                <ul>
+                                    <li>Damaged Poster Detector (OpenCV, Streamlit)</li>
+                                    <li>Virtual Dresser “Put It On” (OpenCV + Gemini-2.0-flash)</li>
+                                    <li>Bangla document RAG on Ollama + Gemma</li>
+                                    <li>Online exam monitoring (OpenCV)</li>
+                                </ul>
+                            </div>
+                            <div class="cluster">
+                                <h4><i class="fas fa-microchip"></i> Systems &amp; Tooling</h4>
+                                <ul>
+                                    <li>PostgreSQL fingerprint extension in C/C++ (AFIS)</li>
+                                    <li>Imgproxy fork with premium features (Go)</li>
+                                    <li>Conducted workshop: <em>AI-Powered Development</em></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="timeline-content">
-                        <h3>Team Lead</h3>
-                        <h4>BracU Mongol-Tori (Semi-Autonomous Mars Rover)</h4>
-                        <ul class="experience-highlights">
-                            <li>Developed rock classification model using YOLO-v5 (9 rock types)</li>
-                            <li>Built mechanical tool detector using YOLO-v5 & SSD MobileNet</li>
-                            <li>Created Arrow and Aruco Marker detector with OpenCV</li>
-                            <li>Successfully managed a team of 17 members</li>
+                </li>
+
+                <li class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-meta">
+                            <span class="timeline-period">Jan 2022 — Oct 2022</span>
+                            <span class="timeline-company">BracU Mongol-Tori · Semi-Autonomous Mars Rover</span>
+                        </div>
+                        <h3 class="timeline-role">Team Lead · Computer Vision</h3>
+                        <p class="timeline-summary">
+                            Led a 17-member team building the rover's perception stack
+                            for international rover competitions.
+                        </p>
+                        <ul class="bullet-list">
+                            <li>Rock classification model (YOLO-v5) covering 9 rock types</li>
+                            <li>Mechanical tool detector (YOLO-v5, SSD MobileNet)</li>
+                            <li>Arrow &amp; ArUco marker detection (OpenCV)</li>
+                            <li>Cross-functional coordination across CV, mechanical, and electrical sub-teams</li>
                         </ul>
                     </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">
-                        <span>Summer & Fall 2019</span>
-                    </div>
-                    <div class="timeline-content">
-                        <h3>Campus Representative</h3>
-                        <h4>BRAC University</h4>
-                        <ul class="experience-highlights">
-                            <li>Arranged events and seminars for university community</li>
-                            <li>Represented BRAC University on multiple occasions</li>
+                </li>
+
+                <li class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-meta">
+                            <span class="timeline-period">2019 — 2022</span>
+                            <span class="timeline-company">BRAC University</span>
+                        </div>
+                        <h3 class="timeline-role">Technical Workshop Facilitator &amp; Campus Representative</h3>
+                        <ul class="bullet-list">
+                            <li>Organized and led workshops on Artificial Intelligence, Neural Networks, and Python for data science</li>
+                            <li>Mentored students in deep-learning methodologies and applied ML projects</li>
+                            <li>Represented BRAC University at external events, seminars, and outreach engagements</li>
                         </ul>
                     </div>
-                </div>
-            </div>
+                </li>
+            </ol>
         </div>
     </section>
 
-    <!-- Research Section -->
-    <section id="research" class="research section">
+    <!-- Projects -->
+    <section id="projects" class="section projects">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Research & Publications</h2>
-                <p class="section-subtitle">My academic research contributions and publications</p>
-            </div>
-            <div class="research-content">
-                <div class="research-item glass-card">
-                    <div class="research-header">
-                        <div class="research-icon">
-                            <i class="fas fa-satellite"></i>
-                        </div>
-                        <div class="research-meta">
-                            <span class="research-venue">IEEE Xplore</span>
-                            <span class="research-type">Conference Paper</span>
-                        </div>
-                    </div>
-                    <h3>Precision Repairs: Achieving Accuracy During Repair Missions at the International Space Station</h3>
-                    <p>
-                        Research focused on developing precision repair methodologies for space missions, particularly 
-                        addressing the challenges of maintaining accuracy in zero-gravity environments at the International Space Station.
-                    </p>
-                    <div class="research-tags">
-                        <span class="research-tag">Space Technology</span>
-                        <span class="research-tag">Precision Engineering</span>
-                        <span class="research-tag">ISS</span>
-                        <span class="research-tag">Repair Systems</span>
-                    </div>
-                </div>
+            <header class="section-header">
+                <span class="section-kicker">04 — Projects</span>
+                <h2 class="section-title">Selected work.</h2>
+                <p class="section-subtitle">A curated slice — agents, AI products, biometric systems, and platforms.</p>
+            </header>
 
-                <div class="research-item glass-card">
-                    <div class="research-header">
-                        <div class="research-icon">
-                            <i class="fas fa-brain"></i>
-                        </div>
-                        <div class="research-meta">
-                            <span class="research-venue">DSpace BRACU</span>
-                            <span class="research-type">Research Paper</span>
-                        </div>
-                    </div>
-                    <h3>Predicting Suicidal Intent from Social Media Text Post Using Machine Learning</h3>
-                    <p>
-                        Developed machine learning models to analyze social media text posts for early detection of suicidal 
-                        intent, contributing to mental health intervention systems through natural language processing and sentiment analysis.
-                    </p>
-                    <div class="research-tags">
-                        <span class="research-tag">Machine Learning</span>
-                        <span class="research-tag">NLP</span>
-                        <span class="research-tag">Mental Health</span>
-                        <span class="research-tag">Social Media Analysis</span>
-                    </div>
-                </div>
-
-                <div class="research-item glass-card">
-                    <div class="research-header">
-                        <div class="research-icon">
-                            <i class="fas fa-code-branch"></i>
-                        </div>
-                        <div class="research-meta">
-                            <span class="research-venue">GitHub</span>
-                            <span class="research-type">Personal Projects</span>
-                        </div>
-                    </div>
-                    <h3>Personal Research Projects: Machine Learning and Deep Learning</h3>
-                    <p>
-                        Collection of personal research projects focused on Machine Learning and Deep Learning implementations, 
-                        exploring various algorithms, models, and applications across different domains.
-                    </p>
-                    <div class="research-tags">
-                        <span class="research-tag">Machine Learning</span>
-                        <span class="research-tag">Deep Learning</span>
-                        <span class="research-tag">Open Source</span>
-                        <span class="research-tag">Research</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Featured Projects</h2>
-                <p class="section-subtitle">Some of my notable work and contributions</p>
-            </div>
-            <div class="projects-grid">
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon">
-                            <i class="fas fa-network-wired"></i>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="project-link">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
+            <div class="project-grid">
+                <article class="project-card" style="--accent: #0A84FF;">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-network-wired"></i></div>
+                        <span class="project-tag">R&amp;D</span>
                     </div>
                     <h3>MCP Server Implementation</h3>
-                    <p>Built advanced Model Context Protocol (MCP) servers for seamless AI model integration and context management. Implemented custom protocols for efficient data exchange and model orchestration.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">MCP</span>
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">TypeScript</span>
-                        <span class="tech-tag">AI/ML</span>
-                    </div>
-                </div>
+                    <p>Custom Model Context Protocol servers for AI model orchestration, context exchange, and tool invocation across heterogeneous LLM stacks.</p>
+                    <ul class="project-stack">
+                        <li>MCP</li><li>Python</li><li>TypeScript</li><li>LLM Tooling</li>
+                    </ul>
+                </article>
 
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="project-link">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
+                <article class="project-card" style="--accent: #5E5CE6;">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-database"></i></div>
+                        <span class="project-tag">AI Product</span>
                     </div>
                     <h3>AI-Powered SQL Generator</h3>
-                    <p>Multi-version SQL generation system built with SpringBoot, LangChain4j, Python, and N8N. Features intelligent query optimization and natural language processing with mathematical optimization algorithms.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Java</span>
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">LangChain4j</span>
-                        <span class="tech-tag">N8N</span>
-                    </div>
-                </div>
+                    <p>Three implementations — Java/LangChain4j, Python, and N8N — that translate natural language into optimized SQL with probability-driven selection.</p>
+                    <ul class="project-stack">
+                        <li>SpringBoot</li><li>LangChain4j</li><li>Python</li><li>N8N</li>
+                    </ul>
+                </article>
 
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon">
-                            <i class="fas fa-tshirt"></i>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="project-link">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
+                <article class="project-card" style="--accent: #30D158;">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-diagram-project"></i></div>
+                        <span class="project-tag">Platform</span>
                     </div>
-                    <h3>Virtual Dresser "Put It On"</h3>
-                    <p>AI-powered virtual clothing try-on system using OpenCV, Streamlit, and Gemini-2.0-flash for realistic image generation and fitting simulation.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">OpenCV</span>
-                        <span class="tech-tag">Streamlit</span>
-                        <span class="tech-tag">Gemini AI</span>
-                    </div>
-                </div>
+                    <h3>Flowable Modeler Generator</h3>
+                    <p>LLM-assisted BPMN authoring on top of Flowable — generates valid process models from prompts, reducing modeler ramp-up dramatically.</p>
+                    <ul class="project-stack">
+                        <li>SpringBoot</li><li>LangChain4j</li><li>Flowable</li><li>BPMN</li>
+                    </ul>
+                </article>
 
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon">
-                            <i class="fas fa-university"></i>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="project-link">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
+                <article class="project-card" style="--accent: #FF9F0A;">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-shirt"></i></div>
+                        <span class="project-tag">Computer Vision</span>
                     </div>
-                    <h3>BRAC University Management System</h3>
-                    <p>Full-stack university management system with Angular frontend and SpringBoot backend. Features comprehensive student and administrative functionality.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Angular</span>
-                        <span class="tech-tag">SpringBoot</span>
-                        <span class="tech-tag">PostgreSQL</span>
-                        <span class="tech-tag">WebFlux</span>
-                    </div>
-                </div>
+                    <h3>Put It On — Virtual Dresser</h3>
+                    <p>Realtime virtual try-on combining OpenCV pose anchors with Gemini-2.0-flash image generation for plausible garment placement.</p>
+                    <ul class="project-stack">
+                        <li>OpenCV</li><li>Streamlit</li><li>Gemini</li><li>Python</li>
+                    </ul>
+                </article>
 
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon"> 
-                            <i class="fas fa-fingerprint"></i>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="project-link">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
+                <article class="project-card" style="--accent: #FF375F;">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-language"></i></div>
+                        <span class="project-tag">RAG</span>
+                    </div>
+                    <h3>Bangla Document RAG</h3>
+                    <p>Ollama-hosted Gemma RAG tuned for Bangla corpora — chunking, retrieval, and answer synthesis optimized for low-resource context.</p>
+                    <ul class="project-stack">
+                        <li>Ollama</li><li>Gemma</li><li>RAG</li><li>NLP</li>
+                    </ul>
+                </article>
+
+                <article class="project-card" style="--accent: #64D2FF;">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-fingerprint"></i></div>
+                        <span class="project-tag">Systems</span>
                     </div>
                     <h3>PostgreSQL Fingerprint Extension</h3>
-                    <p>Optimized fingerprint matching extension for PostgreSQL written in C/C++. Implements AFIS algorithm with SourceAFIS reference for high-performance biometric matching.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">C/C++</span>
-                        <span class="tech-tag">PostgreSQL</span>
-                        <span class="tech-tag">AFIS</span>
-                        <span class="tech-tag">PHP</span>
+                    <p>Native C/C++ extension implementing AFIS-style fingerprint matching directly inside Postgres, with a PHP-friendly interface.</p>
+                    <ul class="project-stack">
+                        <li>C / C++</li><li>PostgreSQL</li><li>AFIS</li><li>PHP</li>
+                    </ul>
+                </article>
+
+                <article class="project-card" style="--accent: #BF5AF2;">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-eye"></i></div>
+                        <span class="project-tag">Computer Vision</span>
                     </div>
+                    <h3>Online Exam Monitoring</h3>
+                    <p>Vision-based proctoring with face presence checks, gaze approximation, and behavioral signals — built on OpenCV and lightweight ML.</p>
+                    <ul class="project-stack">
+                        <li>OpenCV</li><li>Python</li><li>ML</li><li>Streaming</li>
+                    </ul>
+                </article>
+
+                <article class="project-card" style="--accent: #FF6482;">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-rocket"></i></div>
+                        <span class="project-tag">Robotics</span>
+                    </div>
+                    <h3>Mars Rover · Mongol-Tori CV</h3>
+                    <p>Perception stack for BracU's semi-autonomous Mars rover — rock classification, tool detection, and ArUco / arrow navigation cues.</p>
+                    <ul class="project-stack">
+                        <li>YOLO-v5</li><li>SSD MobileNet</li><li>OpenCV</li><li>ROS</li>
+                    </ul>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research -->
+    <section id="research" class="section research">
+        <div class="container">
+            <header class="section-header">
+                <span class="section-kicker">05 — Research &amp; Workshops</span>
+                <h2 class="section-title">Publications &amp; teaching.</h2>
+                <p class="section-subtitle">
+                    Published research, ongoing personal investigations, and AI-development
+                    workshops conducted at BRAC IT Services.
+                </p>
+            </header>
+
+            <div class="research-grid">
+                <article class="research-card">
+                    <div class="research-icon"><i class="fas fa-satellite"></i></div>
+                    <span class="research-venue">IEEE Xplore · Conference Paper</span>
+                    <h3>Precision Repairs: Achieving Accuracy During Repair Missions at the International Space Station</h3>
+                    <p>Methodologies for precision repair operations under zero-gravity constraints aboard the ISS.</p>
+                    <div class="research-tags">
+                        <span>Space Tech</span><span>Precision</span><span>ISS</span>
+                    </div>
+                </article>
+
+                <article class="research-card">
+                    <div class="research-icon"><i class="fas fa-brain"></i></div>
+                    <span class="research-venue">DSpace BRACU · Research Paper</span>
+                    <h3>Predicting Suicidal Intent from Social Media Text Using Machine Learning</h3>
+                    <p>NLP and sentiment models for early detection of suicidal intent — a contribution toward mental-health intervention systems.</p>
+                    <div class="research-tags">
+                        <span>ML</span><span>NLP</span><span>Mental Health</span>
+                    </div>
+                </article>
+
+                <article class="research-card">
+                    <div class="research-icon"><i class="fas fa-chalkboard-user"></i></div>
+                    <span class="research-venue">BRAC IT Services · Workshop</span>
+                    <h3>AI-Powered Development: Enhancing Coding with Intelligent Integration</h3>
+                    <p>Conducted internal workshops on integrating AI copilots, MCP, and agent patterns into day-to-day engineering workflows.</p>
+                    <div class="research-tags">
+                        <span>AI Tooling</span><span>MCP</span><span>DevEx</span>
+                    </div>
+                </article>
+            </div>
+
+            <div class="workshop-strip" aria-label="Workshop photos">
+                <img src="profile-photo/achievements/Taking Training sessions/Media (1).jpeg" alt="Workshop session" loading="lazy">
+                <img src="profile-photo/achievements/Taking Training sessions/1773308815442.jpeg" alt="Workshop session" loading="lazy">
+                <img src="profile-photo/achievements/Taking Training sessions/1773308816290.jpeg" alt="Workshop session" loading="lazy">
+                <img src="profile-photo/achievements/Taking Training sessions/1769681991969.jpeg" alt="Workshop session" loading="lazy">
+                <img src="profile-photo/achievements/Taking Training sessions/Media (2).jpeg" alt="Workshop session" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="section skills">
+        <div class="container">
+            <header class="section-header">
+                <span class="section-kicker">06 — Skills &amp; Education</span>
+                <h2 class="section-title">Stack &amp; foundations.</h2>
+                <p class="section-subtitle">Languages, frameworks, math, and the credentials behind the work.</p>
+            </header>
+
+            <div class="skills-grid">
+                <div class="skills-card">
+                    <h3><i class="fas fa-code"></i> Languages</h3>
+                    <ul class="chip-list">
+                        <li>Python</li><li>Java</li><li>TypeScript</li><li>JavaScript</li>
+                        <li>C / C++</li><li>Go</li><li>SQL</li>
+                    </ul>
                 </div>
 
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon">
-                            <i class="fas fa-language"></i>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="project-link">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <h3>Bangla Document RAG System</h3>
-                    <p>Ollama-based Retrieval-Augmented Generation system for Bangla documents using Gemma model. Enables intelligent question-answering in Bengali language.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Ollama</span>
-                        <span class="tech-tag">Gemma</span>
-                        <span class="tech-tag">RAG</span>
-                        <span class="tech-tag">NLP</span>
-                    </div>
+                <div class="skills-card">
+                    <h3><i class="fas fa-cubes"></i> Frameworks &amp; Platforms</h3>
+                    <ul class="chip-list">
+                        <li>SpringBoot</li><li>Quarkus</li><li>Angular</li><li>React</li>
+                        <li>WebFlux</li><li>LangChain4j</li><li>Streamlit</li><li>N8N</li>
+                        <li>VectorShift</li><li>Crew</li><li>Google ADK</li>
+                    </ul>
                 </div>
 
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="project-link">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <h3>Online Exam Monitoring System</h3>
-                    <p>Computer vision-based proctoring system using OpenCV for real-time exam monitoring and anti-cheating detection with advanced behavioral analysis.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">OpenCV</span>
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Computer Vision</span>
-                        <span class="tech-tag">ML</span>
-                    </div>
+                <div class="skills-card">
+                    <h3><i class="fas fa-brain"></i> AI / ML</h3>
+                    <ul class="chip-list">
+                        <li>TensorFlow</li><li>PyTorch</li><li>Scikit-learn</li><li>Transformers</li>
+                        <li>OpenCV</li><li>YOLO</li><li>RAG</li><li>LLMs</li>
+                        <li>MCP</li><li>NLP</li><li>Computer Vision</li><li>Deep Learning</li>
+                    </ul>
+                </div>
+
+                <div class="skills-card">
+                    <h3><i class="fas fa-database"></i> DevOps &amp; Infra</h3>
+                    <ul class="chip-list">
+                        <li>Docker</li><li>Kubernetes</li><li>GCP</li><li>CI/CD</li>
+                        <li>Kafka</li><li>RabbitMQ</li><li>Redis</li><li>PostgreSQL</li>
+                        <li>Keycloak</li><li>Git</li>
+                    </ul>
+                </div>
+
+                <div class="skills-card">
+                    <h3><i class="fas fa-square-root-variable"></i> Mathematics</h3>
+                    <ul class="chip-list">
+                        <li>Linear Algebra</li><li>Calculus</li><li>Probability</li>
+                        <li>Statistics</li><li>Optimization</li><li>Mathematical Modeling</li>
+                    </ul>
+                </div>
+
+                <div class="skills-card skills-card-wide">
+                    <h3><i class="fas fa-graduation-cap"></i> Education &amp; Certifications</h3>
+                    <ul class="cred-list">
+                        <li><i class="fas fa-university"></i> <strong>ACMP-4.0</strong> — IBA, Dhaka University · Jan 2025 – Mar 2025</li>
+                        <li><i class="fas fa-school"></i> <strong>B.Sc, Computer Science &amp; Engineering</strong> — BRAC University · CGPA 3.54 · Jan 2018 – Jul 2022</li>
+                        <li><i class="fas fa-book"></i> <strong>HSC (Science)</strong> — Collectorate School &amp; College, Rangpur · GPA 5.00 · 2014 – 2017</li>
+                        <li><i class="fas fa-leaf"></i> Spring 6 &amp; Spring Boot 3 First Look — LinkedIn Learning</li>
+                        <li><i class="fas fa-chart-line"></i> Data Science &amp; Machine Learning Specialization — DataCamp</li>
+                        <li><i class="fas fa-square-root-variable"></i> Introduction to Statistics in Python — DataCamp</li>
+                        <li><i class="fas fa-robot"></i> Supervised &amp; Unsupervised Learning in Python — DataCamp</li>
+                        <li><i class="fas fa-code"></i> Problem Solving Certificate — HackerRank</li>
+                        <li><i class="fab fa-python"></i> Programming for Everybody (Python) — Coursera</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="skills section">
+    <!-- Contact -->
+    <section id="contact" class="section contact">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Technical Skills</h2>
-                <p class="section-subtitle">Technologies and tools I work with</p>
-            </div>
-            <div class="skills-content">
-                <div class="skills-category glass-card">
-                    <h3><i class="fas fa-code"></i> Programming Languages</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Java</span>
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">TypeScript</span>
-                        <span class="skill-tag">C/C++</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">SQL</span>
-                    </div>
-                </div>
+            <header class="section-header">
+                <span class="section-kicker">07 — Contact</span>
+                <h2 class="section-title">Let's build something.</h2>
+                <p class="section-subtitle">Open to AI / R&amp;D collaborations, advisory, and interesting engineering problems.</p>
+            </header>
 
-                <div class="skills-category glass-card">
-                    <h3><i class="fas fa-cogs"></i> Frameworks & Libraries</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">SpringBoot</span>
-                        <span class="skill-tag">Angular</span>
-                        <span class="skill-tag">Tensorflow</span>
-                        <span class="skill-tag">LangChain4j</span>
-                        <span class="skill-tag">OpenCV</span>
-                        <span class="skill-tag">Streamlit</span>
-                        <span class="skill-tag">MCP</span>
-                        <span class="skill-tag">CSS</span>
+            <div class="contact-grid">
+                <aside class="contact-info">
+                    <a class="contact-row" href="mailto:uic.mubin@gmail.com">
+                        <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+                        <span class="contact-text">
+                            <strong>Email</strong>
+                            <span>uic.mubin@gmail.com</span>
+                        </span>
+                    </a>
+                    <a class="contact-row" href="tel:+8801303215559">
+                        <span class="contact-icon"><i class="fas fa-phone"></i></span>
+                        <span class="contact-text">
+                            <strong>Phone</strong>
+                            <span>+880 1303 215559</span>
+                        </span>
+                    </a>
+                    <div class="contact-row">
+                        <span class="contact-icon"><i class="fas fa-location-dot"></i></span>
+                        <span class="contact-text">
+                            <strong>Location</strong>
+                            <span>Uttar Badda, Dhaka — Bangladesh</span>
+                        </span>
                     </div>
-                </div>
 
-                <div class="skills-category glass-card">
-                    <h3><i class="fas fa-calculator"></i> Mathematics & Statistics</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Linear Algebra</span>
-                        <span class="skill-tag">Calculus</span>
-                        <span class="skill-tag">Probability</span>
-                        <span class="skill-tag">Statistics</span>
-                        <span class="skill-tag">Mathematical Modeling</span>
-                        <span class="skill-tag">Optimization</span>
+                    <div class="social">
+                        <a href="https://github.com/mubinuic" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://linkedin.com/in/mubinui" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="mailto:uic.mubin@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
                     </div>
-                </div>
+                </aside>
 
-                <div class="skills-category glass-card">
-                    <h3><i class="fas fa-database"></i> Databases & Tools</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">PostgreSQL</span>
-                        <span class="skill-tag">Redis</span>
-                        <span class="skill-tag">Docker</span>
-                        <span class="skill-tag">Kafka</span>
-                        <span class="skill-tag">RabbitMQ</span>
-                        <span class="skill-tag">Git</span>
-                        <span class="skill-tag">Keycloak</span>
-                        <span class="skill-tag">Vectorshift</span>
+                <form class="contact-form" id="contactForm" novalidate>
+                    <div class="field">
+                        <input type="text" id="name" name="name" placeholder=" " required autocomplete="name">
+                        <label for="name">Your name</label>
                     </div>
-                </div>
-
-                <div class="skills-category glass-card">
-                    <h3><i class="fas fa-brain"></i> AI/ML & Data Science</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Machine Learning</span>
-                        <span class="skill-tag">Deep Learning</span>
-                        <span class="skill-tag">NLP</span>
-                        <span class="skill-tag">RAG</span>
-                        <span class="skill-tag">CAG</span>
-                        <span class="skill-tag">Computer Vision</span>
-                        <span class="skill-tag">YOLO</span>
-                        <span class="skill-tag">Prompt Engineering</span>
+                    <div class="field">
+                        <input type="email" id="email" name="email" placeholder=" " required autocomplete="email">
+                        <label for="email">Email</label>
                     </div>
-                </div>
-
-                <div class="skills-category glass-card">
-                    <h3><i class="fas fa-cloud"></i> DevOps & Deployment</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Docker</span>
-                        <span class="skill-tag">N8N</span>
-                        <span class="skill-tag">WebFlux</span>
-                        <span class="skill-tag">Quarkus</span>
-                        <span class="skill-tag">Go</span>
+                    <div class="field">
+                        <input type="text" id="subject" name="subject" placeholder=" " required>
+                        <label for="subject">Subject</label>
                     </div>
-                </div>
-
-                <div class="skills-category glass-card">
-                    <h3><i class="fas fa-certificate"></i> Certifications</h3>
-                    <div class="certification-list">
-                        <div class="cert-item">
-                            <i class="fas fa-graduation-cap"></i>
-                            <span>ACMP-4.0 - IBA, Dhaka University</span>
-                        </div>
-                        <div class="cert-item">
-                            <i class="fas fa-python"></i>
-                            <span>Programming for Everybody (Getting Started with Python) - Coursera</span>
-                        </div>
-                        <div class="cert-item">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Introduction to Data Science in Python - DataCamp</span>
-                        </div>
-                        <div class="cert-item">
-                            <i class="fas fa-calculator"></i>
-                            <span>Introduction to Statistics in Python - DataCamp</span>
-                        </div>
-                        <div class="cert-item">
-                            <i class="fas fa-code"></i>
-                            <span>Problem Solving Certificate - HackerRank</span>
-                        </div>
-                        <div class="cert-item">
-                            <i class="fas fa-brain"></i>
-                            <span>Supervised Learning with scikit-learn - DataCamp</span>
-                        </div>
-                        <div class="cert-item">
-                            <i class="fas fa-robot"></i>
-                            <span>Unsupervised Learning in Python - DataCamp</span>
-                        </div>
-                        <div class="cert-item">
-                            <i class="fas fa-leaf"></i>
-                            <span>Spring 6 and Spring Boot 3 First Look - LinkedIn</span>
-                        </div>
+                    <div class="field">
+                        <textarea id="message" name="message" rows="5" placeholder=" " required></textarea>
+                        <label for="message">Message</label>
                     </div>
-                </div>
+                    <button type="submit" class="btn btn-primary form-submit">
+                        <i class="fas fa-paper-plane"></i>
+                        Send message
+                    </button>
+                </form>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Get In Touch</h2>
-                <p class="section-subtitle">Let's connect and discuss opportunities</p>
-            </div>
-            <div class="contact-content">
-                <div class="contact-info glass-card">
-                    <h3>Contact Information</h3>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Email</h4>
-                            <a href="mailto:uic.mubin@gmail.com">uic.mubin@gmail.com</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Phone</h4>
-                            <a href="tel:+8801303215559">+880 1303 215559</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Location</h4>
-                            <span>Mohakhali Ja Block, Wireless, Dhaka</span>
-                        </div>
-                    </div>
-                    <div class="social-links">
-                        <a href="https://github.com/mubinuic" class="social-link" target="_blank" rel="noopener">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="https://linkedin.com/in/mubinui" class="social-link" target="_blank" rel="noopener">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="mailto:uic.mubin@gmail.com" class="social-link">
-                            <i class="fas fa-envelope"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="contact-form glass-card">
-                    <h3>Send Message</h3>
-                    <form class="form">
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" required>
-                            <label for="name">Your Name</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="email" name="email" required>
-                            <label for="email">Your Email</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="subject" name="subject" required>
-                            <label for="subject">Subject</label>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="message" name="message" rows="5" required></textarea>
-                            <label for="message">Your Message</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-paper-plane"></i>
-                            Send Message
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer glass-effect">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-text">
-                    <p>&copy; 2025 Mubin Ul Islam Chowdhury. All rights reserved.</p>
-                </div>
-                <div class="footer-links">
-                    <a href="https://github.com/mubinuic" target="_blank" rel="noopener">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://linkedin.com/in/mubinui" target="_blank" rel="noopener">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="mailto:uic.mubin@gmail.com">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-                </div>
-            </div>
+    <footer class="footer">
+        <div class="container footer-row">
+            <span>&copy; 2026 Mubin Ul Islam Chowdhury · Built from scratch with HTML, CSS &amp; JS.</span>
+            <span class="footer-tag">Crafted in Dhaka · Last updated 2026</span>
         </div>
     </footer>
 
-    <!-- Custom JavaScript -->
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Photo viewer">
+        <button class="lb-btn lb-close" id="lbClose" aria-label="Close">&times;</button>
+        <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous">&#10094;</button>
+        <button class="lb-btn lb-next" id="lbNext" aria-label="Next">&#10095;</button>
+        <figure class="lb-stage">
+            <img id="lbImg" alt="">
+            <figcaption id="lbCount" class="lb-count"></figcaption>
+        </figure>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

@@ -703,6 +703,10 @@ input, textarea { font: inherit; border: none; outline: none; color: inherit; }
     object-fit: cover;
     transition: transform 600ms var(--ease), filter var(--t);
 }
+.gallery-contain img {
+    object-fit: contain;
+    object-position: center;
+}
 .gallery-item::after {
     content: "";
     position: absolute;

@@ -1859,6 +1859,16 @@ a.contact-row:hover { background: var(--glass-hover); border-color: var(--line);
 
     .section { padding: 58px 0; }
 
+    /* The navbar's backdrop-filter would trap fixed children inside it —
+       on mobile it goes near-opaque instead, so the bottom bar can anchor
+       to the real viewport. */
+    .navbar {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: var(--nav-bg-scrolled);
+        border-bottom-color: var(--line);
+    }
+
     /* App-style floating bottom navigation — always visible */
     .nav-menu {
         position: fixed;
@@ -1869,16 +1879,17 @@ a.contact-row:hover { background: var(--glass-hover); border-color: var(--line);
         bottom: calc(12px + env(safe-area-inset-bottom, 0px));
         flex-direction: row;
         align-items: center;
-        gap: 2px;
+        justify-content: center;
+        gap: 0;
         width: auto;
-        max-width: calc(100% - 20px);
-        padding: 6px 8px;
+        max-width: calc(100% - 16px);
+        padding: 5px 6px;
         background: var(--glass-strong);
         backdrop-filter: blur(24px) saturate(160%);
         -webkit-backdrop-filter: blur(24px) saturate(160%);
         border: 1px solid var(--line);
         border-radius: 999px;
-        box-shadow: var(--shadow-md);
+        box-shadow: var(--shadow-lg);
         z-index: 110;
     }
     .nav-menu li.nav-hide-mobile { display: none; }
@@ -1886,12 +1897,14 @@ a.contact-row:hover { background: var(--glass-hover); border-color: var(--line);
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 3px;
-        padding: 8px 13px;
-        font-size: 10px;
+        gap: 2px;
+        padding: 8px 11px;
+        font-size: 9.5px;
         font-weight: 600;
+        letter-spacing: 0.01em;
         border-radius: 999px;
         color: var(--text-2);
+        white-space: nowrap;
     }
     .nav-link i { display: block; font-size: 16px; }
     .nav-link.active {
@@ -1904,7 +1917,7 @@ a.contact-row:hover { background: var(--glass-hover); border-color: var(--line);
         color: var(--text-2) !important;
         box-shadow: none;
         margin-left: 0;
-        padding: 8px 13px;
+        padding: 8px 11px;
     }
     .nav-cta.active {
         color: var(--accent) !important;

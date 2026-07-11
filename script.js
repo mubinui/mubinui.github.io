@@ -249,6 +249,12 @@
                 filterItems.forEach(item => {
                     const match = filter === 'all' || item.dataset.cat === filter;
                     item.classList.toggle('is-hidden', !match);
+                    if (match) {
+                        // restart the entrance fade so filtering feels alive
+                        item.style.animation = 'none';
+                        void item.offsetWidth;
+                        item.style.animation = '';
+                    }
                 });
             });
         });
@@ -275,12 +281,14 @@
 
     const buildList = () => items.filter(it => !it.classList.contains('is-hidden'));
 
+    const lbCap = $('#lbCap');
     const updateLightbox = () => {
         const node = currentList[currentIndex];
         if (!node) return;
         const img = $('img', node);
         lbImg.src = img.src;
         lbImg.alt = img.alt || 'Photo';
+        if (lbCap) lbCap.textContent = img.alt || '';
         lbCount.textContent = `${currentIndex + 1} / ${currentList.length}`;
     };
 
@@ -324,6 +332,15 @@
                 openLightbox(item);
             }
         });
+        // Caption below the tag, sourced from the image's alt text
+        const img = $('img', item);
+        const fc = $('figcaption', item);
+        if (img && fc && img.alt) {
+            const cap = document.createElement('span');
+            cap.className = 'gallery-cap';
+            cap.textContent = img.alt;
+            fc.appendChild(cap);
+        }
     });
 
     lbClose?.addEventListener('click', closeLightbox);

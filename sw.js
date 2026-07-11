@@ -1,14 +1,14 @@
 // Service Worker for Portfolio Website
 // Provides offline functionality and caching
 
-const CACHE_NAME = 'mubin-portfolio-v3';
+const CACHE_NAME = 'mubin-portfolio-v5';
 const urlsToCache = [
     '/',
     '/index.html',
     '/styles.css',
     '/script.js',
     '/manifest.json',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap',
+    'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
 

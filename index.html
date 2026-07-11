@@ -4,42 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Mubin Ul Islam Chowdhury — Software & AI Engineer · R&D</title>
-    <meta name="description" content="Software & AI Engineer (R&D) at BRAC IT Services. AI/ML, MCP, full-stack, and applied research. Second Runner Up — AI Engineering Hackathon 2025.">
-    <meta name="keywords" content="Mubin Ul Islam Chowdhury, Software Engineer, AI, Machine Learning, MCP, Model Context Protocol, Full Stack, Java, SpringBoot, Python, Angular, RAG, LangChain4j, Computer Vision">
+    <meta name="description" content="Software & AI Engineer (R&D) at BRAC IT Services. AI agents, multi-agent platforms, RAG, computer vision, and applied research. Second Runner Up — AI Engineering Hackathon 2025.">
+    <meta name="keywords" content="Mubin Ul Islam Chowdhury, Software Engineer, AI, Machine Learning, AI Agents, MCP, Model Context Protocol, Full Stack, Java, SpringBoot, Python, Angular, RAG, LangChain4j, Computer Vision, Gemini Live API">
     <meta name="author" content="Mubin Ul Islam Chowdhury">
 
     <meta name="format-detection" content="telephone=no">
     <meta name="mobile-web-app-capable" content="yes">
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0A84FF">
+    <meta name="theme-color" content="#3B82F6">
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('selected-theme');
+                if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+                document.documentElement.classList.add(t + '-theme');
+            } catch (e) {
+                document.documentElement.classList.add('dark-theme');
+            }
+        })();
+    </script>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Mubin Portfolio">
 
     <meta property="og:title" content="Mubin Ul Islam Chowdhury — Software & AI Engineer · R&D">
-    <meta property="og:description" content="Software & AI Engineer (R&D), AI/ML, MCP, full-stack engineer. Second Runner Up — AI Engineering Hackathon 2025.">
+    <meta property="og:description" content="Software & AI Engineer (R&D). AI agents, RAG, computer vision, full-stack systems. Second Runner Up — AI Engineering Hackathon 2025.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://mubinuic.github.io">
-    <meta property="og:image" content="profile-photo/46964914.jpeg">
+    <meta property="og:url" content="https://mubinui.github.io">
+    <meta property="og:image" content="profile-photo/IMG_5007.jpg">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Mubin Ul Islam Chowdhury — Software & AI Engineer · R&D">
-    <meta name="twitter:description" content="AI / R&D engineer. MCP, RAG, full-stack systems.">
-    <meta name="twitter:image" content="profile-photo/46964914.jpeg">
+    <meta name="twitter:description" content="AI / R&D engineer. Agents, MCP, RAG, full-stack systems.">
+    <meta name="twitter:image" content="profile-photo/IMG_5007.jpg">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="preload" as="image" href="profile-photo/46964914.jpeg">
+    <link rel="preload" as="image" href="profile-photo/IMG_5007.jpg">
 
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <a class="skip-link" href="#home">Skip to content</a>
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
     <!-- Navigation -->
     <nav class="navbar" aria-label="Primary">
@@ -51,16 +63,21 @@
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#showcase" class="nav-link">Showcase</a></li>
-                <li><a href="#experience" class="nav-link">Experience</a></li>
                 <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
                 <li><a href="#research" class="nav-link">Research</a></li>
+                <li><a href="#showcase" class="nav-link">Showcase</a></li>
                 <li><a href="#skills" class="nav-link">Skills</a></li>
                 <li><a href="#contact" class="nav-link nav-cta">Contact</a></li>
             </ul>
-            <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
-                <span></span><span></span><span></span>
-            </button>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle light / dark theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -77,77 +94,65 @@
                     <span class="eyebrow-dot"></span>
                     Open for graduate research · NASA/MIT collaborator
                 </span>
-                <h1 class="hero-title">
-                    <span class="hero-line">Building intelligent</span>
-                    <span class="hero-line accent">systems &amp; agents.</span>
-                </h1>
+                <span class="hero-greeting">Hi, I'm <strong>Mubin Ul Islam Chowdhury</strong> — building</span>
+                <h1 class="hero-title">Intelligent Systems<span class="title-dot">.</span></h1>
+
+                <div class="hero-dynamic" aria-label="I build multi-agent AI platforms, RAG and LLM systems, computer-vision pipelines, enterprise backends, research prototypes">
+                    <span class="hero-dynamic-static">I build</span>
+                    <span class="hero-dynamic-typed" id="typedText" aria-hidden="true">multi-agent AI platforms</span>
+                </div>
+
                 <p class="hero-lede">
-                    I'm <strong>Mubin Ul Islam Chowdhury</strong> — a Software &amp; AI Engineer
-                    (R&amp;D) at <strong>BRAC IT Services Ltd.</strong>,
-                    collaborating with a <strong>NASA/MIT Astrobee scientist</strong> on
-                    autonomous space robotics. I architect enterprise-grade AI systems —
-                    RAG, LLMs, computer vision — and the backends that carry them.
+                    Software &amp; AI Engineer (R&amp;D) at <strong>BRAC IT Services Ltd.</strong>,
+                    collaborating with a <strong>NASA/MIT Astrobee scientist</strong> on autonomous
+                    space robotics. From research prototypes to production platforms.
                 </p>
 
-                <div class="hero-roles" aria-hidden="true">
-                    <span class="role-chip">AI Researcher</span>
-                    <span class="role-chip">MCP &amp; Agents</span>
-                    <span class="role-chip">RAG · LLMs</span>
-                    <span class="role-chip">Computer Vision</span>
-                    <span class="role-chip">Builder &amp; Trainer</span>
-                </div>
-
                 <div class="hero-cta">
-                    <a href="#showcase" class="btn btn-primary">
-                        <i class="fas fa-image"></i>
-                        View Showcase
-                    </a>
-                    <a href="#contact" class="btn btn-ghost">
+                    <a href="#contact" class="btn btn-primary">
                         <i class="fas fa-paper-plane"></i>
-                        Get in touch
+                        Let's connect
                     </a>
-                </div>
-
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <strong>4+</strong>
-                        <span>Years in R&amp;D</span>
-                    </div>
-                    <div class="hero-stat">
-                        <strong>5</strong>
-                        <span>Major recognitions</span>
-                    </div>
-                    <div class="hero-stat">
-                        <strong>2</strong>
-                        <span>Publications</span>
-                    </div>
+                    <a href="#projects" class="btn btn-ghost">
+                        <i class="fas fa-code"></i>
+                        See my work
+                    </a>
                 </div>
             </div>
 
             <div class="hero-visual">
-                <div class="hero-card hero-card-main">
-                    <img src="profile-photo/46964914.jpeg" alt="Portrait of Mubin Ul Islam Chowdhury" loading="eager">
-                    <div class="hero-card-badge">
-                        <i class="fas fa-bolt"></i>
-                        Software &amp; AI Engineer · R&amp;D
-                    </div>
+                <div class="hero-img-card">
+                    <img src="profile-photo/IMG_5007.jpg" alt="Portrait of Mubin Ul Islam Chowdhury" loading="eager" width="320" height="320">
                 </div>
-                <div class="hero-card hero-card-mini hero-card-mini-1">
-                    <img src="profile-photo/achievements/Achievements/1761374388215.jpeg" alt="Achievement moment" loading="lazy">
+                <div class="stat-badge stat-badge-tl">
+                    <span class="stat-badge-val" data-count="4" data-suffix="+">4+</span>
+                    <span class="stat-badge-label">Years in R&amp;D</span>
                 </div>
-                <div class="hero-card hero-card-mini hero-card-mini-2">
-                    <img src="profile-photo/achievements/Achievements/1745765338695.jpeg" alt="Achievement moment" loading="lazy">
+                <div class="stat-badge stat-badge-tr">
+                    <span class="stat-badge-val" data-count="15" data-suffix="+">15+</span>
+                    <span class="stat-badge-label">Production Systems</span>
                 </div>
-                <div class="hero-floating-pill" aria-hidden="true">
-                    <span class="pulse-dot"></span>
-                    Currently shipping at BRAC IT
+                <div class="stat-badge stat-badge-bl">
+                    <span class="stat-badge-val" data-count="2">2</span>
+                    <span class="stat-badge-label">Publications</span>
+                </div>
+                <div class="stat-badge stat-badge-br">
+                    <span class="stat-badge-val" data-count="17">17</span>
+                    <span class="stat-badge-label">Engineers Led</span>
                 </div>
             </div>
         </div>
 
-        <a href="#about" class="scroll-indicator" aria-label="Scroll to About">
-            <span></span>
-        </a>
+        <div class="container trusted-by" aria-label="Organizations">
+            <span class="trusted-by-title">Worked with &amp; recognized by</span>
+            <div class="trusted-by-logos">
+                <span class="trusted-logo"><i class="fas fa-building"></i> BRAC IT Services</span>
+                <span class="trusted-logo"><i class="fas fa-university"></i> BRAC University</span>
+                <span class="trusted-logo"><i class="fas fa-satellite"></i> STEMX365 · NASA/MIT</span>
+                <span class="trusted-logo"><i class="fas fa-rocket"></i> JAXA Kibo-RPC</span>
+                <span class="trusted-logo"><i class="fas fa-landmark"></i> IBA, Dhaka University</span>
+            </div>
+        </div>
     </section>
 
     <!-- About -->
@@ -157,7 +162,7 @@
                 <span class="section-kicker">01 — About</span>
                 <h2 class="section-title">Engineer, researcher, builder, trainer.</h2>
                 <p class="section-subtitle">
-                    Three years deep in applied R&amp;D — turning AI research into shipped
+                    Four years deep in applied R&amp;D — turning AI research into shipped
                     products, internal platforms, and developer tools.
                 </p>
             </header>
@@ -168,15 +173,17 @@
                         I'm a results-driven <strong>Software Engineer and AI Researcher</strong>
                         specializing in machine learning, computer vision, and NLP.
                         At <strong>BRAC IT Services Ltd.</strong> I architect and deploy
-                        enterprise-grade AI — RAG systems, LLM agents, biometric extensions —
-                        and the SpringBoot / Quarkus / Angular backends behind them.
+                        enterprise-grade AI — the multi-agent <strong>BRAC IT AI Kit</strong>,
+                        RAG systems, biometric identification at scale — alongside rigorously
+                        measured research prototypes grounded in information theory and
+                        statistical estimation.
                     </p>
                     <p>
-                        I actively collaborate with a <strong>NASA/MIT Astrobee scientist</strong>
-                        through STEMX365 on autonomous-navigation research for space robotics.
+                        I co-authored peer-reviewed work on autonomous space robotics with a
+                        <strong>NASA/MIT Astrobee scientist</strong> through STEMX365.
                         With <strong>ACMP-4.0 (IBA, Dhaka University)</strong> and a
                         <strong>B.Sc in CSE from BRAC University</strong>, I'm now pursuing
-                        graduate funding to keep pushing on cutting-edge laboratory innovation.
+                        graduate research to keep pushing on cutting-edge laboratory innovation.
                     </p>
 
                     <ul class="about-highlights">
@@ -190,19 +197,19 @@
 
                 <aside class="about-stats" aria-label="Quick facts">
                     <div class="stat-card">
-                        <span class="stat-value">3+</span>
+                        <span class="stat-value" data-count="4" data-suffix="+">4+</span>
                         <span class="stat-label">Years in R&amp;D</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-value">15+</span>
+                        <span class="stat-value" data-count="15" data-suffix="+">15+</span>
                         <span class="stat-label">Production systems</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-value">17</span>
+                        <span class="stat-value" data-count="17">17</span>
                         <span class="stat-label">Engineers led</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-value">7+</span>
+                        <span class="stat-value" data-count="7" data-suffix="+">7+</span>
                         <span class="stat-label">Certifications</span>
                     </div>
                 </aside>
@@ -210,116 +217,254 @@
         </div>
     </section>
 
-    <!-- Showcase / Achievement Gallery -->
-    <section id="showcase" class="section showcase">
+    <!-- What I do -->
+    <section id="services" class="section services">
         <div class="container">
             <header class="section-header">
-                <span class="section-kicker">02 — Showcase</span>
-                <h2 class="section-title">Achievements, in pictures.</h2>
+                <span class="section-kicker">02 — What I do</span>
+                <h2 class="section-title">From prototype to production.</h2>
                 <p class="section-subtitle">
-                    Moments from competitions, awards, leadership, and workshops —
-                    the work behind the résumé.
+                    The four kinds of problems I get pulled into — and ship.
                 </p>
             </header>
 
-            <ul class="awards-list" aria-label="Recognitions">
-                <li><span class="award-year">2026</span><i class="fas fa-award"></i><span>Best Mentor Award · BRAC IT</span></li>
-                <li><span class="award-year">2025</span><i class="fas fa-trophy"></i><span>Second Runner Up · AI Engineering Hackathon 2025 (BS23 × Poridhi)</span></li>
-                <li><span class="award-year">2023</span><i class="fas fa-star"></i><span>Best Team Performer · BRAC IT Townhall</span></li>
-                <li><span class="award-year">2022</span><i class="fas fa-medal"></i><span>3rd Place · Kibo-RPC by JAXA (National)</span></li>
-                <li><span class="award-year">Now</span><i class="fas fa-satellite"></i><span>Active Member · STEMX365</span></li>
-            </ul>
+            <div class="services-grid">
+                <article class="service-card">
+                    <div class="service-icon"><i class="fas fa-robot"></i></div>
+                    <h3>Multi-Agent AI Platforms</h3>
+                    <p>Self-hosted agent platforms with LLM routing, tool surfaces, and observability — like the BRAC IT AI Kit powering enterprise assistants in production.</p>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon"><i class="fas fa-brain"></i></div>
+                    <h3>RAG &amp; LLM Systems</h3>
+                    <p>Retrieval-augmented generation, natural-language-to-SQL, and hallucination-free data assistants where every answer traces to real data.</p>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon"><i class="fas fa-eye"></i></div>
+                    <h3>Computer Vision &amp; Biometrics</h3>
+                    <p>From YOLO perception stacks for a Mars rover to large-scale fingerprint identification hitting 100% Rank-1 on the FVC2002 benchmark.</p>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon"><i class="fas fa-chalkboard-user"></i></div>
+                    <h3>Full-Stack &amp; Team Enablement</h3>
+                    <p>SpringBoot, Quarkus, Angular, and React systems — plus AI-development workshops that upskill whole teams (Best Mentor Award, 2026).</p>
+                </article>
+            </div>
+        </div>
+    </section>
 
-            <div class="gallery-filters" role="tablist" aria-label="Gallery filters">
+    <!-- Projects -->
+    <section id="projects" class="section projects">
+        <div class="container">
+            <header class="section-header">
+                <span class="section-kicker">03 — Projects</span>
+                <h2 class="section-title">Selected work.</h2>
+                <p class="section-subtitle">
+                    Recent independent R&amp;D at BRAC IT — a flagship multi-agent platform,
+                    applied research, vision systems, and the infrastructure behind them.
+                </p>
+            </header>
+
+            <div class="gallery-filters project-filters" id="projectFilters" role="tablist" aria-label="Project filters">
                 <button class="filter-btn active" role="tab" aria-selected="true" data-filter="all">All</button>
-                <button class="filter-btn" role="tab" aria-selected="false" data-filter="awards">Awards</button>
-                <button class="filter-btn" role="tab" aria-selected="false" data-filter="hackathon">Hackathon</button>
-                <button class="filter-btn" role="tab" aria-selected="false" data-filter="leadership">Leadership</button>
-                <button class="filter-btn" role="tab" aria-selected="false" data-filter="training">Training</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="agents">Agents &amp; Assistants</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="genai">GenAI &amp; RAG</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="cv">Computer Vision</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="systems">Systems &amp; Platforms</button>
             </div>
 
-            <div class="gallery" id="gallery">
-                <!-- Achievements -->
-                <figure class="gallery-item gallery-tall" data-cat="awards">
-                    <img src="profile-photo/achievements/Achievements/1657218058083.jpeg" alt="Award ceremony moment" loading="lazy">
-                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
-                </figure>
-                <figure class="gallery-item" data-cat="awards">
-                    <img src="profile-photo/achievements/Achievements/1660414549463.jpeg" alt="Award ceremony moment" loading="lazy">
-                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
-                </figure>
-                <figure class="gallery-item" data-cat="hackathon">
-                    <img src="profile-photo/achievements/Achievements/1734594758255.jpeg" alt="Hackathon stage" loading="lazy">
-                    <figcaption><span class="tag tag-blue">Hackathon</span></figcaption>
-                </figure>
-                <figure class="gallery-item gallery-wide" data-cat="hackathon">
-                    <img src="profile-photo/achievements/Achievements/1734594760587.jpeg" alt="AI Hackathon 2025" loading="lazy">
-                    <figcaption><span class="tag tag-blue">AI Hackathon 2025</span></figcaption>
-                </figure>
-                <figure class="gallery-item" data-cat="hackathon">
-                    <img src="profile-photo/achievements/Achievements/1734594761384.jpeg" alt="Hackathon team" loading="lazy">
-                    <figcaption><span class="tag tag-blue">Hackathon</span></figcaption>
-                </figure>
-                <figure class="gallery-item" data-cat="leadership">
-                    <img src="profile-photo/achievements/Achievements/1745765338695.jpeg" alt="Leadership moment" loading="lazy">
-                    <figcaption><span class="tag tag-violet">Leadership</span></figcaption>
-                </figure>
-                <figure class="gallery-item gallery-tall" data-cat="leadership">
-                    <img src="profile-photo/achievements/Achievements/1745765344689.jpeg" alt="Leadership moment" loading="lazy">
-                    <figcaption><span class="tag tag-violet">Leadership</span></figcaption>
-                </figure>
-                <figure class="gallery-item" data-cat="leadership">
-                    <img src="profile-photo/achievements/Achievements/1745765344940.jpeg" alt="Leadership moment" loading="lazy">
-                    <figcaption><span class="tag tag-violet">Leadership</span></figcaption>
-                </figure>
-                <figure class="gallery-item" data-cat="awards">
-                    <img src="profile-photo/achievements/Achievements/1756500448593.jpeg" alt="Recognition" loading="lazy">
-                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
-                </figure>
-                <figure class="gallery-item gallery-wide" data-cat="awards">
-                    <img src="profile-photo/achievements/Achievements/1761374384285.jpeg" alt="Recognition moment" loading="lazy">
-                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
-                </figure>
-                <figure class="gallery-item" data-cat="awards">
-                    <img src="profile-photo/achievements/Achievements/1761374388022.jpeg" alt="Recognition moment" loading="lazy">
-                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
-                </figure>
-                <figure class="gallery-item" data-cat="awards">
-                    <img src="profile-photo/achievements/Achievements/1761374388215.jpeg" alt="Recognition moment" loading="lazy">
-                    <figcaption><span class="tag tag-amber">Award</span></figcaption>
-                </figure>
+            <div class="project-grid" id="projectGrid">
+                <!-- Featured -->
+                <article class="project-card featured" data-cat="agents">
+                    <div class="featured-grid">
+                        <div class="featured-main">
+                            <div class="project-top">
+                                <div class="project-icon"><i class="fas fa-robot"></i></div>
+                                <span class="project-tag project-tag-featured">Featured · Flagship R&amp;D</span>
+                            </div>
+                            <h3>BRAC IT AI Kit</h3>
+                            <p>
+                                A production, self-hosted multi-agent conversational-AI platform
+                                (~15k LOC). A configuration-driven LLM "selector" router dispatches
+                                queries to specialist agents across sequential, tree, graph, and
+                                hybrid workflow topologies — with a Swagger/OpenAPI importer and
+                                50+ tools spanning business APIs, web search, and RAG.
+                            </p>
+                            <ul class="project-stack">
+                                <li>Python</li><li>FastAPI</li><li>CrewAI</li><li>LiteLLM</li>
+                                <li>React 19</li><li>PostgreSQL · Redis</li><li>Docker / K8s</li>
+                            </ul>
+                            <div class="project-links">
+                                <span class="project-lock"><i class="fas fa-lock"></i> Proprietary · BRAC IT</span>
+                            </div>
+                        </div>
+                        <ul class="featured-points">
+                            <li><i class="fas fa-users-gear"></i> 16 pre-built agents plus full Procurement and University Admission assistants</li>
+                            <li><i class="fas fa-plug"></i> Provider-agnostic via LiteLLM — cloud models or local vLLM / Ollama</li>
+                            <li><i class="fas fa-bolt"></i> Redis multi-layer caching cuts repeat-query LLM cost by 50%+</li>
+                            <li><i class="fas fa-shield-halved"></i> Keycloak / RBAC auth with Prometheus + OpenTelemetry observability</li>
+                        </ul>
+                    </div>
+                </article>
 
-                <!-- Training -->
-                <figure class="gallery-item" data-cat="training">
-                    <img src="profile-photo/achievements/Taking Training sessions/1769681991969.jpeg" alt="Training session" loading="lazy">
-                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
-                </figure>
-                <figure class="gallery-item gallery-contain" data-cat="training">
-                    <img src="profile-photo/achievements/Taking Training sessions/1773308815442.jpeg" alt="Conducting workshop" loading="lazy">
-                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
-                </figure>
-                <figure class="gallery-item" data-cat="training">
-                    <img src="profile-photo/achievements/Taking Training sessions/1773308816290.jpeg" alt="Conducting workshop" loading="lazy">
-                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
-                </figure>
-                <figure class="gallery-item" data-cat="training">
-                    <img src="profile-photo/achievements/Taking Training sessions/Media (1).jpeg" alt="Conducting workshop" loading="lazy">
-                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
-                </figure>
-                <figure class="gallery-item" data-cat="training">
-                    <img src="profile-photo/achievements/Taking Training sessions/Media (2).jpeg" alt="Conducting workshop" loading="lazy">
-                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
-                </figure>
-                <figure class="gallery-item gallery-contain" data-cat="training">
-                    <img src="profile-photo/achievements/Taking Training sessions/image001.png" alt="Conducting workshop" loading="lazy">
-                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
-                </figure>
+                <article class="project-card" data-cat="agents">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-chart-column"></i></div>
+                        <span class="project-tag">AI Agent</span>
+                    </div>
+                    <h3>DataAssistant</h3>
+                    <p>Conversational, hallucination-free data visualization. A find–compute–draw architecture separates semantic retrieval, validated read-only SQL, and deterministic chart binding — every figure traces to a real database row. Text and low-latency live-voice modes over a shared tool surface.</p>
+                    <ul class="project-stack">
+                        <li>Python</li><li>FastAPI</li><li>Angular</li><li>Gemini · Live Voice</li><li>MCP</li><li>sqlglot</li>
+                    </ul>
+                    <div class="project-links">
+                        <span class="project-lock"><i class="fas fa-lock"></i> Proprietary · BRAC IT</span>
+                    </div>
+                </article>
+
+                <article class="project-card" data-cat="cv">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-baseball-bat-ball"></i></div>
+                        <span class="project-tag">Research · Analytics</span>
+                    </div>
+                    <h3>Cricket Entropy Analysis</h3>
+                    <p>Information-theoretic sports analytics — quantifies batter predictability (Shannon entropy) and exploitability (mutual information) with bias-corrected estimators and bootstrap confidence intervals, so small-sample noise is never presented as signal. A vision pipeline turns broadcast video into per-delivery clips via scoreboard-OCR, YOLO, and a VLM for tactical tagging.</p>
+                    <ul class="project-stack">
+                        <li>Python</li><li>NumPy</li><li>DuckDB / Parquet</li><li>YOLO</li><li>Ollama VLM</li>
+                    </ul>
+                    <div class="project-links">
+                        <span class="project-lock"><i class="fas fa-flask"></i> Independent R&amp;D</span>
+                    </div>
+                </article>
+
+                <article class="project-card" data-cat="systems">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-fingerprint"></i></div>
+                        <span class="project-tag">Biometrics · ABIS</span>
+                    </div>
+                    <h3>Advance Fingerprint Indexing</h3>
+                    <p>Large-scale biometric identification and deduplication — a two-stage retrieve-then-rerank cascade (vector/LSH retrieval, then exact geometric matching) achieving 100% Rank-1 on FVC2002 and 100% recall@10 at up to 5001× gallery reduction, with a ten-finger fusion dedup gate and a quantified scale analysis to 10M records.</p>
+                    <ul class="project-stack">
+                        <li>Java 25</li><li>SourceAFIS</li><li>Qdrant</li><li>MinHash-LSH</li><li>PostgreSQL</li>
+                    </ul>
+                    <div class="project-links">
+                        <span class="project-lock"><i class="fas fa-lock"></i> Proprietary · BRAC IT</span>
+                    </div>
+                </article>
+
+                <article class="project-card" data-cat="agents">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-network-wired"></i></div>
+                        <span class="project-tag">R&amp;D</span>
+                    </div>
+                    <h3>MCP Server Implementation</h3>
+                    <p>Custom Model Context Protocol servers for AI model orchestration, context exchange, and tool invocation across heterogeneous LLM stacks.</p>
+                    <ul class="project-stack">
+                        <li>MCP</li><li>Python</li><li>TypeScript</li><li>LLM Tooling</li>
+                    </ul>
+                    <div class="project-links">
+                        <span class="project-lock"><i class="fas fa-lock"></i> Proprietary · BRAC IT</span>
+                    </div>
+                </article>
+
+                <article class="project-card" data-cat="genai">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-database"></i></div>
+                        <span class="project-tag">AI Product</span>
+                    </div>
+                    <h3>AI-Powered SQL Generator</h3>
+                    <p>Three implementations — Java/LangChain4j, Python, and N8N — that translate natural language into optimized SQL with probability-driven selection.</p>
+                    <ul class="project-stack">
+                        <li>SpringBoot</li><li>LangChain4j</li><li>Python</li><li>N8N</li>
+                    </ul>
+                    <div class="project-links">
+                        <span class="project-lock"><i class="fas fa-lock"></i> Proprietary · BRAC IT</span>
+                    </div>
+                </article>
+
+                <article class="project-card" data-cat="genai">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-diagram-project"></i></div>
+                        <span class="project-tag">Platform</span>
+                    </div>
+                    <h3>Flowable Modeler Generator</h3>
+                    <p>LLM-assisted BPMN authoring on top of Flowable — generates valid process models from prompts, reducing modeler ramp-up dramatically.</p>
+                    <ul class="project-stack">
+                        <li>SpringBoot</li><li>LangChain4j</li><li>Flowable</li><li>BPMN</li>
+                    </ul>
+                    <div class="project-links">
+                        <span class="project-lock"><i class="fas fa-lock"></i> Proprietary · BRAC IT</span>
+                    </div>
+                </article>
+
+                <article class="project-card" data-cat="genai">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-language"></i></div>
+                        <span class="project-tag">RAG</span>
+                    </div>
+                    <h3>Bangla Document RAG</h3>
+                    <p>Ollama-hosted Gemma RAG tuned for Bangla corpora — chunking, retrieval, and answer synthesis optimized for low-resource context.</p>
+                    <ul class="project-stack">
+                        <li>Ollama</li><li>Gemma</li><li>RAG</li><li>NLP</li>
+                    </ul>
+                    <div class="project-links">
+                        <a href="https://github.com/mubinui/DocumentRAG" target="_blank" rel="noopener"><i class="fab fa-github"></i> Source</a>
+                    </div>
+                </article>
+
+                <article class="project-card" data-cat="cv">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-shirt"></i></div>
+                        <span class="project-tag">Computer Vision</span>
+                    </div>
+                    <h3>Put It On — Virtual Dresser</h3>
+                    <p>Realtime virtual try-on combining OpenCV pose anchors with Gemini-2.0-flash image generation for plausible garment placement.</p>
+                    <ul class="project-stack">
+                        <li>OpenCV</li><li>Streamlit</li><li>Gemini</li><li>Python</li>
+                    </ul>
+                    <div class="project-links">
+                        <a href="https://github.com/mubinui/put-it-on" target="_blank" rel="noopener"><i class="fab fa-github"></i> Source</a>
+                    </div>
+                </article>
+
+                <article class="project-card" data-cat="cv">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-eye"></i></div>
+                        <span class="project-tag">Computer Vision</span>
+                    </div>
+                    <h3>Online Exam Monitoring</h3>
+                    <p>Vision-based proctoring with face presence checks, gaze approximation, and behavioral signals — built on OpenCV and lightweight ML.</p>
+                    <ul class="project-stack">
+                        <li>OpenCV</li><li>Python</li><li>ML</li><li>Streaming</li>
+                    </ul>
+                    <div class="project-links">
+                        <span class="project-lock"><i class="fas fa-lock"></i> Proprietary · BRAC IT</span>
+                    </div>
+                </article>
+
+                <article class="project-card" data-cat="cv">
+                    <div class="project-top">
+                        <div class="project-icon"><i class="fas fa-rocket"></i></div>
+                        <span class="project-tag">Robotics</span>
+                    </div>
+                    <h3>Mars Rover · Mongol-Tori CV</h3>
+                    <p>Perception stack for BracU's semi-autonomous Mars rover — rock classification, tool detection, and ArUco / arrow navigation cues.</p>
+                    <ul class="project-stack">
+                        <li>YOLO-v5</li><li>SSD MobileNet</li><li>OpenCV</li><li>ROS</li>
+                    </ul>
+                    <div class="project-links">
+                        <span class="project-lock"><i class="fas fa-flag-checkered"></i> Competition build · BracU</span>
+                    </div>
+                </article>
+
             </div>
 
-            <p class="gallery-note">
-                <i class="fas fa-keyboard"></i>
-                Click any photo to open. Use <kbd>←</kbd> <kbd>→</kbd> to navigate, <kbd>Esc</kbd> to close.
-            </p>
+            <div class="projects-cta">
+                <a class="btn btn-ghost" href="https://github.com/mubinui" target="_blank" rel="noopener">
+                    <i class="fab fa-github"></i>
+                    GitHub profile
+                </a>
+            </div>
         </div>
     </section>
 
@@ -327,14 +472,13 @@
     <section id="experience" class="section experience">
         <div class="container">
             <header class="section-header">
-                <span class="section-kicker">03 — Experience</span>
+                <span class="section-kicker">04 — Experience</span>
                 <h2 class="section-title">Where I've built &amp; shipped.</h2>
                 <p class="section-subtitle">A timeline of roles, teams, and the systems that came out of them.</p>
             </header>
 
             <ol class="timeline">
                 <li class="timeline-item">
-                    <div class="timeline-marker"></div>
                     <div class="timeline-card">
                         <div class="timeline-meta">
                             <span class="timeline-period">2022 — Present</span>
@@ -356,7 +500,6 @@
                 </li>
 
                 <li class="timeline-item">
-                    <div class="timeline-marker"></div>
                     <div class="timeline-card">
                         <div class="timeline-meta">
                             <span class="timeline-period">Oct 2022 — Present</span>
@@ -371,10 +514,10 @@
 
                         <div class="cluster-grid">
                             <div class="cluster">
-                                <h4><i class="fas fa-robot"></i> Agent Development Kit</h4>
+                                <h4><i class="fas fa-robot"></i> BRAC IT AI Kit — Multi-Agent Platform</h4>
                                 <ul>
-                                    <li>Custom agent development kit and builder platform</li>
-                                    <li>Rapid creation, testing, and deployment of conversational AI chatbots</li>
+                                    <li>Self-hosted multi-agent conversational-AI platform (CrewAI, LiteLLM) with a visual workflow builder</li>
+                                    <li>16 pre-built agents, 50+ tools, Redis caching cutting repeat-query LLM cost by 50%+</li>
                                 </ul>
                             </div>
                             <div class="cluster">
@@ -420,7 +563,6 @@
                 </li>
 
                 <li class="timeline-item">
-                    <div class="timeline-marker"></div>
                     <div class="timeline-card">
                         <div class="timeline-meta">
                             <span class="timeline-period">Jan 2022 — Oct 2022</span>
@@ -441,7 +583,6 @@
                 </li>
 
                 <li class="timeline-item">
-                    <div class="timeline-marker"></div>
                     <div class="timeline-card">
                         <div class="timeline-meta">
                             <span class="timeline-period">2019 — 2022</span>
@@ -456,115 +597,6 @@
                     </div>
                 </li>
             </ol>
-        </div>
-    </section>
-
-    <!-- Projects -->
-    <section id="projects" class="section projects">
-        <div class="container">
-            <header class="section-header">
-                <span class="section-kicker">04 — Projects</span>
-                <h2 class="section-title">Selected work.</h2>
-                <p class="section-subtitle">A curated slice — agents, AI products, biometric systems, and platforms.</p>
-            </header>
-
-            <div class="project-grid">
-                <article class="project-card" style="--accent: #0A84FF;">
-                    <div class="project-top">
-                        <div class="project-icon"><i class="fas fa-network-wired"></i></div>
-                        <span class="project-tag">R&amp;D</span>
-                    </div>
-                    <h3>MCP Server Implementation</h3>
-                    <p>Custom Model Context Protocol servers for AI model orchestration, context exchange, and tool invocation across heterogeneous LLM stacks.</p>
-                    <ul class="project-stack">
-                        <li>MCP</li><li>Python</li><li>TypeScript</li><li>LLM Tooling</li>
-                    </ul>
-                </article>
-
-                <article class="project-card" style="--accent: #5E5CE6;">
-                    <div class="project-top">
-                        <div class="project-icon"><i class="fas fa-database"></i></div>
-                        <span class="project-tag">AI Product</span>
-                    </div>
-                    <h3>AI-Powered SQL Generator</h3>
-                    <p>Three implementations — Java/LangChain4j, Python, and N8N — that translate natural language into optimized SQL with probability-driven selection.</p>
-                    <ul class="project-stack">
-                        <li>SpringBoot</li><li>LangChain4j</li><li>Python</li><li>N8N</li>
-                    </ul>
-                </article>
-
-                <article class="project-card" style="--accent: #30D158;">
-                    <div class="project-top">
-                        <div class="project-icon"><i class="fas fa-diagram-project"></i></div>
-                        <span class="project-tag">Platform</span>
-                    </div>
-                    <h3>Flowable Modeler Generator</h3>
-                    <p>LLM-assisted BPMN authoring on top of Flowable — generates valid process models from prompts, reducing modeler ramp-up dramatically.</p>
-                    <ul class="project-stack">
-                        <li>SpringBoot</li><li>LangChain4j</li><li>Flowable</li><li>BPMN</li>
-                    </ul>
-                </article>
-
-                <article class="project-card" style="--accent: #FF9F0A;">
-                    <div class="project-top">
-                        <div class="project-icon"><i class="fas fa-shirt"></i></div>
-                        <span class="project-tag">Computer Vision</span>
-                    </div>
-                    <h3>Put It On — Virtual Dresser</h3>
-                    <p>Realtime virtual try-on combining OpenCV pose anchors with Gemini-2.0-flash image generation for plausible garment placement.</p>
-                    <ul class="project-stack">
-                        <li>OpenCV</li><li>Streamlit</li><li>Gemini</li><li>Python</li>
-                    </ul>
-                </article>
-
-                <article class="project-card" style="--accent: #FF375F;">
-                    <div class="project-top">
-                        <div class="project-icon"><i class="fas fa-language"></i></div>
-                        <span class="project-tag">RAG</span>
-                    </div>
-                    <h3>Bangla Document RAG</h3>
-                    <p>Ollama-hosted Gemma RAG tuned for Bangla corpora — chunking, retrieval, and answer synthesis optimized for low-resource context.</p>
-                    <ul class="project-stack">
-                        <li>Ollama</li><li>Gemma</li><li>RAG</li><li>NLP</li>
-                    </ul>
-                </article>
-
-                <article class="project-card" style="--accent: #64D2FF;">
-                    <div class="project-top">
-                        <div class="project-icon"><i class="fas fa-fingerprint"></i></div>
-                        <span class="project-tag">Systems</span>
-                    </div>
-                    <h3>PostgreSQL Fingerprint Extension</h3>
-                    <p>Native C/C++ extension implementing AFIS-style fingerprint matching directly inside Postgres, with a PHP-friendly interface.</p>
-                    <ul class="project-stack">
-                        <li>C / C++</li><li>PostgreSQL</li><li>AFIS</li><li>PHP</li>
-                    </ul>
-                </article>
-
-                <article class="project-card" style="--accent: #BF5AF2;">
-                    <div class="project-top">
-                        <div class="project-icon"><i class="fas fa-eye"></i></div>
-                        <span class="project-tag">Computer Vision</span>
-                    </div>
-                    <h3>Online Exam Monitoring</h3>
-                    <p>Vision-based proctoring with face presence checks, gaze approximation, and behavioral signals — built on OpenCV and lightweight ML.</p>
-                    <ul class="project-stack">
-                        <li>OpenCV</li><li>Python</li><li>ML</li><li>Streaming</li>
-                    </ul>
-                </article>
-
-                <article class="project-card" style="--accent: #FF6482;">
-                    <div class="project-top">
-                        <div class="project-icon"><i class="fas fa-rocket"></i></div>
-                        <span class="project-tag">Robotics</span>
-                    </div>
-                    <h3>Mars Rover · Mongol-Tori CV</h3>
-                    <p>Perception stack for BracU's semi-autonomous Mars rover — rock classification, tool detection, and ArUco / arrow navigation cues.</p>
-                    <ul class="project-stack">
-                        <li>YOLO-v5</li><li>SSD MobileNet</li><li>OpenCV</li><li>ROS</li>
-                    </ul>
-                </article>
-            </div>
         </div>
     </section>
 
@@ -613,12 +645,126 @@
             </div>
 
             <div class="workshop-strip" aria-label="Workshop photos">
-                <img src="profile-photo/achievements/Taking Training sessions/Media (1).jpeg" alt="Workshop session" loading="lazy">
-                <img src="profile-photo/achievements/Taking Training sessions/1773308815442.jpeg" alt="Workshop session" loading="lazy">
-                <img src="profile-photo/achievements/Taking Training sessions/1773308816290.jpeg" alt="Workshop session" loading="lazy">
-                <img src="profile-photo/achievements/Taking Training sessions/1769681991969.jpeg" alt="Workshop session" loading="lazy">
-                <img src="profile-photo/achievements/Taking Training sessions/Media (2).jpeg" alt="Workshop session" loading="lazy">
+                <img src="profile-photo/achievements/Taking Training sessions/TrainingatBracit.jpeg" alt="Workshop session" loading="lazy" decoding="async">
+                <img src="profile-photo/achievements/Taking Training sessions/TrainingatBracit1.jpeg" alt="Workshop session" loading="lazy" decoding="async">
+                <img src="profile-photo/achievements/Taking Training sessions/TrainingatBracit2.jpeg" alt="Workshop session" loading="lazy" decoding="async">
+                <img src="profile-photo/achievements/Taking Training sessions/TrainingATBRACIT4.jpeg" alt="Workshop session" loading="lazy" decoding="async">
+                <img src="profile-photo/achievements/Taking Training sessions/TrainingatBracit3.jpeg" alt="Workshop session" loading="lazy" decoding="async">
             </div>
+        </div>
+    </section>
+
+    <!-- Showcase / Achievement Gallery -->
+    <section id="showcase" class="section showcase">
+        <div class="container">
+            <header class="section-header">
+                <span class="section-kicker">06 — Showcase</span>
+                <h2 class="section-title">Achievements, in pictures.</h2>
+                <p class="section-subtitle">
+                    Moments from competitions, awards, leadership, and workshops —
+                    the work behind the résumé.
+                </p>
+            </header>
+
+            <ul class="awards-list" aria-label="Recognitions">
+                <li><span class="award-year">2026</span><i class="fas fa-award"></i><span>Best Mentor Award · BRAC IT</span></li>
+                <li><span class="award-year">2025</span><i class="fas fa-trophy"></i><span>Second Runner Up · AI Engineering Hackathon 2025 (BS23 × Poridhi)</span></li>
+                <li><span class="award-year">2023</span><i class="fas fa-star"></i><span>Best Team Performer · BRAC IT Townhall</span></li>
+                <li><span class="award-year">2022</span><i class="fas fa-medal"></i><span>3rd Place · Kibo-RPC by JAXA (National)</span></li>
+                <li><span class="award-year">Now</span><i class="fas fa-satellite"></i><span>Active Member · STEMX365</span></li>
+            </ul>
+
+            <div class="gallery-filters" id="galleryFilters" role="tablist" aria-label="Gallery filters">
+                <button class="filter-btn active" role="tab" aria-selected="true" data-filter="all">All</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="awards">Awards</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="hackathon">Hackathon</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="research">Research</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="leadership">Leadership</button>
+                <button class="filter-btn" role="tab" aria-selected="false" data-filter="training">Training</button>
+            </div>
+
+            <div class="gallery" id="gallery">
+                <!-- Achievements -->
+                <figure class="gallery-item gallery-wide" data-cat="hackathon">
+                    <img src="profile-photo/achievements/Achievements/AIEngineerHacktathonWinnerAward.jpeg" alt="Receiving the AI Engineering Hackathon 2025 award" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-blue">AI Hackathon 2025 · Award</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="awards">
+                    <img src="profile-photo/achievements/Achievements/TrainerAward.jpeg" alt="Receiving the Best Mentor Award at BRAC IT" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-amber">Best Mentor · BRAC IT</span></figcaption>
+                </figure>
+                <figure class="gallery-item gallery-tall" data-cat="research">
+                    <img src="profile-photo/achievements/Achievements/PhotoWithNasaScientistISSPublication.jpeg" alt="With the NASA/MIT Astrobee scientist — ISS publication collaboration" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-cyan">NASA/MIT · ISS Paper</span></figcaption>
+                </figure>
+                <figure class="gallery-item gallery-wide" data-cat="awards">
+                    <img src="profile-photo/achievements/Achievements/KiboKrpcAward.jpeg" alt="Receiving the Kibo-RPC (JAXA) national award" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-amber">Kibo-RPC · JAXA</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="hackathon">
+                    <img src="profile-photo/achievements/Achievements/AIEngineeringHackathonPresentation.jpeg" alt="Presenting at the AI Engineering Hackathon 2025" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-blue">Hackathon Pitch</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="hackathon">
+                    <img src="profile-photo/achievements/Achievements/AI-EngineeringHackathonWinners.jpeg" alt="AI Engineering Hackathon 2025 winners" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-blue">Hackathon Winners</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="leadership">
+                    <img src="profile-photo/achievements/Achievements/MongolTori.jpeg" alt="BracU Mongol-Tori Mars rover team" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-violet">Mongol-Tori Rover</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="awards">
+                    <img src="profile-photo/achievements/Achievements/KiboKrpcAward2.jpeg" alt="Kibo-RPC (JAXA) award ceremony" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-amber">Kibo-RPC · JAXA</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="awards">
+                    <img src="profile-photo/achievements/Achievements/PhotoWithKiboAwardGiver.jpeg" alt="With the Kibo-RPC award presenter" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-amber">Kibo-RPC · JAXA</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="awards">
+                    <img src="profile-photo/achievements/Achievements/ACMP-4Certification.jpeg" alt="ACMP-4.0 certification from IBA, Dhaka University" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-amber">ACMP-4.0 · IBA DU</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="hackathon">
+                    <img src="profile-photo/achievements/Achievements/AIEngineeringHackathonWinner.jpeg" alt="AI Engineering Hackathon 2025 winner moment" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-blue">AI Hackathon 2025</span></figcaption>
+                </figure>
+                <figure class="gallery-item gallery-wide" data-cat="training">
+                    <img src="profile-photo/achievements/Achievements/AphotoWithSessionAttendies.jpeg" alt="With training session attendees" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-emerald">Session Attendees</span></figcaption>
+                </figure>
+
+                <!-- Training -->
+                <figure class="gallery-item" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/TrainingatBracit.jpeg" alt="Conducting a training session at BRAC IT" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/TrainingatBracit1.jpeg" alt="Conducting a training session at BRAC IT" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/TrainingatBracit2.jpeg" alt="Conducting a training session at BRAC IT" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
+                <figure class="gallery-item gallery-tall" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/TrainingATBRACIT4.jpeg" alt="Presenting during a BRAC IT workshop" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
+                <figure class="gallery-item" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/TrainingatBracit3.jpeg" alt="Presenting during a BRAC IT workshop" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
+                <figure class="gallery-item gallery-contain" data-cat="training">
+                    <img src="profile-photo/achievements/Taking Training sessions/TrainingAdvertisingatBracit.png" alt="AI-Powered Development workshop announcement" loading="lazy" decoding="async">
+                    <figcaption><span class="tag tag-emerald">Workshop</span></figcaption>
+                </figure>
+            </div>
+
+            <p class="gallery-note">
+                <i class="fas fa-keyboard"></i>
+                Click any photo to open. Use <kbd>←</kbd> <kbd>→</kbd> to navigate, <kbd>Esc</kbd> to close — or swipe on touch.
+            </p>
         </div>
     </section>
 
@@ -626,7 +772,7 @@
     <section id="skills" class="section skills">
         <div class="container">
             <header class="section-header">
-                <span class="section-kicker">06 — Skills &amp; Education</span>
+                <span class="section-kicker">07 — Skills &amp; Education</span>
                 <h2 class="section-title">Stack &amp; foundations.</h2>
                 <p class="section-subtitle">Languages, frameworks, math, and the credentials behind the work.</p>
             </header>
@@ -644,8 +790,9 @@
                     <h3><i class="fas fa-cubes"></i> Frameworks &amp; Platforms</h3>
                     <ul class="chip-list">
                         <li>SpringBoot</li><li>Quarkus</li><li>Angular</li><li>React</li>
-                        <li>WebFlux</li><li>LangChain4j</li><li>Streamlit</li><li>N8N</li>
-                        <li>VectorShift</li><li>Crew</li><li>Google ADK</li>
+                        <li>FastAPI</li><li>WebFlux</li><li>LangChain4j</li><li>LiteLLM</li>
+                        <li>Streamlit</li><li>N8N</li><li>VectorShift</li><li>CrewAI</li>
+                        <li>Google ADK</li>
                     </ul>
                 </div>
 
@@ -654,7 +801,8 @@
                     <ul class="chip-list">
                         <li>TensorFlow</li><li>PyTorch</li><li>Scikit-learn</li><li>Transformers</li>
                         <li>OpenCV</li><li>YOLO</li><li>RAG</li><li>LLMs</li>
-                        <li>MCP</li><li>NLP</li><li>Computer Vision</li><li>Deep Learning</li>
+                        <li>MCP</li><li>Multi-Agent Systems</li><li>Predictive Modeling</li>
+                        <li>NLP</li><li>Computer Vision</li><li>Deep Learning</li>
                     </ul>
                 </div>
 
@@ -663,7 +811,7 @@
                     <ul class="chip-list">
                         <li>Docker</li><li>Kubernetes</li><li>GCP</li><li>CI/CD</li>
                         <li>Kafka</li><li>RabbitMQ</li><li>Redis</li><li>PostgreSQL</li>
-                        <li>Keycloak</li><li>Git</li>
+                        <li>Qdrant</li><li>DuckDB</li><li>Keycloak</li><li>Git</li>
                     </ul>
                 </div>
 
@@ -671,7 +819,8 @@
                     <h3><i class="fas fa-square-root-variable"></i> Mathematics</h3>
                     <ul class="chip-list">
                         <li>Linear Algebra</li><li>Calculus</li><li>Probability</li>
-                        <li>Statistics</li><li>Optimization</li><li>Mathematical Modeling</li>
+                        <li>Statistics</li><li>Information Theory</li><li>Optimization</li>
+                        <li>Mathematical Modeling</li>
                     </ul>
                 </div>
 
@@ -680,7 +829,7 @@
                     <ul class="cred-list">
                         <li><i class="fas fa-university"></i> <strong>ACMP-4.0</strong> — IBA, Dhaka University · Jan 2025 – Mar 2025</li>
                         <li><i class="fas fa-school"></i> <strong>B.Sc, Computer Science &amp; Engineering</strong> — BRAC University · CGPA 3.54 · Jan 2018 – Jul 2022</li>
-                        <li><i class="fas fa-book"></i> <strong>HSC (Science)</strong> — Collectorate School &amp; College, Rangpur · GPA 5.00 · 2014 – 2016</li>
+                        <li><i class="fas fa-book"></i> <strong>HSC (Science)</strong> — Collectorate School &amp; College, Rangpur · GPA 5.00 · 2014 – 2017</li>
                         <li><i class="fas fa-leaf"></i> Spring 6 &amp; Spring Boot 3 First Look — LinkedIn Learning</li>
                         <li><i class="fas fa-chart-line"></i> Data Science &amp; Machine Learning Specialization — DataCamp</li>
                         <li><i class="fas fa-square-root-variable"></i> Introduction to Statistics in Python — DataCamp</li>
@@ -693,11 +842,27 @@
         </div>
     </section>
 
+    <!-- CTA banner -->
+    <section class="section cta-section" aria-label="Call to action">
+        <div class="container">
+            <div class="cta-banner">
+                <div class="cta-text">
+                    <h2>Have an AI problem worth solving?</h2>
+                    <p>From research prototypes to production platforms — let's build it together.</p>
+                </div>
+                <a href="#contact" class="btn btn-primary">
+                    <i class="fas fa-comments"></i>
+                    Let's talk
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact -->
     <section id="contact" class="section contact">
         <div class="container">
             <header class="section-header">
-                <span class="section-kicker">07 — Contact</span>
+                <span class="section-kicker">08 — Contact</span>
                 <h2 class="section-title">Let's build something.</h2>
                 <p class="section-subtitle">Open to AI / R&amp;D collaborations, advisory, and interesting engineering problems.</p>
             </header>

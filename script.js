@@ -1,6 +1,7 @@
 /* =========================================================
    Mubin Ul Islam Chowdhury — Portfolio
-   Interactions: nav, reveal, gallery, lightbox, form
+   Interactions: nav, progress, reveal, counters, filters,
+   lightbox (+swipe), spotlight, tilt, form
    ========================================================= */
 
 (() => {
@@ -8,6 +9,9 @@
 
     const $ = (sel, root = document) => root.querySelector(sel);
     const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
     // -----------------------------------------------------
     // Navigation
@@ -17,6 +21,7 @@
     const hamburger = $('#hamburger');
     const navLinks = $$('.nav-link');
     const sections = $$('section[id]');
+    const progressBar = $('#scrollProgress');
 
     const closeMenu = () => {
         navMenu.classList.remove('active');
@@ -40,7 +45,7 @@
                 if (target) {
                     e.preventDefault();
                     const top = target.getBoundingClientRect().top + window.scrollY - 70;
-                    window.scrollTo({ top, behavior: 'smooth' });
+                    window.scrollTo({ top, behavior: prefersReduced.matches ? 'auto' : 'smooth' });
                     closeMenu();
                 }
             }
@@ -51,10 +56,82 @@
         if (e.key === 'Escape' && navMenu.classList.contains('active')) closeMenu();
     });
 
-    // Scroll-driven nav state
+    // -----------------------------------------------------
+    // Theme toggle (initial class set by inline head script)
+    // -----------------------------------------------------
+    const themeToggle = $('#themeToggle');
+    const applyThemeIcon = () => {
+        const icon = themeToggle?.querySelector('i');
+        if (icon) {
+            icon.className = document.documentElement.classList.contains('light-theme')
+                ? 'fas fa-sun' : 'fas fa-moon';
+        }
+    };
+    let themeTransTimer = null;
+    themeToggle?.addEventListener('click', () => {
+        const root = document.documentElement;
+        const next = root.classList.contains('light-theme') ? 'dark' : 'light';
+        root.classList.add('theme-transition');
+        root.classList.remove('light-theme', 'dark-theme');
+        root.classList.add(next + '-theme');
+        try { localStorage.setItem('selected-theme', next); } catch { /* private mode */ }
+        applyThemeIcon();
+        clearTimeout(themeTransTimer);
+        themeTransTimer = setTimeout(() => root.classList.remove('theme-transition'), 400);
+    });
+    applyThemeIcon();
+
+    // -----------------------------------------------------
+    // Hero typewriter
+    // -----------------------------------------------------
+    const typedEl = $('#typedText');
+    if (typedEl) {
+        const words = [
+            'multi-agent AI platforms',
+            'RAG & LLM systems',
+            'computer-vision pipelines',
+            'enterprise backends',
+            'research prototypes'
+        ];
+        if (prefersReduced.matches) {
+            typedEl.textContent = words[0];
+        } else {
+            let wi = 0, ci = words[0].length, deleting = true;
+            const tick = () => {
+                if (deleting) {
+                    ci -= 1;
+                    typedEl.textContent = words[wi].slice(0, ci);
+                    if (ci === 0) {
+                        deleting = false;
+                        wi = (wi + 1) % words.length;
+                        setTimeout(tick, 350);
+                    } else {
+                        setTimeout(tick, 42);
+                    }
+                } else {
+                    ci += 1;
+                    typedEl.textContent = words[wi].slice(0, ci);
+                    if (ci === words[wi].length) {
+                        deleting = true;
+                        setTimeout(tick, 2200);
+                    } else {
+                        setTimeout(tick, 72);
+                    }
+                }
+            };
+            setTimeout(tick, 2400);
+        }
+    }
+
+    // Scroll-driven nav state + reading progress
     const onScroll = () => {
         const y = window.scrollY;
         navbar.classList.toggle('scrolled', y > 40);
+
+        if (progressBar) {
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            progressBar.style.transform = `scaleX(${max > 0 ? Math.min(y / max, 1) : 0})`;
+        }
 
         let current = sections[0]?.id;
         for (const s of sections) {
@@ -74,15 +151,21 @@
     onScroll();
 
     // -----------------------------------------------------
-    // Reveal on scroll
+    // Reveal on scroll — staggered within each batch.
+    // Classes are stripped once the transition finishes so
+    // hover transforms are never overridden afterwards.
     // -----------------------------------------------------
     const revealTargets = $$([
         '.section-header',
         '.about-bio',
         '.about-stats > *',
+        '.service-card',
+        '.cta-banner',
+        '.awards-list > li',
         '.gallery-item',
         '.timeline-item',
         '.project-card',
+        '.projects-cta',
         '.research-card',
         '.workshop-strip > *',
         '.skills-card',
@@ -90,44 +173,95 @@
         '.contact-form'
     ].join(','));
 
-    revealTargets.forEach(el => el.classList.add('reveal'));
+    const settleReveal = (el, delay) => {
+        setTimeout(() => {
+            el.classList.remove('reveal', 'in');
+            el.style.removeProperty('--reveal-delay');
+        }, delay + 900);
+    };
 
-    if ('IntersectionObserver' in window) {
+    if (!prefersReduced.matches && 'IntersectionObserver' in window) {
+        revealTargets.forEach(el => el.classList.add('reveal'));
         const io = new IntersectionObserver((entries) => {
+            let batch = 0;
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('in');
-                    io.unobserve(entry.target);
-                }
+                if (!entry.isIntersecting) return;
+                const delay = Math.min(batch * 70, 420);
+                batch += 1;
+                entry.target.style.setProperty('--reveal-delay', `${delay}ms`);
+                entry.target.classList.add('in');
+                settleReveal(entry.target, delay);
+                io.unobserve(entry.target);
             });
         }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
         revealTargets.forEach(el => io.observe(el));
-    } else {
-        revealTargets.forEach(el => el.classList.add('in'));
     }
 
     // -----------------------------------------------------
-    // Gallery filter + lightbox
+    // Animated counters
     // -----------------------------------------------------
-    const gallery = $('#gallery');
-    const filterBtns = $$('.filter-btn');
-    const items = gallery ? $$('.gallery-item', gallery) : [];
+    const counters = $$('[data-count]');
+    const runCounter = (el) => {
+        const target = parseInt(el.dataset.count, 10);
+        const suffix = el.dataset.suffix || '';
+        if (Number.isNaN(target)) return;
+        if (prefersReduced.matches) {
+            el.textContent = target + suffix;
+            return;
+        }
+        const duration = 1300;
+        const start = performance.now();
+        const tick = (now) => {
+            const t = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = Math.round(target * eased) + suffix;
+            if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+    };
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const filter = btn.dataset.filter;
-            filterBtns.forEach(b => {
-                b.classList.toggle('active', b === btn);
-                b.setAttribute('aria-selected', String(b === btn));
+    if (counters.length && 'IntersectionObserver' in window) {
+        const cio = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    runCounter(entry.target);
+                    cio.unobserve(entry.target);
+                }
             });
-            items.forEach(item => {
-                const match = filter === 'all' || item.dataset.cat === filter;
-                item.classList.toggle('is-hidden', !match);
+        }, { threshold: 0.5 });
+        counters.forEach(el => cio.observe(el));
+    }
+
+    // -----------------------------------------------------
+    // Category filters (projects + gallery)
+    // -----------------------------------------------------
+    const setupFilter = (filtersEl, itemsEl) => {
+        if (!filtersEl || !itemsEl) return;
+        const btns = $$('.filter-btn', filtersEl);
+        const filterItems = $$('[data-cat]', itemsEl);
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+                btns.forEach(b => {
+                    b.classList.toggle('active', b === btn);
+                    b.setAttribute('aria-selected', String(b === btn));
+                });
+                filterItems.forEach(item => {
+                    const match = filter === 'all' || item.dataset.cat === filter;
+                    item.classList.toggle('is-hidden', !match);
+                });
             });
         });
-    });
+    };
+    setupFilter($('#projectFilters'), $('#projectGrid'));
+    setupFilter($('#galleryFilters'), $('#gallery'));
 
-    // Lightbox
+    // -----------------------------------------------------
+    // Lightbox (keyboard + swipe)
+    // -----------------------------------------------------
+    const gallery = $('#gallery');
+    const items = gallery ? $$('.gallery-item', gallery) : [];
+
     const lightbox = $('#lightbox');
     const lbImg = $('#lbImg');
     const lbCount = $('#lbCount');
@@ -205,18 +339,55 @@
         else if (e.key === 'ArrowRight') next();
     });
 
+    // Swipe: horizontal to navigate, downward to dismiss
+    let touchX = 0, touchY = 0;
+    lightbox?.addEventListener('touchstart', (e) => {
+        touchX = e.changedTouches[0].clientX;
+        touchY = e.changedTouches[0].clientY;
+    }, { passive: true });
+    lightbox?.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchX;
+        const dy = e.changedTouches[0].clientY - touchY;
+        if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) {
+            if (dx > 0) prev(); else next();
+        } else if (dy > 70 && Math.abs(dy) > Math.abs(dx)) {
+            closeLightbox();
+        }
+    }, { passive: true });
+
     // Workshop strip → also opens lightbox via the gallery list
     $$('.workshop-strip img').forEach(img => {
         img.style.cursor = 'zoom-in';
         img.addEventListener('click', () => {
-            // find a matching gallery item by src
             const match = items.find(it => $('img', it).src === img.src);
             if (match) openLightbox(match);
         });
     });
 
     // -----------------------------------------------------
-    // Contact form
+    // Cursor spotlight on cards (desktop only)
+    // -----------------------------------------------------
+    if (finePointer.matches) {
+        const SPOT = '.project-card, .skills-card, .service-card, .research-card, .timeline-card';
+        let spotEvent = null;
+        let spotTicking = false;
+        document.addEventListener('pointermove', (e) => {
+            spotEvent = e;
+            if (spotTicking) return;
+            spotTicking = true;
+            requestAnimationFrame(() => {
+                spotTicking = false;
+                const card = spotEvent.target?.closest?.(SPOT);
+                if (!card) return;
+                const r = card.getBoundingClientRect();
+                card.style.setProperty('--mx', `${spotEvent.clientX - r.left}px`);
+                card.style.setProperty('--my', `${spotEvent.clientY - r.top}px`);
+            });
+        }, { passive: true });
+    }
+
+    // -----------------------------------------------------
+    // Contact form — composes a real email
     // -----------------------------------------------------
     const form = $('#contactForm');
 
@@ -236,7 +407,7 @@
 
     const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-    form?.addEventListener('submit', async (e) => {
+    form?.addEventListener('submit', (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(form));
         if (!data.name || !data.email || !data.subject || !data.message) {
@@ -247,20 +418,10 @@
             toast('Please enter a valid email address.', 'error');
             return;
         }
-        const submitBtn = $('.form-submit', form);
-        const originalHTML = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
-        submitBtn.disabled = true;
-        try {
-            await new Promise(r => setTimeout(r, 1100));
-            toast("Message sent. I'll get back to you soon.", 'success');
-            form.reset();
-        } catch {
-            toast('Could not send. Please try again later.', 'error');
-        } finally {
-            submitBtn.innerHTML = originalHTML;
-            submitBtn.disabled = false;
-        }
+        const body = `${data.message}\n\n— ${data.name}\n${data.email}`;
+        window.location.href =
+            `mailto:uic.mubin@gmail.com?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(body)}`;
+        toast('Opening your email app with the message ready to send…', 'info');
     });
 
     // -----------------------------------------------------

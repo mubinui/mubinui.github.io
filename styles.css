@@ -76,10 +76,10 @@
 .light-theme {
     color-scheme: light;
 
-    --bg-0: #FAF6ED;
-    --bg-1: #F4EFE3;
-    --bg-2: #FFFCF5;
-    --bg-3: #E9E2D2;
+    --bg-0: #FCFAF5;
+    --bg-1: #F7F4EC;
+    --bg-2: #FFFEFB;
+    --bg-3: #EFEBE0;
 
     --text-0: #2C261B;
     --text-1: #4A4334;
@@ -94,16 +94,16 @@
     --accent-soft: #3B82F6;
     --accent-rgb: 29, 78, 216;
 
-    --glass: rgba(255, 252, 245, 0.75);
-    --glass-strong: rgba(255, 252, 245, 0.92);
-    --glass-hover: rgba(255, 253, 248, 0.95);
-    --surface: rgba(60, 50, 30, 0.045);
+    --glass: rgba(255, 254, 250, 0.78);
+    --glass-strong: rgba(255, 254, 250, 0.94);
+    --glass-hover: rgba(255, 255, 252, 0.96);
+    --surface: rgba(60, 50, 30, 0.04);
 
-    --nav-bg: rgba(250, 246, 237, 0.72);
-    --nav-bg-scrolled: rgba(250, 246, 237, 0.94);
-    --menu-bg: rgba(250, 246, 237, 0.98);
-    --footer-bg: rgba(244, 239, 227, 0.8);
-    --toast-bg: rgba(255, 252, 245, 0.97);
+    --nav-bg: rgba(252, 250, 245, 0.72);
+    --nav-bg-scrolled: rgba(252, 250, 245, 0.94);
+    --menu-bg: rgba(252, 250, 245, 0.98);
+    --footer-bg: rgba(247, 244, 236, 0.8);
+    --toast-bg: rgba(255, 254, 250, 0.97);
 
     --grid-line: rgba(60, 50, 30, 0.06);
     --spot-color: rgba(29, 78, 216, 0.05);

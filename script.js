@@ -17,25 +17,9 @@
     // Navigation
     // -----------------------------------------------------
     const navbar = $('.navbar');
-    const navMenu = $('#navMenu');
-    const hamburger = $('#hamburger');
     const navLinks = $$('.nav-link');
     const sections = $$('section[id]');
     const progressBar = $('#scrollProgress');
-
-    const closeMenu = () => {
-        navMenu.classList.remove('active');
-        hamburger.classList.remove('active');
-        hamburger.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('menu-open');
-    };
-
-    hamburger?.addEventListener('click', () => {
-        const isOpen = navMenu.classList.toggle('active');
-        hamburger.classList.toggle('active', isOpen);
-        hamburger.setAttribute('aria-expanded', String(isOpen));
-        document.body.classList.toggle('menu-open', isOpen);
-    });
 
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -46,14 +30,9 @@
                     e.preventDefault();
                     const top = target.getBoundingClientRect().top + window.scrollY - 70;
                     window.scrollTo({ top, behavior: prefersReduced.matches ? 'auto' : 'smooth' });
-                    closeMenu();
                 }
             }
         });
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && navMenu.classList.contains('active')) closeMenu();
     });
 
     // -----------------------------------------------------

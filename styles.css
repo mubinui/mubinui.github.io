@@ -72,50 +72,50 @@
     color-scheme: dark;
 }
 
-/* ---- Light theme ---- */
+/* ---- Light theme — warm cream, easy on the eyes ---- */
 .light-theme {
     color-scheme: light;
 
-    --bg-0: #F8FAFC;
-    --bg-1: #F1F5F9;
-    --bg-2: #FFFFFF;
-    --bg-3: #E2E8F0;
+    --bg-0: #FAF6ED;
+    --bg-1: #F4EFE3;
+    --bg-2: #FFFCF5;
+    --bg-3: #E9E2D2;
 
-    --text-0: #0F172A;
-    --text-1: #334155;
-    --text-2: #475569;
-    --text-3: #64748B;
+    --text-0: #2C261B;
+    --text-1: #4A4334;
+    --text-2: #6B6353;
+    --text-3: #8A8271;
 
-    --line: rgba(15, 23, 42, 0.08);
-    --line-strong: rgba(15, 23, 42, 0.16);
+    --line: rgba(60, 50, 30, 0.10);
+    --line-strong: rgba(60, 50, 30, 0.18);
 
     --accent: #1D4ED8;
     --accent-alt: #1E40AF;
     --accent-soft: #3B82F6;
     --accent-rgb: 29, 78, 216;
 
-    --glass: rgba(255, 255, 255, 0.72);
-    --glass-strong: rgba(255, 255, 255, 0.9);
-    --glass-hover: rgba(255, 255, 255, 0.95);
-    --surface: rgba(15, 23, 42, 0.035);
+    --glass: rgba(255, 252, 245, 0.75);
+    --glass-strong: rgba(255, 252, 245, 0.92);
+    --glass-hover: rgba(255, 253, 248, 0.95);
+    --surface: rgba(60, 50, 30, 0.045);
 
-    --nav-bg: rgba(248, 250, 252, 0.7);
-    --nav-bg-scrolled: rgba(248, 250, 252, 0.92);
-    --menu-bg: rgba(248, 250, 252, 0.98);
-    --footer-bg: rgba(241, 245, 249, 0.8);
-    --toast-bg: rgba(255, 255, 255, 0.97);
+    --nav-bg: rgba(250, 246, 237, 0.72);
+    --nav-bg-scrolled: rgba(250, 246, 237, 0.94);
+    --menu-bg: rgba(250, 246, 237, 0.98);
+    --footer-bg: rgba(244, 239, 227, 0.8);
+    --toast-bg: rgba(255, 252, 245, 0.97);
 
-    --grid-line: rgba(15, 23, 42, 0.05);
+    --grid-line: rgba(60, 50, 30, 0.06);
     --spot-color: rgba(29, 78, 216, 0.05);
-    --title-grad-a: #0F172A;
-    --title-grad-b: #3B4A63;
+    --title-grad-a: #2C261B;
+    --title-grad-b: #56503E;
 
-    --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.06);
-    --shadow-md: 0 12px 36px rgba(15, 23, 42, 0.10);
-    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.14);
+    --shadow-sm: 0 2px 10px rgba(60, 48, 30, 0.06);
+    --shadow-md: 0 12px 36px rgba(60, 48, 30, 0.10);
+    --shadow-lg: 0 24px 60px rgba(60, 48, 30, 0.14);
 
-    --card-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-    --card-shadow-hover: 0 15px 35px rgba(15, 23, 42, 0.11);
+    --card-shadow: 0 10px 30px rgba(60, 48, 30, 0.07);
+    --card-shadow-hover: 0 15px 35px rgba(60, 48, 30, 0.12);
 }
 
 /* Smooth cross-fade while switching themes (class added briefly by JS) */
@@ -154,6 +154,12 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color var(--t), color var(--t);
+}
+
+.light-theme body {
+    background-image:
+        radial-gradient(1000px 600px at 12% -10%, rgba(var(--accent-rgb), 0.07), transparent 60%),
+        radial-gradient(900px 500px at 100% 10%, rgba(var(--accent-rgb), 0.05), transparent 60%);
 }
 
 /* Fixed background gradients only on desktop — it repaints badly on mobile */
@@ -586,7 +592,7 @@ a, button {
     aspect-ratio: 1 / 1;
     overflow: hidden;
 }
-.light-theme .hero-img-card { box-shadow: 0 15px 35px rgba(15, 23, 42, 0.1); }
+.light-theme .hero-img-card { box-shadow: 0 15px 35px rgba(60, 48, 30, 0.14); }
 .hero-img-card img {
     width: 100%;
     height: 100%;

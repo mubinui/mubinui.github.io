@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mubinuic.github.io/sitemap.xml

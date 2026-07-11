@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mubinuic.github.io/sitemap.xml
+Sitemap: https://mubinui.github.io/sitemap.xml

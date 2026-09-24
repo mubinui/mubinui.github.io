@@ -956,3 +956,101 @@
 .inline-link:hover {
     text-decoration: underline;
 }
+
+/* ---------- Buttons: the portfolio's tactile language, in the assistant ---------- */
+
+.composer-btn,
+.suggestion,
+.head-btn,
+.tool,
+.fab-end,
+.ask-fab,
+.voice-end,
+.provider span {
+    transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out), background-color 0.2s ease, color 0.2s ease;
+}
+
+.composer-btn:active,
+.suggestion:active,
+.head-btn:active,
+.tool:active,
+.fab-end:active,
+.voice-end:active,
+.ask-fab:active {
+    transform: scale(0.94);
+    transition-duration: 0.1s;
+}
+
+/* Send: the same lit blue lens as the primary button. */
+.composer-btn.send {
+    background: linear-gradient(180deg, #3a95ff 0%, #0a74e6 55%, #0066d6 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 40, 110, 0.25), 0 6px 14px -6px rgba(0, 113, 227, 0.6);
+}
+
+.composer-btn.send:hover:not(:disabled) {
+    background: linear-gradient(180deg, #4a9fff 0%, #1479ea 55%, #006ad9 100%);
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -1px 0 rgba(0, 40, 110, 0.25), 0 10px 20px -8px rgba(0, 113, 227, 0.65);
+}
+
+.composer-btn.send:disabled {
+    background: linear-gradient(180deg, #d8d8dd, #c4c4ca);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Mic: a frosted key with a bright rim. */
+.composer-btn.mic {
+    background: linear-gradient(180deg, #ffffff, #eef1f6);
+    box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgba(15, 23, 42, 0.07), 0 4px 10px -6px rgba(15, 23, 42, 0.3);
+}
+
+.composer-btn.mic:hover {
+    background: linear-gradient(180deg, #ffffff, #e7ecf5);
+    color: var(--blue);
+    transform: translateY(-1px);
+}
+
+/* Suggestions: soft blue glass capsules. */
+.suggestion {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 0 0 1px rgba(0, 113, 227, 0.1);
+}
+
+.suggestion:hover {
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 0 0 1px rgba(0, 113, 227, 0.2), 0 6px 14px -8px rgba(0, 113, 227, 0.45);
+}
+
+.head-btn {
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95), 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 20px -10px rgba(15, 23, 42, 0.22);
+}
+
+.head-btn:hover {
+    transform: translateY(-1px);
+}
+
+.tool:hover {
+    background: linear-gradient(180deg, #ffffff, #eef1f6);
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06), 0 3px 8px -4px rgba(15, 23, 42, 0.25);
+}
+
+/* End: a lit red lens, matching the blue one. */
+.fab-end,
+.voice-end {
+    background: linear-gradient(180deg, #ff6259 0%, #ff3b30 55%, #e5302a 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(120, 10, 10, 0.25), 0 8px 20px -8px rgba(255, 59, 48, 0.65);
+}
+
+.fab-end:hover,
+.voice-end:hover {
+    background: linear-gradient(180deg, #ff6f67 0%, #ff4238 55%, #e8352e 100%);
+    transform: translateY(-1px);
+}
+
+.ask-fab:hover {
+    box-shadow: var(--glass-edge), 0 18px 40px -14px rgba(0, 113, 227, 0.35);
+}
+
+/* Settings actions reuse the portfolio pills; the provider switch gets a lit thumb. */
+.provider input:checked + span {
+    box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(15, 23, 42, 0.1), 0 4px 10px -6px rgba(15, 23, 42, 0.25);
+}

@@ -91,6 +91,8 @@ Mathematics: calculus, probability, linear algebra, statistics, information theo
 
     const SYSTEM_PROMPT = `You are the assistant on Mubin Ul Islam Chowdhury's portfolio website. Visitors are usually hiring managers, recruiters, or professors considering him for research positions.
 
+LANGUAGE: Reply only in Bangla or English. If the visitor writes or speaks Bangla (including Banglish, Bangla in Latin letters), reply in natural, everyday Bangla written in Bangla script; otherwise reply in English. If they use any other language, reply in English and mention politely that you can talk in Bangla or English. Keep names, project names and technical terms (for example BRAC IT AI Kit, RAG, FVC2002) in English inside Bangla replies.
+
 Answer only from the profile below. If something isn't in it, say you don't know and suggest emailing Mubin at ${EMAIL}. Never invent employers, dates, numbers, links or opinions. Refer to Mubin in the third person.
 
 Keep answers short and specific: two to four sentences, or a brief list when listing several items. Lead with the most relevant fact or number. Use plain language. You may use **bold** and simple "- " lists. Do not use headings or tables.
@@ -340,7 +342,31 @@ ${PROFILE}`;
         'Teaching': 'Tell me about his teaching'
     };
 
-    const normalize = text => ` ${text.toLowerCase().replace(/[^a-z0-9.+#\s-]/g, ' ').replace(/\s+/g, ' ').trim()} `;
+    const BANGLA = /[\u0980-\u09FF]/;
+    const normalize = text => ` ${text.toLowerCase().replace(/[^a-z0-9.+#\s\u0980-\u09FF-]/g, ' ').replace(/\s+/g, ' ').trim()} `;
+
+    // Bangla words for the main topics; matched as substrings because Bangla adds suffixes.
+    const BANGLA_KEYS = {
+        greeting: ['হ্যালো', 'হাই', 'আসসালামু', 'সালাম', 'নমস্কার'],
+        about: ['কে', 'পরিচয়', 'মুবিন'],
+        experience: ['অভিজ্ঞতা', 'চাকরি', 'কাজের অভিজ্ঞতা', 'ক্যারিয়ার'],
+        projects: ['প্রজেক্ট', 'প্রকল্প', 'কাজ'],
+        research: ['গবেষণা', 'পেপার', 'প্রকাশনা', 'রিসার্চ'],
+        awards: ['পুরস্কার', 'অর্জন', 'হ্যাকাথন', 'জিতেছে', 'অ্যাওয়ার্ড'],
+        teaching: ['প্রশিক্ষণ', 'ট্রেনিং', 'ট্রেইনার', 'শেখান', 'ওয়ার্কশপ', 'মেন্টর'],
+        skills: ['দক্ষতা', 'স্কিল', 'প্রোগ্রামিং', 'ভাষা', 'টেকনোলজি'],
+        education: ['শিক্ষা', 'পড়াশোনা', 'ডিগ্রি', 'বিশ্ববিদ্যালয়', 'সিজিপিএ'],
+        contact: ['যোগাযোগ', 'ইমেইল', 'নিয়োগ', 'চাকরির সুযোগ', 'হায়ার'],
+        location: ['কোথায়', 'ঠিকানা', 'ঢাকা'],
+        cv: ['সিভি', 'রেজুমে'],
+        rover: ['রোভার', 'মঙ্গল'],
+        nasa: ['নাসা', 'মহাকাশ', 'স্পেস স্টেশন'],
+        thanks: ['ধন্যবাদ', 'থ্যাংকস'],
+        bye: ['বিদায়', 'আল্লাহ হাফেজ']
+    };
+    INTENTS.forEach(intent => {
+        if (BANGLA_KEYS[intent.id]) intent.keys = intent.keys.concat(BANGLA_KEYS[intent.id]);
+    });
 
     function ruleAnswer(question) {
         const q = normalize(question);
@@ -349,12 +375,14 @@ ${PROFILE}`;
         for (const intent of INTENTS) {
             let score = 0;
             for (const key of intent.keys) {
-                if (q.includes(` ${key} `) || (key.includes(' ') && q.includes(key))) {
+                if (q.includes(` ${key} `) || ((key.includes(' ') || (BANGLA.test(key) && key.length > 2)) && q.includes(key))) {
                     score += (key.includes(' ') ? 2 : 1) * (intent.weight || 1);
                 }
             }
             // Greetings only win when the message is basically a greeting.
             if (intent.id === 'greeting' && q.trim().split(' ').length > 4) score = Math.min(score, 0.5);
+            // The one-letter Bangla "who" (কে) only counts for short questions.
+            if (intent.id === 'about' && BANGLA.test(q) && q.trim().split(' ').length > 6) score = Math.min(score, 0.5);
             if (score > bestScore) {
                 bestScore = score;
                 best = intent;
@@ -627,8 +655,13 @@ ${PROFILE}`;
         if (c && window.DotSphere) new window.DotSphere(c, { count: 46, dotSize: 0.75 }).setState('thinking');
     };
 
+    let banglaNoted = false;
+    // The browser voice listens in the language the visitor last used.
+    let voiceLang = 'en-US';
+
     // Answers a question; resolves with the plain text to speak.
     async function respond(question, { voice = false, onSentence } = {}) {
+        voiceLang = BANGLA.test(question) ? 'bn-BD' : 'en-US';
         history.push({ role: 'user', text: question });
         const bubble = addMessage('bot', typingHtml);
         wakeSphere(bubble);
@@ -682,6 +715,10 @@ ${PROFILE}`;
         await new Promise(r => setTimeout(r, 350));
         bubble.innerHTML = format(rule.answer);
         addLinks(bubble, rule.links);
+        if (BANGLA.test(question) && !banglaNoted) {
+            banglaNoted = true;
+            addNote(bubble, 'অফলাইন গাইড ইংরেজিতে উত্তর দেয়। বাংলায় পূর্ণ উত্তরের জন্য একটি ফ্রি Gemini কী যুক্ত করুন।');
+        }
         history.push({ role: 'model', text: rule.answer });
         showChips(rule.chips);
         scrollDown();
@@ -756,6 +793,12 @@ ${PROFILE}`;
         if (orb) orb.setState(state);
     }
 
+    function pickBanglaVoice() {
+        const voices = canSpeak ? speechSynthesis.getVoices() : [];
+        const bangla = voices.filter(v => /^bn(-|_|$)/i.test(v.lang));
+        return bangla.find(v => /female|nabanita|tanishaa|google/i.test(v.name)) || bangla[0] || null;
+    }
+
     function pickVoice() {
         const voices = canSpeak ? speechSynthesis.getVoices() : [];
         const english = voices.filter(v => /^en(-|_|$)/i.test(v.lang));
@@ -784,8 +827,10 @@ ${PROFILE}`;
         speaking = true;
         setVoiceState('speaking', 'Speaking…');
         const u = new SpeechSynthesisUtterance(text);
-        const v = pickVoice();
+        const bangla = BANGLA.test(text);
+        const v = bangla ? pickBanglaVoice() : pickVoice();
         if (v) u.voice = v;
+        u.lang = bangla ? 'bn-BD' : 'en-US';
         u.rate = 0.96;
         u.pitch = 1.04;
         u.onboundary = () => orb && orb.beat(0.8);
@@ -806,7 +851,7 @@ ${PROFILE}`;
         voiceText.textContent = '';
         let finalText = '';
         recognizer = new Recognition();
-        recognizer.lang = 'en-US';
+        recognizer.lang = voiceLang;
         recognizer.interimResults = true;
         recognizer.continuous = false;
         recognizer.onresult = e => {
@@ -857,7 +902,7 @@ ${PROFILE}`;
 
     const LIVE_URL = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent';
 
-    const LIVE_PERSONA = `You are speaking out loud with a visitor to Mubin Ul Islam Chowdhury's portfolio, as his warm, friendly assistant. Talk like a thoughtful person, not a narrator: relaxed, natural and kind, with a gentle pace. Keep each reply to one to three short sentences, then let the visitor talk. Use contractions and everyday words. Never read out lists, markdown, symbols or web addresses; say "his email" or spell the address slowly only if asked. If the visitor interrupts, stop and listen. If you don't know something, say so simply and suggest emailing Mubin.`;
+    const LIVE_PERSONA = `You are speaking out loud with a visitor to Mubin Ul Islam Chowdhury's portfolio, as his warm, friendly assistant. Talk like a thoughtful person, not a narrator: relaxed, natural and kind, with a gentle pace. Keep each reply to one to three short sentences, then let the visitor talk. Use contractions and everyday words. Never read out lists, markdown, symbols or web addresses; say "his email" or spell the address slowly only if asked. If the visitor interrupts, stop and listen. If you don't know something, say so simply and suggest emailing Mubin. Speak only Bangla or English: answer in Bangla when the visitor speaks Bangla, otherwise in English; if they use another language, answer in English and say you can talk in Bangla or English.`;
 
     // Resamples the microphone to 16 kHz, 16-bit PCM, in ~100 ms packets.
     const MIC_WORKLET = `
@@ -1353,7 +1398,7 @@ registerProcessor('pcm-capture', PcmCapture);`;
     // ---------------------------------------------------------------
 
     renderMode();
-    const intro = addMessage('bot', format('Hi, I’m the assistant on Mubin’s portfolio. Ask me about his **projects, research, experience or awards**. Type, or tap the wave button to **talk**.'));
+    const intro = addMessage('bot', format('Hi, I’m the assistant on Mubin’s portfolio. Ask me about his **projects, research, experience or awards**, in **English or বাংলা**. Type, or tap the wave button to **talk**.'));
     if (!usingModel()) {
         const note = document.createElement('p');
         note.className = 'bubble-note';

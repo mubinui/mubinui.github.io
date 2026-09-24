@@ -2254,34 +2254,35 @@ a.paper-title:hover {
     box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(15, 23, 42, 0.1), 0 4px 10px -6px rgba(15, 23, 42, 0.25);
 }
 
-/* ---------- Portrait: stepping out of his own photo ----------
-   A borderless disc filled with the photo's own studio background. The photo keeps its
-   natural size; a cut-out of it, aligned pixel for pixel, rises above the disc's rim.
-   The disc wears the same soft shadow as the glass cards, so it belongs to the page. */
+/* ---------- Portrait: stepping out of a glass card ----------
+   The photo keeps its natural size. A rounded glass card holds its lower part: inside
+   the card you see the original photo, and a cut-out of the same photo, aligned pixel
+   for pixel, lets the head rise above the card's top edge. */
 
 .hero-portrait.pop {
-    --d: 84%;                             /* disc diameter, as a share of the photo */
-    --cy: calc(100% - var(--d) / 2);      /* disc centre, down the photo */
+    --top: 22%;                     /* where the card starts, down the photo */
+    --ring: clamp(8px, 1vw, 12px);  /* glass edge around the photo */
+    --r: 30px;                      /* inner corner radius */
     position: relative;
-    width: min(100%, 410px);
+    width: min(100%, 380px);
     aspect-ratio: 1;
     padding: 0;
-    margin: 0 0 18px;
+    margin: 0;
     border-radius: 0;
     background: none;
     box-shadow: none;
 }
 
-/* Shadow and a faint lift of light, drawn under the photo disc. */
-.pop-disc {
+.pop-card {
     position: absolute;
-    left: calc((100% - var(--d)) / 2);
-    bottom: 0;
-    width: var(--d);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: #cdcbd9;
-    box-shadow: var(--glass-shadow), 0 30px 60px -30px rgba(15, 23, 42, 0.28);
+    top: calc(var(--top) - var(--ring));
+    left: calc(var(--ring) * -1);
+    right: calc(var(--ring) * -1);
+    bottom: calc(var(--ring) * -1);
+    padding: 0;
+    border-radius: calc(var(--r) + var(--ring));
+    translate: calc(var(--px, 0) * 2px) calc(var(--py, 0) * 1.5px);
+    transition: translate 0.6s var(--ease-out);
 }
 
 .pop-inside,
@@ -2300,22 +2301,15 @@ a.paper-title:hover {
     max-width: none;
 }
 
-/* The original photo, seen through the disc: its background is the disc's colour. */
+/* The original photo, seen through the card. */
 .pop-inside {
-    clip-path: circle(calc(var(--d) / 2) at 50% var(--cy));
+    clip-path: inset(var(--top) 0 0 0 round var(--r));
 }
 
-/* The cut-out: free above the disc's centre line, kept to the disc below it. */
+/* The cut-out rises freely above the card; below, it keeps the card's corners. */
 .pop-stage {
-    -webkit-mask-image: linear-gradient(#000, #000), radial-gradient(ellipse calc(var(--d) / 2) calc(var(--d) / 2) at 50% var(--cy), #000 99.4%, transparent 100%);
-    mask-image: linear-gradient(#000, #000), radial-gradient(ellipse calc(var(--d) / 2) calc(var(--d) / 2) at 50% var(--cy), #000 99.4%, transparent 100%);
-    -webkit-mask-size: 100% var(--cy), 100% 100%;
-    mask-size: 100% var(--cy), 100% 100%;
-    -webkit-mask-position: top, center;
-    mask-position: top, center;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    filter: drop-shadow(0 -1px 6px rgba(15, 23, 42, 0.08));
+    clip-path: inset(-20% 0 0 0 round 0 0 var(--r) var(--r));
+    filter: drop-shadow(0 -2px 8px rgba(15, 23, 42, 0.08));
 }
 
 .pop-person {
@@ -2323,50 +2317,32 @@ a.paper-title:hover {
     mask-image: url("profile-photo/portrait-mask.png");
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
-}
-
-/* A hairline of light on the disc's lower rim, in front of the body: he sits inside it. */
-.pop-edge {
-    position: absolute;
-    left: calc((100% - var(--d)) / 2);
-    bottom: 0;
-    width: var(--d);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.35);
-    -webkit-mask-image: linear-gradient(transparent 50%, #000 50%);
-    mask-image: linear-gradient(transparent 50%, #000 50%);
-    pointer-events: none;
-}
-
-/* Both photo layers move as one, so the cut-out never separates from the photo. */
-.pop-inside img,
-.pop-person {
     transform-origin: 50% 100%;
+    translate: calc(var(--px, 0) * 4px) calc(var(--py, 0) * 2px);
+    transition: translate 0.6s var(--ease-out);
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    .pop-inside img,
     .pop-person {
         animation:
             pop-rise 1.4s var(--ease-out) 0.25s both,
-            pop-breathe 6s ease-in-out 1.7s infinite alternate;
+            pop-float 7s ease-in-out 1.7s infinite alternate;
     }
 }
 
 @keyframes pop-rise {
-    from { transform: translateY(6%); }
+    from { transform: translateY(9%); }
     to { transform: translateY(0); }
 }
 
-@keyframes pop-breathe {
-    from { transform: scale(1); }
-    to { transform: scale(1.012); }
+@keyframes pop-float {
+    from { transform: translateY(0); }
+    to { transform: translateY(-1%); }
 }
 
 @media (max-width: 859px) {
     .hero-portrait.pop {
-        width: min(calc(100% - 24px), 330px);
+        width: min(calc(100% - 24px), 320px);
     }
 }
 

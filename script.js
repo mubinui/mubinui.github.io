@@ -13,7 +13,7 @@
     const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
     // The main windows carry a visionOS grabber.
-    $$('.hero-window, .hero-portrait, .featured, .contact-window').forEach(win => {
+    $$('.hero-window, .featured, .contact-window').forEach(win => {
         const grabber = document.createElement('span');
         grabber.className = 'grabber';
         grabber.setAttribute('aria-hidden', 'true');
@@ -45,6 +45,23 @@
         window.addEventListener('scroll', requestDepth, { passive: true });
         window.addEventListener('resize', requestDepth);
         renderDepth();
+    }
+
+    // Portrait parallax: the figure drifts a little further than its disc, for depth.
+    const visual = $('.hero-visual');
+    const portrait = $('.hero-portrait.pop');
+    if (visual && portrait && finePointer && !reducedMotion) {
+        visual.addEventListener('pointermove', e => {
+            const r = portrait.getBoundingClientRect();
+            const px = clamp((e.clientX - (r.left + r.width / 2)) / (r.width / 2), -1, 1);
+            const py = clamp((e.clientY - (r.top + r.height / 2)) / (r.height / 2), -1, 1);
+            portrait.style.setProperty('--px', px.toFixed(3));
+            portrait.style.setProperty('--py', py.toFixed(3));
+        });
+        visual.addEventListener('pointerleave', () => {
+            portrait.style.setProperty('--px', '0');
+            portrait.style.setProperty('--py', '0');
+        });
     }
 
     // Glass light: a specular highlight follows the pointer across a window.

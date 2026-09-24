@@ -1,7 +1,7 @@
 // Service Worker for Portfolio Website
 // Provides offline functionality and caching
 
-const CACHE_NAME = 'mubin-portfolio-v28';
+const CACHE_NAME = 'mubin-portfolio-v29';
 const urlsToCache = [
     '/',
     '/index.html',

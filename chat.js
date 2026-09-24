@@ -368,13 +368,20 @@ ${PROFILE}`;
     // ---------------------------------------------------------------
 
     const STORE = 'mubin-assistant';
-    const DEFAULT_MODELS = { gemini: 'gemini-2.5-flash', openai: 'gpt-4.1-mini' };
+    const DEFAULT_MODELS = { gemini: 'gemini-3.8-flash', openai: 'gpt-4.1-mini' };
+    const DEFAULT_LIVE_MODEL = 'gemini-3.8-live';
+    // Achernar is Gemini's soft, warm female voice.
+    const LIVE_VOICE = 'Achernar';
+    const RETIRED_MODELS = ['gemini-2.5-flash'];
 
     const readStore = storage => {
         try { return JSON.parse(storage.getItem(STORE) || 'null'); } catch { return null; }
     };
 
     let settings = readStore(localStorage) || readStore(sessionStorage) || { provider: 'none', key: '', model: '', remember: false };
+    if (RETIRED_MODELS.includes(settings.model)) settings.model = '';
+    const liveModelName = () => settings.liveModel || DEFAULT_LIVE_MODEL;
+    const liveAvailable = () => settings.provider === 'gemini' && !!settings.key;
 
     function persist() {
         const data = JSON.stringify(settings);
@@ -752,12 +759,14 @@ ${PROFILE}`;
     function pickVoice() {
         const voices = canSpeak ? speechSynthesis.getVoices() : [];
         const english = voices.filter(v => /^en(-|_|$)/i.test(v.lang));
-        const preferred = ['Samantha', 'Ava', 'Google US English', 'Microsoft Aria', 'Microsoft Jenny', 'Daniel', 'Karen'];
+        // Soft female voices, best first; the browser's own voice is the last resort.
+        const preferred = ['Ava (Premium)', 'Ava (Enhanced)', 'Samantha (Enhanced)', 'Allison', 'Ava', 'Samantha', 'Susan', 'Serena', 'Moira', 'Tessa', 'Karen', 'Victoria',
+            'Google UK English Female', 'Google US English', 'Microsoft Jenny', 'Microsoft Aria', 'Microsoft Sonia', 'Microsoft Libby', 'Microsoft Zira'];
         for (const name of preferred) {
             const v = english.find(voice => voice.name.includes(name));
             if (v) return v;
         }
-        return english.find(v => v.localService) || english[0] || null;
+        return english.find(v => /female|woman/i.test(v.name)) || english.find(v => v.localService) || english[0] || null;
     }
 
     function speakNext() {
@@ -777,7 +786,8 @@ ${PROFILE}`;
         const u = new SpeechSynthesisUtterance(text);
         const v = pickVoice();
         if (v) u.voice = v;
-        u.rate = 1.02;
+        u.rate = 0.96;
+        u.pitch = 1.04;
         u.onboundary = () => orb && orb.beat(0.8);
         u.onend = speakNext;
         u.onerror = speakNext;
@@ -840,7 +850,298 @@ ${PROFILE}`;
         }
     }
 
+    // ---------------------------------------------------------------
+    // Gemini Live: native audio in and out over one WebSocket.
+    // Used for voice whenever a Gemini key is connected.
+    // ---------------------------------------------------------------
+
+    const LIVE_URL = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent';
+
+    const LIVE_PERSONA = `You are speaking out loud with a visitor to Mubin Ul Islam Chowdhury's portfolio, as his warm, friendly assistant. Talk like a thoughtful person, not a narrator: relaxed, natural and kind, with a gentle pace. Keep each reply to one to three short sentences, then let the visitor talk. Use contractions and everyday words. Never read out lists, markdown, symbols or web addresses; say "his email" or spell the address slowly only if asked. If the visitor interrupts, stop and listen. If you don't know something, say so simply and suggest emailing Mubin.`;
+
+    // Resamples the microphone to 16 kHz, 16-bit PCM, in ~100 ms packets.
+    const MIC_WORKLET = `
+class PcmCapture extends AudioWorkletProcessor {
+  constructor() { super(); this.ratio = sampleRate / 16000; this.t = 0; this.prev = 0; this.out = []; }
+  process(inputs) {
+    const x = inputs[0] && inputs[0][0];
+    if (!x) return true;
+    let sum = 0;
+    for (; this.t < x.length - 1; this.t += this.ratio) {
+      const i = Math.floor(this.t), f = this.t - i;
+      const a = i < 0 ? this.prev : x[i];
+      const s = a + (x[i + 1] - a) * f;
+      this.out.push(s);
+      sum += s * s;
+    }
+    this.t -= x.length;
+    this.prev = x[x.length - 1];
+    if (this.out.length >= 1600) {
+      const pcm = new Int16Array(this.out.length);
+      for (let k = 0; k < this.out.length; k++) pcm[k] = Math.max(-1, Math.min(1, this.out[k])) * 0x7fff;
+      this.port.postMessage({ pcm: pcm.buffer, level: Math.sqrt(sum / Math.max(1, this.out.length)) }, [pcm.buffer]);
+      this.out = [];
+    }
+    return true;
+  }
+}
+registerProcessor('pcm-capture', PcmCapture);`;
+
+    const toBase64 = buffer => {
+        const bytes = new Uint8Array(buffer);
+        let s = '';
+        for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+        return btoa(s);
+    };
+
+    const fromBase64 = data => {
+        const s = atob(data);
+        const bytes = new Uint8Array(s.length);
+        for (let i = 0; i < s.length; i++) bytes[i] = s.charCodeAt(i);
+        return bytes.buffer;
+    };
+
+    let live = null;
+
+    function liveContext() {
+        const recent = history.slice(-8).map(t => `${t.role === 'user' ? 'Visitor' : 'Assistant'}: ${t.text}`).join('\n');
+        return `${LIVE_PERSONA}\n\n${SYSTEM_PROMPT}${recent ? `\n\nCONVERSATION SO FAR (typed)\n${recent}` : ''}`;
+    }
+
+    function explainLiveClose(event) {
+        const reason = (event.reason || '').trim();
+        if (/api key|permission|unauthori[sz]ed/i.test(reason) || event.code === 1008) return 'Gemini rejected the key for Live voice. Check it in AI settings.';
+        if (/not found|not supported|model/i.test(reason)) return `The Live model “${liveModelName()}” isn’t available for this key. Try another in AI settings.`;
+        if (/quota|rate|exhausted/i.test(reason)) return 'This key has reached its Live voice limit for now. Try again later, or type your question.';
+        return reason ? `Live voice stopped: ${reason}` : 'Live voice lost its connection.';
+    }
+
+    async function startLive() {
+        if (!navigator.mediaDevices?.getUserMedia || !window.AudioWorkletNode || !('WebSocket' in window)) {
+            addMessage('bot', '<p>Live voice needs a current browser with microphone support. You can still type your questions here.</p>');
+            return;
+        }
+        lastFocus = document.activeElement;
+        voiceOn = true;
+        if (WIDGET) setAssistant('voice');
+        else voicePanel.hidden = false;
+        $('#voiceEnd').focus();
+        setVoiceState('thinking', 'Connecting…');
+        voiceText.textContent = '';
+
+        const session = {
+            ws: null, stream: null, ctx: null, gain: null, analyser: null, node: null,
+            sources: new Set(), nextTime: 0, userText: '', modelText: '', ready: false, closing: false,
+            thinkTimer: 0, raf: 0
+        };
+        live = session;
+
+        try {
+            session.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            await session.ctx.resume();
+            session.stream = await navigator.mediaDevices.getUserMedia({
+                audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 }
+            });
+        } catch (err) {
+            stopLive();
+            voiceText.textContent = err && err.name === 'NotAllowedError'
+                ? 'Microphone access is blocked. Allow it in your browser to talk, or type instead.'
+                : 'Couldn’t start the microphone.';
+            endVoice(false);
+            return;
+        }
+        if (live !== session) return;
+
+        // Playback chain: sources -> gain -> analyser -> speakers.
+        session.gain = session.ctx.createGain();
+        session.gain.gain.value = muted ? 0 : 1;
+        session.analyser = session.ctx.createAnalyser();
+        session.analyser.fftSize = 512;
+        session.gain.connect(session.analyser);
+        session.analyser.connect(session.ctx.destination);
+
+        const levels = new Uint8Array(session.analyser.fftSize);
+        const pulse = () => {
+            if (live !== session) return;
+            if (session.sources.size) {
+                session.analyser.getByteTimeDomainData(levels);
+                let peak = 0;
+                for (const v of levels) peak = Math.max(peak, Math.abs(v - 128));
+                if (orb && peak > 6) orb.beat(Math.min(1, peak / 60));
+            }
+            session.raf = requestAnimationFrame(pulse);
+        };
+        session.raf = requestAnimationFrame(pulse);
+
+        const ws = new WebSocket(`${LIVE_URL}?key=${encodeURIComponent(settings.key)}`);
+        session.ws = ws;
+
+        ws.onopen = () => {
+            ws.send(JSON.stringify({
+                setup: {
+                    model: `models/${liveModelName()}`,
+                    generationConfig: {
+                        responseModalities: ['AUDIO'],
+                        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: LIVE_VOICE } } }
+                    },
+                    systemInstruction: { parts: [{ text: liveContext() }] },
+                    inputAudioTranscription: {},
+                    outputAudioTranscription: {}
+                }
+            }));
+        };
+
+        ws.onmessage = async event => {
+            if (live !== session) return;
+            let msg;
+            try {
+                msg = JSON.parse(typeof event.data === 'string' ? event.data : await event.data.text());
+            } catch {
+                return;
+            }
+            if (msg.setupComplete) {
+                session.ready = true;
+                await startLiveMic(session);
+                setVoiceState('listening', 'Listening…');
+                return;
+            }
+            if (msg.goAway) {
+                voiceText.textContent = 'The session is ending soon.';
+                return;
+            }
+            const sc = msg.serverContent;
+            if (!sc) return;
+            if (sc.interrupted) stopLivePlayback(session);
+            if (sc.inputTranscription?.text) {
+                if (session.modelText) flushLiveTurn(session);
+                session.userText += sc.inputTranscription.text;
+                voiceText.textContent = session.userText.trim();
+                if (!session.sources.size) setVoiceState('listening', 'Listening…');
+                clearTimeout(session.thinkTimer);
+                session.thinkTimer = setTimeout(() => {
+                    if (live === session && !session.sources.size) setVoiceState('thinking', 'Thinking…');
+                }, 700);
+            }
+            for (const part of sc.modelTurn?.parts || []) {
+                const data = part.inlineData;
+                if (data && /^audio\/pcm/.test(data.mimeType || '')) {
+                    const rate = +(/rate=(\d+)/.exec(data.mimeType) || [0, 24000])[1];
+                    playLiveChunk(session, fromBase64(data.data), rate);
+                }
+            }
+            if (sc.outputTranscription?.text) {
+                session.modelText += sc.outputTranscription.text;
+                voiceText.textContent = session.modelText.trim();
+            }
+            if (sc.turnComplete) flushLiveTurn(session);
+        };
+
+        ws.onerror = () => { /* the close event carries the reason */ };
+
+        ws.onclose = event => {
+            if (live !== session || session.closing) return;
+            flushLiveTurn(session);
+            const message = explainLiveClose(event);
+            addNote(addMessage('bot', '<p>Voice ended.</p>'), message);
+            stopLive();
+            voiceText.textContent = message;
+            endVoice(false);
+        };
+    }
+
+    async function startLiveMic(session) {
+        const url = URL.createObjectURL(new Blob([MIC_WORKLET], { type: 'application/javascript' }));
+        try {
+            await session.ctx.audioWorklet.addModule(url);
+        } finally {
+            URL.revokeObjectURL(url);
+        }
+        if (live !== session) return;
+        const source = session.ctx.createMediaStreamSource(session.stream);
+        const node = new AudioWorkletNode(session.ctx, 'pcm-capture');
+        const sink = session.ctx.createGain();
+        sink.gain.value = 0;
+        source.connect(node);
+        node.connect(sink);
+        sink.connect(session.ctx.destination);
+        session.node = node;
+        node.port.onmessage = ({ data }) => {
+            if (live !== session || !session.ready || session.ws.readyState !== WebSocket.OPEN) return;
+            session.ws.send(JSON.stringify({
+                realtimeInput: { audio: { data: toBase64(data.pcm), mimeType: 'audio/pcm;rate=16000' } }
+            }));
+            if (orb && !session.sources.size && data.level > 0.02) orb.beat(Math.min(0.8, data.level * 6));
+        };
+    }
+
+    function playLiveChunk(session, buffer, rate) {
+        const pcm = new Int16Array(buffer);
+        if (!pcm.length) return;
+        const audio = session.ctx.createBuffer(1, pcm.length, rate);
+        const channel = audio.getChannelData(0);
+        for (let i = 0; i < pcm.length; i++) channel[i] = pcm[i] / 0x8000;
+        const src = session.ctx.createBufferSource();
+        src.buffer = audio;
+        src.connect(session.gain);
+        const now = session.ctx.currentTime;
+        session.nextTime = Math.max(session.nextTime, now + 0.03);
+        src.start(session.nextTime);
+        session.nextTime += audio.duration;
+        session.sources.add(src);
+        clearTimeout(session.thinkTimer);
+        setVoiceState('speaking', 'Speaking…');
+        src.onended = () => {
+            session.sources.delete(src);
+            if (live === session && !session.sources.size) setVoiceState('listening', 'Listening…');
+        };
+    }
+
+    function stopLivePlayback(session) {
+        for (const src of session.sources) {
+            try { src.stop(); } catch { /* already stopped */ }
+        }
+        session.sources.clear();
+        session.nextTime = 0;
+    }
+
+    // Writes one spoken exchange into the chat so it stays after the call.
+    function flushLiveTurn(session) {
+        const said = session.userText.trim();
+        const answer = session.modelText.trim();
+        if (said) {
+            addMessage('user', `<p>${escapeHtml(said)}</p>`);
+            history.push({ role: 'user', text: said });
+        }
+        if (answer) {
+            addMessage('bot', format(answer));
+            history.push({ role: 'model', text: answer });
+        }
+        session.userText = '';
+        session.modelText = '';
+    }
+
+    function stopLive() {
+        const session = live;
+        if (!session) return;
+        live = null;
+        session.closing = true;
+        flushLiveTurn(session);
+        clearTimeout(session.thinkTimer);
+        cancelAnimationFrame(session.raf);
+        stopLivePlayback(session);
+        if (session.node) session.node.port.onmessage = null;
+        if (session.stream) session.stream.getTracks().forEach(t => t.stop());
+        if (session.ws && session.ws.readyState <= WebSocket.OPEN) {
+            try { session.ws.close(1000, 'done'); } catch { /* ignore */ }
+        }
+        if (session.ctx) session.ctx.close().catch(() => {});
+    }
+
     function startVoice() {
+        if (liveAvailable() && !busy) {
+            startLive();
+            return;
+        }
         if (!Recognition) {
             addMessage('bot', '<p>Voice conversations need a browser with speech recognition, such as Chrome, Edge or Safari. You can still type your questions here.</p>');
             return;
@@ -857,6 +1158,7 @@ ${PROFILE}`;
 
     function endVoice(restoreFocus = true) {
         voiceOn = false;
+        stopLive();
         speechQueue = [];
         speaking = false;
         if (recognizer) {
@@ -879,7 +1181,7 @@ ${PROFILE}`;
         }
     }
 
-    if (!Recognition) {
+    if (!Recognition && !liveAvailable()) {
         micBtn.setAttribute('aria-disabled', 'true');
         micBtn.title = 'Voice needs Chrome, Edge or Safari';
     }
@@ -891,6 +1193,7 @@ ${PROFILE}`;
         muteBtn.setAttribute('aria-label', muted ? 'Unmute spoken replies' : 'Mute spoken replies');
         muteBtn.querySelector('use').setAttribute('href', muted ? '#i-volume-x' : '#i-volume-2');
         if (muted && canSpeak) speechSynthesis.cancel();
+        if (live && live.gain) live.gain.gain.value = muted ? 0 : 1;
     });
     // Tapping the orb while it speaks interrupts it and listens again.
     const interrupt = () => {
@@ -951,6 +1254,7 @@ ${PROFILE}`;
     const sheet = $('#settings');
     const keyInput = $('#apiKey');
     const modelInput = $('#model');
+    const liveInput = $('#liveModel');
     const remember = $('#remember');
     const status = $('#settingsStatus');
     const keyFields = $('#keyFields');
@@ -961,10 +1265,12 @@ ${PROFILE}`;
         const p = chosenProvider();
         keyFields.hidden = p === 'none';
         $('#freeKey').hidden = p !== 'gemini';
+        $('#liveField').hidden = p !== 'gemini';
+        if (p === 'gemini' && !liveInput.value) liveInput.value = DEFAULT_LIVE_MODEL;
         $('#testKey').disabled = p === 'none';
         if (p !== 'none') {
             modelInput.placeholder = DEFAULT_MODELS[p];
-            if (!modelInput.value || Object.values(DEFAULT_MODELS).includes(modelInput.value)) modelInput.value = DEFAULT_MODELS[p];
+            if (!modelInput.value || Object.values(DEFAULT_MODELS).includes(modelInput.value) || RETIRED_MODELS.includes(modelInput.value)) modelInput.value = DEFAULT_MODELS[p];
             keyInput.placeholder = p === 'gemini' ? 'Gemini API key (AIza…)' : 'OpenAI API key (sk-…)';
         }
     }
@@ -979,6 +1285,7 @@ ${PROFILE}`;
         providerRadios.forEach(r => { r.checked = r.value === provider; });
         keyInput.value = settings.key || '';
         modelInput.value = settings.model || '';
+        liveInput.value = settings.liveModel || '';
         remember.checked = !!settings.remember;
         setStatus('');
         syncSheet();
@@ -1022,13 +1329,23 @@ ${PROFILE}`;
         }
         settings = p === 'none'
             ? { provider: 'none', key: '', model: '', remember: false }
-            : { provider: p, key, model: modelInput.value.trim(), remember: remember.checked };
+            : {
+                provider: p,
+                key,
+                model: modelInput.value.trim(),
+                liveModel: p === 'gemini' && liveInput.value.trim() !== DEFAULT_LIVE_MODEL ? liveInput.value.trim() : '',
+                remember: remember.checked
+            };
+        micBtn.removeAttribute('aria-disabled');
+        if (!Recognition && !liveAvailable()) micBtn.setAttribute('aria-disabled', 'true');
         persist();
         renderMode();
         sheet.close();
         addMessage('bot', format(p === 'none'
             ? 'Switched to the built-in guide. Answers now come from Mubin’s portfolio without a model.'
-            : `Connected to ${p === 'gemini' ? 'Gemini' : 'OpenAI'} (${modelName()}). Ask anything about Mubin’s work.`));
+            : p === 'gemini'
+                ? `Connected to Gemini (${modelName()}). Tap the wave button for **live voice** with ${liveModelName()}.`
+                : `Connected to OpenAI (${modelName()}). Ask anything about Mubin’s work.`));
     });
 
     // ---------------------------------------------------------------

@@ -17,7 +17,7 @@
 
     /* White matte glass: frosted, flat, with a fine grain instead of a glossy sheen. */
     --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .045 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    --fill: rgba(255, 255, 255, 0.6);
+    --fill: rgba(255, 255, 255, 0.48);
     --rim: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.35) 38%, rgba(255, 255, 255, 0.2) 62%, rgba(255, 255, 255, 0.85));
     --glass: var(--grain) padding-box, linear-gradient(var(--fill), var(--fill)) padding-box, var(--rim) border-box;
     --glass-blur: blur(40px) saturate(140%);

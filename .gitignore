@@ -10,3 +10,8 @@ Md Mubin UL Islam Chowdhury CV.pdf
 Thumbs.db
 .idea/
 .vscode/
+
+
+# Design tooling and review captures (local only)
+.claude/
+.impeccable/

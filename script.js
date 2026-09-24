@@ -1,437 +1,208 @@
-/* =========================================================
-   Mubin Ul Islam Chowdhury — Portfolio
-   Interactions: nav, progress, reveal, counters, filters,
-   lightbox (+swipe), spotlight, tilt, form
-   ========================================================= */
+// Mubin Ul Islam Chowdhury — Portfolio
+// Ambient depth, glass light, window reveal, section ornament, gallery.
 
 (() => {
     'use strict';
 
     const $ = (sel, root = document) => root.querySelector(sel);
     const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const hasIO = 'IntersectionObserver' in window;
+    const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-
-    // -----------------------------------------------------
-    // Navigation
-    // -----------------------------------------------------
-    const navbar = $('.navbar');
-    const navLinks = $$('.nav-link');
-    const sections = $$('section[id]');
-    const progressBar = $('#scrollProgress');
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            const href = link.getAttribute('href');
-            if (href && href.startsWith('#')) {
-                const target = document.querySelector(href);
-                if (target) {
-                    e.preventDefault();
-                    const top = target.getBoundingClientRect().top + window.scrollY - 70;
-                    window.scrollTo({ top, behavior: prefersReduced.matches ? 'auto' : 'smooth' });
-                }
-            }
-        });
+    // The main windows carry a visionOS grabber.
+    $$('.hero-window, .hero-portrait, .featured, .contact-window').forEach(win => {
+        const grabber = document.createElement('span');
+        grabber.className = 'grabber';
+        grabber.setAttribute('aria-hidden', 'true');
+        win.appendChild(grabber);
     });
 
-    // -----------------------------------------------------
-    // Theme toggle (initial class set by inline head script)
-    // -----------------------------------------------------
-    const themeToggle = $('#themeToggle');
-    const applyThemeIcon = () => {
-        const icon = themeToggle?.querySelector('i');
-        if (icon) {
-            icon.className = document.documentElement.classList.contains('light-theme')
-                ? 'fas fa-sun' : 'fas fa-moon';
+    // Depth: the ambient light drifts with scroll; the portrait sits on a far plane.
+    const ambient = $('.ambient');
+    const far = $$('[data-depth="far"]');
+    let ticking = false;
+    const renderDepth = () => {
+        ticking = false;
+        const vh = window.innerHeight;
+        const max = Math.max(1, document.documentElement.scrollHeight - vh);
+        ambient.style.setProperty('--amb-y', `${((0.5 - window.scrollY / max) * 120).toFixed(1)}px`);
+        far.forEach(el => {
+            const r = el.getBoundingClientRect();
+            const offset = (r.top + r.height / 2 - vh / 2) * -0.06;
+            el.style.setProperty('--depth-y', `${clamp(offset, -36, 36).toFixed(1)}px`);
+        });
+    };
+    const requestDepth = () => {
+        if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(renderDepth);
         }
     };
-    let themeTransTimer = null;
-    themeToggle?.addEventListener('click', () => {
-        const root = document.documentElement;
-        const next = root.classList.contains('light-theme') ? 'dark' : 'light';
-        root.classList.add('theme-transition');
-        root.classList.remove('light-theme', 'dark-theme');
-        root.classList.add(next + '-theme');
-        try { localStorage.setItem('selected-theme', next); } catch { /* private mode */ }
-        applyThemeIcon();
-        clearTimeout(themeTransTimer);
-        themeTransTimer = setTimeout(() => root.classList.remove('theme-transition'), 400);
-    });
-    applyThemeIcon();
-
-    // -----------------------------------------------------
-    // Hero typewriter
-    // -----------------------------------------------------
-    const typedEl = $('#typedText');
-    if (typedEl) {
-        const words = [
-            'multi-agent AI platforms',
-            'RAG & LLM systems',
-            'computer-vision pipelines',
-            'enterprise backends',
-            'research prototypes'
-        ];
-        if (prefersReduced.matches) {
-            typedEl.textContent = words[0];
-        } else {
-            let wi = 0, ci = words[0].length, deleting = true;
-            const tick = () => {
-                if (deleting) {
-                    ci -= 1;
-                    typedEl.textContent = words[wi].slice(0, ci);
-                    if (ci === 0) {
-                        deleting = false;
-                        wi = (wi + 1) % words.length;
-                        setTimeout(tick, 350);
-                    } else {
-                        setTimeout(tick, 42);
-                    }
-                } else {
-                    ci += 1;
-                    typedEl.textContent = words[wi].slice(0, ci);
-                    if (ci === words[wi].length) {
-                        deleting = true;
-                        setTimeout(tick, 2200);
-                    } else {
-                        setTimeout(tick, 72);
-                    }
-                }
-            };
-            setTimeout(tick, 2400);
-        }
+    if (!reducedMotion) {
+        window.addEventListener('scroll', requestDepth, { passive: true });
+        window.addEventListener('resize', requestDepth);
+        renderDepth();
     }
 
-    // Scroll-driven nav state + reading progress
-    const onScroll = () => {
-        const y = window.scrollY;
-        navbar.classList.toggle('scrolled', y > 40);
-
-        if (progressBar) {
-            const max = document.documentElement.scrollHeight - window.innerHeight;
-            progressBar.style.transform = `scaleX(${max > 0 ? Math.min(y / max, 1) : 0})`;
-        }
-
-        let current = sections[0]?.id;
-        for (const s of sections) {
-            if (y + 120 >= s.offsetTop) current = s.id;
-        }
-        navLinks.forEach(l => {
-            l.classList.toggle('active', l.getAttribute('href') === `#${current}`);
-        });
-    };
-    let scrollTicking = false;
-    window.addEventListener('scroll', () => {
-        if (!scrollTicking) {
-            requestAnimationFrame(() => { onScroll(); scrollTicking = false; });
-            scrollTicking = true;
-        }
-    }, { passive: true });
-    onScroll();
-
-    // -----------------------------------------------------
-    // Reveal on scroll — staggered within each batch.
-    // Classes are stripped once the transition finishes so
-    // hover transforms are never overridden afterwards.
-    // -----------------------------------------------------
-    const revealTargets = $$([
-        '.section-header',
-        '.about-bio',
-        '.about-stats > *',
-        '.service-card',
-        '.cta-banner',
-        '.awards-list > li',
-        '.gallery-item',
-        '.timeline-item',
-        '.project-card',
-        '.projects-cta',
-        '.research-card',
-        '.workshop-strip > *',
-        '.skills-card',
-        '.contact-info',
-        '.contact-form'
-    ].join(','));
-
-    const settleReveal = (el, delay) => {
-        setTimeout(() => {
-            el.classList.remove('reveal', 'in');
-            el.style.removeProperty('--reveal-delay');
-        }, delay + 900);
-    };
-
-    if (!prefersReduced.matches && 'IntersectionObserver' in window) {
-        revealTargets.forEach(el => el.classList.add('reveal'));
-        const io = new IntersectionObserver((entries) => {
-            let batch = 0;
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                const delay = Math.min(batch * 70, 420);
-                batch += 1;
-                entry.target.style.setProperty('--reveal-delay', `${delay}ms`);
-                entry.target.classList.add('in');
-                settleReveal(entry.target, delay);
-                io.unobserve(entry.target);
+    // Glass light: a specular highlight follows the pointer across a window.
+    if (finePointer) {
+        $$('.window:not(.photo-window)').forEach(win => {
+            win.addEventListener('pointermove', e => {
+                const r = win.getBoundingClientRect();
+                win.style.setProperty('--mx', `${e.clientX - r.left}px`);
+                win.style.setProperty('--my', `${e.clientY - r.top}px`);
+                win.classList.add('is-lit');
             });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-        revealTargets.forEach(el => io.observe(el));
+            win.addEventListener('pointerleave', () => win.classList.remove('is-lit'));
+        });
     }
 
-    // -----------------------------------------------------
-    // Animated counters
-    // -----------------------------------------------------
-    const counters = $$('[data-count]');
-    const runCounter = (el) => {
-        const target = parseInt(el.dataset.count, 10);
-        const suffix = el.dataset.suffix || '';
-        if (Number.isNaN(target)) return;
-        if (prefersReduced.matches) {
-            el.textContent = target + suffix;
+    // Windows materialise from depth the first time they are seen.
+    if (!reducedMotion && hasIO) {
+        const windows = $$('.window').filter(w => !w.closest('.hero-visual') && !w.closest('.assistant'));
+        const vh = window.innerHeight;
+        windows.forEach(w => {
+            w.classList.add('reveal');
+            if (w.getBoundingClientRect().top < vh) w.classList.add('is-in');
+        });
+        root.classList.add('motion');
+        const reveal = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                e.target.classList.add('is-in');
+                reveal.unobserve(e.target);
+            });
+        }, { rootMargin: '0px 0px -6% 0px' });
+        windows.filter(w => !w.classList.contains('is-in')).forEach(w => reveal.observe(w));
+    }
+
+    // Ornament: mark the section in view and slide the indicator under it.
+    const ornament = $('.ornament');
+    const indicator = $('.ornament-indicator');
+    const links = $$('.ornament ul a');
+    const moveIndicator = () => {
+        const active = links.find(l => l.getAttribute('aria-current') === 'true' && l.offsetParent);
+        if (!active) {
+            indicator.style.opacity = '0';
             return;
         }
-        const duration = 1300;
-        const start = performance.now();
-        const tick = (now) => {
-            const t = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - t, 3);
-            el.textContent = Math.round(target * eased) + suffix;
-            if (t < 1) requestAnimationFrame(tick);
+        indicator.style.width = `${active.offsetWidth}px`;
+        indicator.style.transform = `translateX(${active.offsetLeft}px)`;
+        indicator.style.opacity = '1';
+    };
+    if (hasIO && ornament) {
+        const tracked = links
+            .map(l => document.querySelector(l.getAttribute('href')))
+            .filter(Boolean);
+        const spy = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                links.forEach(l => {
+                    if (l.getAttribute('href') === `#${e.target.id}`) l.setAttribute('aria-current', 'true');
+                    else l.removeAttribute('aria-current');
+                });
+                moveIndicator();
+            });
+        }, { rootMargin: '-45% 0px -50% 0px' });
+        tracked.forEach(s => spy.observe(s));
+        const hero = $('#top');
+        new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) {
+                links.forEach(l => l.removeAttribute('aria-current'));
+                moveIndicator();
+            }
+        }, { rootMargin: '-45% 0px -50% 0px' }).observe(hero);
+        window.addEventListener('resize', moveIndicator);
+    }
+
+    // Gallery: filter the wall, open any photo in the viewer.
+    const wall = $('#wall');
+    const filters = $$('.segmented [data-filter]');
+    filters.forEach(button => {
+        button.addEventListener('click', () => {
+            const cat = button.dataset.filter;
+            filters.forEach(b => b.setAttribute('aria-pressed', String(b === button)));
+            $$('li', wall).forEach(li => { li.hidden = cat !== 'all' && li.dataset.cat !== cat; });
+        });
+    });
+
+    // Masonry: each tile spans rows in proportion to its photo's real shape.
+    const layoutWall = () => {
+        if (!wall) return;
+        const cs = getComputedStyle(wall);
+        const cols = cs.gridTemplateColumns.split(' ').length;
+        const gap = parseFloat(cs.columnGap) || 0;
+        const colWidth = (wall.clientWidth - gap * (cols - 1)) / cols;
+        const unit = 8;
+        $$('li', wall).forEach(li => {
+            const img = $('img', li);
+            const w = +img.getAttribute('width');
+            const h = +img.getAttribute('height');
+            if (!w || !h) return;
+            const span = li.classList.contains('tile-wide') && cols > 1 ? 2 : 1;
+            const width = colWidth * span + gap * (span - 1);
+            li.style.gridColumn = `span ${span}`;
+            li.style.gridRowEnd = `span ${Math.ceil((width * h / w + gap) / unit)}`;
+        });
+        wall.classList.add('is-masonry');
+    };
+    if (wall) {
+        layoutWall();
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(layoutWall, 120);
+        });
+    }
+
+    const viewer = $('#viewer');
+    if (wall && viewer && typeof viewer.showModal === 'function') {
+        const img = document.createElement('img');
+        $('#viewerFrame').appendChild(img);
+        const cap = $('#viewerCap');
+        const count = $('#viewerCount');
+        let list = [];
+        let index = 0;
+        const show = i => {
+            index = (i + list.length) % list.length;
+            const item = list[index];
+            const source = $('img', item);
+            img.src = source.currentSrc || source.src;
+            img.alt = source.alt;
+            cap.textContent = $('.wall-caption', item).textContent;
+            count.textContent = `${index + 1} of ${list.length}`;
         };
-        requestAnimationFrame(tick);
-    };
-
-    if (counters.length && 'IntersectionObserver' in window) {
-        const cio = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    runCounter(entry.target);
-                    cio.unobserve(entry.target);
-                }
+        $$('.wall-item', wall).forEach(item => {
+            item.addEventListener('click', () => {
+                list = $$('li:not([hidden]) .wall-item', wall);
+                show(list.indexOf(item));
+                viewer.showModal();
             });
-        }, { threshold: 0.5 });
-        counters.forEach(el => cio.observe(el));
+        });
+        $('#viewerPrev').addEventListener('click', () => show(index - 1));
+        $('#viewerNext').addEventListener('click', () => show(index + 1));
+        $('#viewerClose').addEventListener('click', () => viewer.close());
+        viewer.addEventListener('click', e => { if (e.target === viewer) viewer.close(); });
+        viewer.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') show(index - 1);
+            if (e.key === 'ArrowRight') show(index + 1);
+        });
+        let startX = null;
+        viewer.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+        viewer.addEventListener('touchend', e => {
+            if (startX === null) return;
+            const dx = e.changedTouches[0].clientX - startX;
+            if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+            startX = null;
+        });
     }
 
-    // -----------------------------------------------------
-    // Category filters (projects + gallery)
-    // -----------------------------------------------------
-    const setupFilter = (filtersEl, itemsEl) => {
-        if (!filtersEl || !itemsEl) return;
-        const btns = $$('.filter-btn', filtersEl);
-        const filterItems = $$('[data-cat]', itemsEl);
-        btns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const filter = btn.dataset.filter;
-                btns.forEach(b => {
-                    b.classList.toggle('active', b === btn);
-                    b.setAttribute('aria-selected', String(b === btn));
-                });
-                filterItems.forEach(item => {
-                    const match = filter === 'all' || item.dataset.cat === filter;
-                    item.classList.toggle('is-hidden', !match);
-                    if (match) {
-                        // restart the entrance fade so filtering feels alive
-                        item.style.animation = 'none';
-                        void item.offsetWidth;
-                        item.style.animation = '';
-                    }
-                });
-            });
-        });
-    };
-    setupFilter($('#projectFilters'), $('#projectGrid'));
-    setupFilter($('#galleryFilters'), $('#gallery'));
-
-    // -----------------------------------------------------
-    // Lightbox (keyboard + swipe)
-    // -----------------------------------------------------
-    const gallery = $('#gallery');
-    const items = gallery ? $$('.gallery-item', gallery) : [];
-
-    const lightbox = $('#lightbox');
-    const lbImg = $('#lbImg');
-    const lbCount = $('#lbCount');
-    const lbClose = $('#lbClose');
-    const lbPrev = $('#lbPrev');
-    const lbNext = $('#lbNext');
-
-    let currentList = [];
-    let currentIndex = 0;
-    let lastFocused = null;
-
-    const buildList = () => items.filter(it => !it.classList.contains('is-hidden'));
-
-    const lbCap = $('#lbCap');
-    const updateLightbox = () => {
-        const node = currentList[currentIndex];
-        if (!node) return;
-        const img = $('img', node);
-        lbImg.src = img.src;
-        lbImg.alt = img.alt || 'Photo';
-        if (lbCap) lbCap.textContent = img.alt || '';
-        lbCount.textContent = `${currentIndex + 1} / ${currentList.length}`;
-    };
-
-    const openLightbox = (node) => {
-        currentList = buildList();
-        currentIndex = currentList.indexOf(node);
-        if (currentIndex < 0) currentIndex = 0;
-        updateLightbox();
-        lastFocused = document.activeElement;
-        lightbox.classList.add('is-open');
-        lightbox.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('menu-open');
-        lbClose.focus();
-    };
-
-    const closeLightbox = () => {
-        lightbox.classList.remove('is-open');
-        lightbox.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('menu-open');
-        if (lastFocused) lastFocused.focus();
-    };
-
-    const prev = () => {
-        if (!currentList.length) return;
-        currentIndex = (currentIndex - 1 + currentList.length) % currentList.length;
-        updateLightbox();
-    };
-    const next = () => {
-        if (!currentList.length) return;
-        currentIndex = (currentIndex + 1) % currentList.length;
-        updateLightbox();
-    };
-
-    items.forEach(item => {
-        item.addEventListener('click', () => openLightbox(item));
-        item.tabIndex = 0;
-        item.setAttribute('role', 'button');
-        item.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                openLightbox(item);
-            }
-        });
-        // Caption below the tag, sourced from the image's alt text
-        const img = $('img', item);
-        const fc = $('figcaption', item);
-        if (img && fc && img.alt) {
-            const cap = document.createElement('span');
-            cap.className = 'gallery-cap';
-            cap.textContent = img.alt;
-            fc.appendChild(cap);
-        }
-    });
-
-    lbClose?.addEventListener('click', closeLightbox);
-    lbPrev?.addEventListener('click', prev);
-    lbNext?.addEventListener('click', next);
-    lightbox?.addEventListener('click', (e) => {
-        if (e.target === lightbox) closeLightbox();
-    });
-    document.addEventListener('keydown', (e) => {
-        if (!lightbox?.classList.contains('is-open')) return;
-        if (e.key === 'Escape') closeLightbox();
-        else if (e.key === 'ArrowLeft') prev();
-        else if (e.key === 'ArrowRight') next();
-    });
-
-    // Swipe: horizontal to navigate, downward to dismiss
-    let touchX = 0, touchY = 0;
-    lightbox?.addEventListener('touchstart', (e) => {
-        touchX = e.changedTouches[0].clientX;
-        touchY = e.changedTouches[0].clientY;
-    }, { passive: true });
-    lightbox?.addEventListener('touchend', (e) => {
-        const dx = e.changedTouches[0].clientX - touchX;
-        const dy = e.changedTouches[0].clientY - touchY;
-        if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) {
-            if (dx > 0) prev(); else next();
-        } else if (dy > 70 && Math.abs(dy) > Math.abs(dx)) {
-            closeLightbox();
-        }
-    }, { passive: true });
-
-    // Workshop strip → also opens lightbox via the gallery list
-    $$('.workshop-strip img').forEach(img => {
-        img.style.cursor = 'zoom-in';
-        img.addEventListener('click', () => {
-            const match = items.find(it => $('img', it).src === img.src);
-            if (match) openLightbox(match);
-        });
-    });
-
-    // -----------------------------------------------------
-    // Cursor spotlight on cards (desktop only)
-    // -----------------------------------------------------
-    if (finePointer.matches) {
-        const SPOT = '.project-card, .skills-card, .service-card, .research-card, .timeline-card';
-        let spotEvent = null;
-        let spotTicking = false;
-        document.addEventListener('pointermove', (e) => {
-            spotEvent = e;
-            if (spotTicking) return;
-            spotTicking = true;
-            requestAnimationFrame(() => {
-                spotTicking = false;
-                const card = spotEvent.target?.closest?.(SPOT);
-                if (!card) return;
-                const r = card.getBoundingClientRect();
-                card.style.setProperty('--mx', `${spotEvent.clientX - r.left}px`);
-                card.style.setProperty('--my', `${spotEvent.clientY - r.top}px`);
-            });
-        }, { passive: true });
-    }
-
-    // -----------------------------------------------------
-    // Contact form — composes a real email
-    // -----------------------------------------------------
-    const form = $('#contactForm');
-
-    const toast = (msg, type = 'info') => {
-        $$('.toast').forEach(t => t.remove());
-        const el = document.createElement('div');
-        el.className = `toast ${type}`;
-        const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
-        el.innerHTML = `<i class="fas fa-${icon}"></i><span>${msg}</span>`;
-        document.body.appendChild(el);
-        requestAnimationFrame(() => el.classList.add('show'));
-        setTimeout(() => {
-            el.classList.remove('show');
-            setTimeout(() => el.remove(), 320);
-        }, 4200);
-    };
-
-    const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-
-    form?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const data = Object.fromEntries(new FormData(form));
-        if (!data.name || !data.email || !data.subject || !data.message) {
-            toast('Please fill in all fields.', 'error');
-            return;
-        }
-        if (!isEmail(data.email)) {
-            toast('Please enter a valid email address.', 'error');
-            return;
-        }
-        const body = `${data.message}\n\n— ${data.name}\n${data.email}`;
-        window.location.href =
-            `mailto:uic.mubin@gmail.com?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(body)}`;
-        toast('Opening your email app with the message ready to send…', 'info');
-    });
-
-    // -----------------------------------------------------
-    // Service worker
-    // -----------------------------------------------------
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js').catch(() => {});
         });
     }
-
-    // -----------------------------------------------------
-    // Console signature
-    // -----------------------------------------------------
-    console.log('%cMubin · Portfolio', 'color:#0A84FF;font-weight:700;font-size:14px');
-    console.log('Reach out → uic.mubin@gmail.com');
 })();

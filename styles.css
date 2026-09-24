@@ -4,7 +4,7 @@
 :root {
     color-scheme: light;
 
-    --ground: #f3f4f7;
+    --ground: #f9f8f5;
     --ink: #1d1d1f;
     --ink-2: #515154;
     --hairline: rgba(15, 23, 42, 0.09);
@@ -155,7 +155,7 @@ a:hover {
     inset: 0;
     z-index: -1;
     overflow: hidden;
-    background: linear-gradient(180deg, #f9f9fb 0%, #f3f4f7 50%, #eff1f5 100%);
+    background: linear-gradient(180deg, #fcfbf9 0%, #f9f8f5 50%, #f6f5f1 100%);
 }
 
 .light {
@@ -170,7 +170,7 @@ a:hover {
     height: 60vmax;
     left: -18vmax;
     top: -22vmax;
-    background: radial-gradient(circle, rgba(0, 113, 227, 0.16), rgba(0, 113, 227, 0) 65%);
+    background: radial-gradient(circle, rgba(0, 113, 227, 0.09), rgba(0, 113, 227, 0) 65%);
 }
 
 .light-b {
@@ -178,7 +178,7 @@ a:hover {
     height: 52vmax;
     right: -16vmax;
     top: 18vh;
-    background: radial-gradient(circle, rgba(94, 92, 230, 0.12), rgba(94, 92, 230, 0) 65%);
+    background: radial-gradient(circle, rgba(94, 92, 230, 0.07), rgba(94, 92, 230, 0) 65%);
     transform: translate3d(0, calc(var(--amb-y, 0px) * -1.4), 0);
 }
 
@@ -196,7 +196,7 @@ a:hover {
     height: 46vmax;
     left: 22vw;
     bottom: -26vmax;
-    background: radial-gradient(circle, rgba(50, 173, 230, 0.11), rgba(50, 173, 230, 0) 65%);
+    background: radial-gradient(circle, rgba(50, 173, 230, 0.06), rgba(50, 173, 230, 0) 65%);
     transform: translate3d(0, calc(var(--amb-y, 0px) * 0.8), 0);
 }
 
@@ -2360,4 +2360,144 @@ a.paper-title:hover {
 
 .hero-portrait.pop {
     margin-bottom: 18px;
+}
+
+/* The name, in a weighted brush script: the one handwritten touch on the page. */
+.hero-name {
+    font-family: "Satisfy", "Snell Roundhand", "Segoe Script", cursive;
+    font-weight: 400;
+    font-size: clamp(3.25rem, 4.6vw + 1rem, 5.25rem);
+    line-height: 1.08;
+    letter-spacing: 0;
+    -webkit-text-stroke: 0.9px currentColor;
+    paint-order: stroke fill;
+}
+
+/* ---------- Flowing ink: the name, title and paragraph in the hero card ----------
+   Deep theme colours drift slowly through the lettering; flow.js bleeds the same
+   colours, pale, into the card's glass behind the name. Every stop keeps 4.5:1 or
+   better against the card, so the text stays readable. */
+
+.hero-window.has-bleed .bleed {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    filter: blur(8px);
+    pointer-events: none;
+}
+
+.hero-name,
+.hero-title,
+.hero-lede {
+    background-image: linear-gradient(100deg, var(--ink-stops));
+    background-size: 300% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--ink);
+}
+
+/* Name: the richest ink, thickened with a hairline dilate (the SVG filter in the page). */
+.hero-name {
+    --ink-stops: #1d1d1f 0%, #2b2a78 20%, #003f84 36%, #0e4f5f 52%, #54206f 68%, #2b2a78 84%, #1d1d1f 100%;
+    -webkit-text-stroke: 0;
+    filter: url("#ink-weight");
+}
+
+/* Title: its own line, a clean readable sans, in the same ink. */
+.hero-title {
+    --ink-stops: #0058b3 0%, #3b37a8 30%, #0f6479 55%, #6b2a93 78%, #0058b3 100%;
+    display: block;
+    margin-top: 1rem;
+    font-size: clamp(1.375rem, 1.1vw + 1rem, 1.875rem);
+    font-weight: 700;
+    letter-spacing: -0.022em;
+}
+
+/* Paragraph: mostly ink, with the colour only passing through. */
+.hero-lede {
+    --ink-stops: #3a3a40 0%, #3a3a40 30%, #2f3b72 45%, #1f4d5a 58%, #4b2e66 70%, #3a3a40 85%, #3a3a40 100%;
+    margin-top: 0.75rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .hero-name,
+    .hero-title,
+    .hero-lede {
+        animation: ink-flow 22s ease-in-out infinite alternate;
+    }
+    .hero-title {
+        animation-duration: 26s;
+        animation-delay: -6s;
+    }
+    .hero-lede {
+        animation-duration: 30s;
+        animation-delay: -12s;
+    }
+}
+
+@keyframes ink-flow {
+    from { background-position: 0% 50%; }
+    to { background-position: 100% 50%; }
+}
+
+/* Script swashes overhang the text box; give the ink fill room so nothing is clipped. */
+.hero-name {
+    padding: 0.06em 0.18em 0.12em;
+    margin: -0.06em -0.18em -0.12em;
+}
+
+/* Shared layer that tints every glass card (flow.js). */
+.card-flow {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    filter: blur(3px) saturate(115%);
+    pointer-events: none;
+}
+
+/* Title and paragraph, paired with the script name: an italic serif that echoes its slant,
+   and a warm humanist sans for easy reading. */
+.hero-title {
+    font-family: "Zodiak", "New York", "Iowan Old Style", Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(1.3125rem, 0.9vw + 1rem, 1.75rem);
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+}
+
+.hero-lede {
+    font-family: "Switzer", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.5;
+}
+
+/* Ink over the glass (flow.js): masked to the cards in the shader, blended like ink on paper. */
+.ink {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    width: 100vw;
+    height: 100vh;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
+
+/* Card colour and ink step aside while the page scrolls, then return. */
+.card-flow,
+.ink {
+    transition: opacity 0.6s ease;
+}
+
+.is-scrolling .card-flow,
+.is-scrolling .ink {
+    opacity: 0;
+    transition: opacity 0.12s ease;
 }

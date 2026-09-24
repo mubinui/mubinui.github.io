@@ -4,7 +4,7 @@
   "description": "Portfolio of Mubin Ul Islam Chowdhury, Software Engineer and AI Researcher",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#f9f8f5",
   "theme_color": "#ffffff",
   "orientation": "portrait-primary",
   "scope": "/",

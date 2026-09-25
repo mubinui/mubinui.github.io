@@ -1061,3 +1061,31 @@
     font-size: 13px;
     line-height: 1.45;
 }
+
+/* Phones: the assistant button sits beside the tab bar, same height, same baseline. */
+@media (max-width: 699px) {
+    .assistant-dock {
+        right: max(12px, env(safe-area-inset-right, 0px));
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    }
+
+    .ask-fab {
+        padding: 4px;
+    }
+
+    .fab-orb {
+        width: 52px;
+        height: 52px;
+    }
+
+    .voice-caption {
+        right: max(12px, env(safe-area-inset-right, 0px));
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 84px);
+    }
+
+    /* During a voice call the pill grows leftward over the tab bar. */
+    .assistant[data-state="voice"] .assistant-dock {
+        left: max(12px, env(safe-area-inset-left, 0px));
+        justify-content: flex-end;
+    }
+}

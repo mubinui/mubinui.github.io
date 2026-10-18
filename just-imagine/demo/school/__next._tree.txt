@@ -1,8 +1,8 @@
-:HL["/just-imagine/demo/_next/static/chunks/2iyrg4vy9c88-.css","style"]
+:HL["/just-imagine/demo/_next/static/chunks/2q8x62k7bk3nc.css","style"]
 :HL["/just-imagine/demo/_next/static/chunks/40qkzfaq5h_jy.css","style"]
-:HL["/just-imagine/demo/_next/static/chunks/1hmft1-er053x.css","style"]
+:HL["/just-imagine/demo/_next/static/chunks/2uj64895oc2wh.css","style"]
 4:[["children",{"s":"__PAGE__","h":160}]]
 3:[["children",{"s":"(console)","h":96,"c":"$Q4"}]]
 2:[["children",{"s":"school","h":96,"c":"$Q3"}]]
 1:[["children",{"s":"(school)","h":96,"c":"$Q2"}]]
-0:{"b":"CR0fbO0KbQ-cwnuL73fN2","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"dETYceojxdGsnxeONtqqY","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

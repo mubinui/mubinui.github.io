@@ -1,4 +1,4 @@
-:HL["/just-imagine/demo/_next/static/chunks/2iyrg4vy9c88-.css","style"]
+:HL["/just-imagine/demo/_next/static/chunks/2q8x62k7bk3nc.css","style"]
 2:[["children",{"s":"__PAGE__","h":160}]]
 1:[["children",{"s":"/_not-found","h":96,"c":"$Q2"}]]
-0:{"b":"CR0fbO0KbQ-cwnuL73fN2","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"dETYceojxdGsnxeONtqqY","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

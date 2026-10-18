@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Just Imagine · Google Cloud Guidebook</title>
-<meta name="description" content="A step-by-step guidebook for a first deployment of Just Imagine to a Google Cloud staging project, then promotion of the same build to production. Follow the steps in order. Every command runs from the repository root unless a step says otherwise.">
+<meta name="description" content="A complete, ordered guide for deploying Just Imagine to a Google Cloud staging project, then promoting the same build to production. It lists every credential, where it comes from and where it goes, and every configuration value each component reads, then how to run, operate and test the system. Only payments are optional: every other part, including email and Google sign-in, student sign-in, voice, world building and schools, must be set up for a release. Follow the steps in order; every command runs from the repository root unless a step says otherwise.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -74,19 +74,19 @@ footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);color:v
 <div class="layout">
 <nav class="toc" aria-label="Contents">
 <p class="brand"><b>Just Imagine</b> · Cloud</p>
-<ol><li><a href="#what-you-are-deploying">What you are deploying</a></li><li><a href="#before-you-start">Before you start</a></li><li><a href="#step-1-set-your-names-once">Step 1: Set your names once</a></li><li><a href="#step-2-add-firebase-to-the-project">Step 2: Add Firebase to the project</a></li><li><a href="#step-3-turn-on-sign-in-and-register-the-web-app">Step 3: Turn on sign-in and register the web app</a></li><li><a href="#step-4-give-terraform-a-state-bucket">Step 4: Give Terraform a state bucket</a></li><li><a href="#step-5-write-the-environment-39-s-variables">Step 5: Write the environment&#39;s variables</a></li><li><a href="#step-6-create-the-registry-build-the-image-apply-terraform">Step 6: Create the registry, build the image, apply Terraform</a></li><li><a href="#step-7-check-the-backend-before-the-web-app">Step 7: Check the backend before the web app</a></li><li><a href="#step-8-deploy-the-web-app-on-app-hosting">Step 8: Deploy the web app on App Hosting</a></li><li><a href="#step-9-accept-the-staging-release">Step 9: Accept the staging release</a></li><li><a href="#step-10-optional-features">Step 10: Optional features</a></li><li><a href="#step-11-promote-to-production">Step 11: Promote to production</a></li><li><a href="#rolling-back">Rolling back</a></li><li><a href="#troubleshooting">Troubleshooting</a></li></ol>
+<ol><li><a href="#what-you-are-deploying">What you are deploying</a></li><li><a href="#deploy-from-main-only">Deploy from <code>main</code> only</a></li><li><a href="#before-you-start">Before you start</a></li><li><a href="#credentials-what-they-are-and-where-to-get-them">Credentials: what they are and where to get them</a></li><li><a href="#configuration-reference">Configuration reference</a></li><li><a href="#step-1-set-your-names-once">Step 1: Set your names once</a></li><li><a href="#step-2-add-firebase-to-the-project">Step 2: Add Firebase to the project</a></li><li><a href="#step-3-turn-on-sign-in-and-register-the-web-app">Step 3: Turn on sign-in and register the web app</a></li><li><a href="#step-4-give-terraform-a-state-bucket">Step 4: Give Terraform a state bucket</a></li><li><a href="#step-5-write-the-environment-39-s-variables">Step 5: Write the environment&#39;s variables</a></li><li><a href="#step-6-create-the-registry-build-the-image-apply-terraform">Step 6: Create the registry, build the image, apply Terraform</a></li><li><a href="#step-7-check-the-backend-before-the-web-app">Step 7: Check the backend before the web app</a></li><li><a href="#step-8-deploy-the-web-app-on-app-hosting">Step 8: Deploy the web app on App Hosting</a></li><li><a href="#step-9-accept-the-staging-release">Step 9: Accept the staging release</a></li><li><a href="#step-10-optional-features">Step 10: Optional features</a></li><li><a href="#step-11-promote-to-production">Step 11: Promote to production</a></li><li><a href="#release-checklist">Release checklist</a></li><li><a href="#run-and-operate">Run and operate</a></li><li><a href="#testing-guide">Testing guide</a></li><li><a href="#rolling-back">Rolling back</a></li><li><a href="#troubleshooting">Troubleshooting</a></li></ol>
 </nav>
 <main>
 <header class="hero">
 <span class="eyebrow">Deployment guidebook</span>
 <h1>Deploying Just Imagine on Google Cloud</h1>
-<p class="lede">A step-by-step guidebook for a first deployment of Just Imagine to a Google Cloud staging project, then promotion of the same build to production. Follow the steps in order. Every command runs from the repository root unless a step says otherwise.</p>
+<p class="lede">A complete, ordered guide for deploying Just Imagine to a Google Cloud staging project, then promoting the same build to production. It lists every credential, where it comes from and where it goes, and every configuration value each component reads, then how to run, operate and test the system. Only payments are optional: every other part, including email and Google sign-in, student sign-in, voice, world building and schools, must be set up for a release. Follow the steps in order; every command runs from the repository root unless a step says otherwise.</p>
 <div class="meta"><span>11 steps</span><span>Staging first, then production</span><span>Region us-central1</span></div>
 </header>
 <article>
-<p>This guide turns the reference material in <a href="https://github.com/mubinui/just-imagine/blob/main/docs/runbooks/deployment.md">deployment.md</a> into one ordered path. If the two disagree, the source files win: <a href="https://github.com/mubinui/just-imagine/blob/main/infra/terraform/"><code>infra/terraform/</code></a>, <a href="https://github.com/mubinui/just-imagine/blob/main/cloudbuild.yaml"><code>cloudbuild.yaml</code></a>, <a href="https://github.com/mubinui/just-imagine/blob/main/cloudbuild.promote.yaml"><code>cloudbuild.promote.yaml</code></a> and <a href="https://github.com/mubinui/just-imagine/blob/main/apps/web/apphosting.yaml"><code>apps/web/apphosting.yaml</code></a>.</p>
+<p>The source files are the final word if anything here disagrees with them: <a href="https://github.com/mubinui/just-imagine/blob/main/infra/terraform/"><code>infra/terraform/</code></a>, <a href="https://github.com/mubinui/just-imagine/blob/main/cloudbuild.yaml"><code>cloudbuild.yaml</code></a>, <a href="https://github.com/mubinui/just-imagine/blob/main/cloudbuild.promote.yaml"><code>cloudbuild.promote.yaml</code></a>, <a href="https://github.com/mubinui/just-imagine/blob/main/apps/web/apphosting.yaml"><code>apps/web/apphosting.yaml</code></a>, the service entrypoints in <code>services/*/src/main.ts</code> and <a href="https://github.com/mubinui/just-imagine/blob/main/apps/web/lib/env.ts"><code>apps/web/lib/env.ts</code></a>. <a href="https://github.com/mubinui/just-imagine/blob/main/docs/runbooks/deployment.md">deployment.md</a> is the shorter reference.</p>
 <blockquote>
-<p><strong>Cost and safety.</strong> These steps create billable resources: Cloud Run, Vertex AI, Firestore, Cloud Storage, Cloud Tasks and Monitoring. Use a dedicated staging project first. Never put a secret in a <code>NEXT_PUBLIC_*</code> variable, an <code>apphosting.yaml</code> file, a <code>.tfvars</code> file you commit, or a log.</p>
+<p><strong>Cost and safety.</strong> These steps create billable resources: Cloud Run, Vertex AI, Firestore, Cloud Storage, Cloud Tasks, Cloud Scheduler and Monitoring. Use a dedicated staging project first. Never put a secret in a <code>NEXT_PUBLIC_*</code> variable, an <code>apphosting*.yaml</code> file, a committed <code>.tfvars</code> file, a ticket or a log.</p>
 </blockquote>
 <h2 id="what-you-are-deploying"><a class="anchor" href="#what-you-are-deploying" aria-hidden="true">#</a>What you are deploying</h2><div class="table-wrap"><table>
 <thead>
@@ -108,17 +108,17 @@ footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);color:v
 </tr>
 <tr>
 <td><code>imagine-gateway</code> (voice WebSocket)</td>
-<td>Cloud Run, public, min 1 instance, session affinity</td>
+<td>Cloud Run, public, at least 1 instance, session affinity</td>
 <td>Terraform</td>
 </tr>
 <tr>
 <td><code>imagine-builder</code> (world builder)</td>
-<td>Cloud Run, private, invoked by Cloud Tasks</td>
+<td>Cloud Run, private, invoked only by Cloud Tasks</td>
 <td>Terraform</td>
 </tr>
 <tr>
 <td>Database</td>
-<td>Firestore Native, <code>(default)</code>, <code>nam5</code></td>
+<td>Firestore Native, <code>(default)</code>, location <code>nam5</code></td>
 <td>Terraform</td>
 </tr>
 <tr>
@@ -133,38 +133,43 @@ footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);color:v
 </tr>
 <tr>
 <td>Deletion retries</td>
-<td>Cloud Scheduler, every 5 minutes</td>
+<td>Cloud Scheduler job <code>imagine-retry-deletions</code>, every 5 min</td>
 <td>Terraform</td>
 </tr>
 <tr>
 <td>AI models</td>
-<td>Vertex AI, <code>us-central1</code> (game model on <code>global</code>)</td>
+<td>Vertex AI, <code>us-central1</code> (the game model on <code>global</code>)</td>
 <td>Terraform enables the API</td>
 </tr>
 <tr>
 <td>Stripe secrets</td>
-<td>Secret Manager</td>
+<td>Secret Manager <code>stripe-secret-key</code>, <code>stripe-webhook-secret</code></td>
 <td>Terraform creates, you add values</td>
 </tr>
 <tr>
-<td>Alerts, dashboard, uptime</td>
+<td>Alerts, dashboard, uptime checks</td>
 <td>Cloud Monitoring</td>
 <td>Terraform</td>
 </tr>
 <tr>
 <td>Sign-in</td>
-<td>Firebase Authentication</td>
+<td>Firebase Authentication (email/password and Google)</td>
 <td>You, in step 3</td>
 </tr>
 </tbody></table>
-</div><p>The three backend services share <strong>one container image</strong> built from the root <a href="https://github.com/mubinui/just-imagine/blob/main/Dockerfile"><code>Dockerfile</code></a>; Cloud Run starts a different entrypoint for each. All resources live in <code>us-central1</code>. Every service authenticates to Google with its own service account through Application Default Credentials; there are no API keys in the cloud.</p>
+</div><p>The three backend services share <strong>one container image</strong> built from the root <a href="https://github.com/mubinui/just-imagine/blob/main/Dockerfile"><code>Dockerfile</code></a>; Cloud Run starts <code>services/&lt;name&gt;/dist/main.js</code> for each. Everything runs in <code>us-central1</code>. Each service signs in to Google as its own service account through Application Default Credentials: <strong>there are no API keys anywhere in the cloud</strong>, including for Gemini.</p>
 <p>The order matters because of three dependencies:</p>
 <ol>
 <li>Cloud Build needs the Artifact Registry repository before it can push the image.</li>
 <li>Terraform needs the image digest and the web app&#39;s final HTTPS address (for CORS and origin checks).</li>
 <li>The web build needs the API and gateway URLs, because <code>NEXT_PUBLIC_*</code> values are compiled into the browser bundle.</li>
 </ol>
-<p>Cloud Run and App Hosting URLs are predictable, so you choose the names up front (step 1) and every later step can use them.</p>
+<p>Cloud Run and App Hosting addresses are predictable, so you choose the names up front (step 1) and every later step can use them.</p>
+<h2 id="deploy-from-main-only"><a class="anchor" href="#deploy-from-main-only" aria-hidden="true">#</a>Deploy from <code>main</code> only</h2><ul>
+<li><strong><code>main</code> is the production source.</strong> Build images, Terraform plans and App Hosting rollouts from <code>main</code>, at a commit whose CI run is green.</li>
+<li><strong>Never deploy the <code>demo</code> branch.</strong> It is <code>main</code> plus the static GitHub Pages UI demo.</li>
+<li><strong>Sample mode never ships.</strong> <code>NEXT_PUBLIC_FAKE=1</code> serves sample worlds with no sign-in, voice or payments. A production web build in sample mode fails on purpose unless <code>JUST_IMAGINE_SAMPLE_BUILD=1</code> is also set, and only CI and the demo build set that. The shared <code>apphosting.yaml</code> sets <code>NEXT_PUBLIC_FAKE=0</code>.</li>
+</ul>
 <h2 id="before-you-start"><a class="anchor" href="#before-you-start" aria-hidden="true">#</a>Before you start</h2><p><strong>Tools on your machine</strong></p>
 <div class="table-wrap"><table>
 <thead>
@@ -175,6 +180,11 @@ footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);color:v
 </tr>
 </thead>
 <tbody><tr>
+<td>Git</td>
+<td>any recent</td>
+<td><code>git --version</code></td>
+</tr>
+<tr>
 <td>Google Cloud CLI</td>
 <td>current</td>
 <td><code>gcloud --version</code></td>
@@ -200,15 +210,40 @@ footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);color:v
 <td><code>pnpm exec firebase --version</code></td>
 </tr>
 </tbody></table>
-</div><p>Install workspace dependencies once with <code>pnpm install --frozen-lockfile</code>.</p>
-<p><strong>Access you need</strong></p>
-<ul>
-<li>A Google Cloud billing account you can link to new projects.</li>
-<li>Permission to create projects, or an owner on an existing empty project.</li>
-<li>Admin access to the GitHub repository, so App Hosting can connect to it.</li>
-<li>Vertex AI access and quota for the configured models in that project. Model IDs are settings, not a guarantee that a project can call them.</li>
-</ul>
-<p><strong>Decisions to make first</strong></p>
+</div><p>Get the code and dependencies:</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>git clone https://github.com/mubinui/just-imagine.git
+cd just-imagine
+git switch main
+pnpm install --frozen-lockfile</code></pre></div><p><strong>Access you need</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>For</th>
+<th>You need</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Creating the projects</td>
+<td>A billing account you can link, and permission to create projects (or an empty project you own)</td>
+</tr>
+<tr>
+<td>Running Terraform and the CLI steps</td>
+<td><strong>Owner</strong> on the staging project, or the equivalent admin roles for every resource in the table above, including Project IAM Admin and Service Usage Admin</td>
+</tr>
+<tr>
+<td>App Hosting&#39;s GitHub connection</td>
+<td>Admin on the <code>mubinui/just-imagine</code> GitHub repository</td>
+</tr>
+<tr>
+<td>Stripe (optional)</td>
+<td>An account on the Stripe Dashboard, in <strong>test mode</strong></td>
+</tr>
+<tr>
+<td>AI</td>
+<td>Vertex AI access and quota for every configured model in this project (see the model table below)</td>
+</tr>
+</tbody></table>
+</div><p><strong>Decisions to make first</strong></p>
 <ul>
 <li>Two separate projects: one for staging, one for production. Never share a database between them.</li>
 <li>The App Hosting backend ID (for example <code>web</code>). It fixes the web address.</li>
@@ -216,71 +251,593 @@ footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);color:v
 <li>Whether you will use a custom domain for the web app or for assets (both optional).</li>
 </ul>
 <p><strong>Check the release first.</strong> Deploy only a commit whose checks pass:</p>
-<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>pnpm install --frozen-lockfile
-node --test scripts/local.test.mjs scripts/env-contract.test.mjs
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>node --test scripts/local.test.mjs scripts/env-contract.test.mjs
 pnpm format:check
 pnpm lint
 pnpm typecheck
 env -u FIRESTORE_EMULATOR_HOST -u FIREBASE_AUTH_EMULATOR_HOST pnpm test
-NEXT_PUBLIC_FAKE=1 pnpm build</code></pre></div><p>The <code>ci</code> workflow on <code>main</code> runs the same checks plus the browser suite. A green run is the minimum bar; it does not prove microphone, model or production behaviour.</p>
-<h2 id="step-1-set-your-names-once"><a class="anchor" href="#step-1-set-your-names-once" aria-hidden="true">#</a>Step 1: Set your names once</h2><p>Open one terminal and keep it for the whole deployment. Set these variables, replacing every value in angle brackets:</p>
+NEXT_PUBLIC_FAKE=1 JUST_IMAGINE_SAMPLE_BUILD=1 pnpm build</code></pre></div><p>The last line builds sample mode for the browser tests only; it is never what you deploy. The <code>ci</code> workflow on <code>main</code> runs the same checks plus the browser suite. A green run is the minimum bar; it does not prove microphone, model or production behaviour.</p>
+<h2 id="credentials-what-they-are-and-where-to-get-them"><a class="anchor" href="#credentials-what-they-are-and-where-to-get-them" aria-hidden="true">#</a>Credentials: what they are and where to get them</h2><p>Every credential the deployment uses, in the order you meet it. &quot;Secret&quot; means it must never be committed, logged or put in a <code>NEXT_PUBLIC_*</code> value.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Credential</th>
+<th>What it is</th>
+<th>Where you get it</th>
+<th>Where it goes</th>
+<th>Secret?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Your Google account</td>
+<td>Runs <code>gcloud</code>, Terraform and the admin scripts</td>
+<td><code>gcloud auth login</code>, then <code>gcloud auth application-default login</code> (step 1)</td>
+<td>Your machine only</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Firebase CLI login</td>
+<td>Runs <code>firebase</code> commands</td>
+<td><code>pnpm exec firebase login</code> (step 2)</td>
+<td>Your machine only</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Billing account ID</td>
+<td>Links billing to the project</td>
+<td><code>gcloud billing accounts list</code></td>
+<td><code>gcloud billing projects link</code> (step 1)</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Project number</td>
+<td>Part of every Cloud Run address</td>
+<td><code>gcloud projects describe</code> (step 1)</td>
+<td>Derived URLs, tfvars</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Firebase web config: <code>apiKey</code>, <code>authDomain</code>, <code>projectId</code>, <code>appId</code></td>
+<td>Identifies the project to the browser for sign-in</td>
+<td><code>firebase apps:sdkconfig WEB</code> (step 3), or Firebase console → Project settings → Your apps</td>
+<td><code>apps/web/apphosting.&lt;env&gt;.yaml</code> as <code>NEXT_PUBLIC_FIREBASE_*</code> (step 8)</td>
+<td>No, public by design; restrict it to your domains (step 3)</td>
+</tr>
+<tr>
+<td>Service accounts <code>imagine-api</code>, <code>imagine-gateway</code>, <code>imagine-builder</code>, <code>imagine-tasks</code></td>
+<td>Each service&#39;s own Google identity</td>
+<td>Created by Terraform (step 6)</td>
+<td>Attached to Cloud Run, Cloud Tasks and Scheduler by Terraform</td>
+<td>No key files exist; never create one</td>
+</tr>
+<tr>
+<td>App Hosting runtime identity <code>firebase-app-hosting-compute@&lt;project&gt;.iam.gserviceaccount.com</code></td>
+<td>The web server&#39;s Google identity</td>
+<td>Created by App Hosting (step 8)</td>
+<td>You grant it two roles (step 8c)</td>
+<td>No key files</td>
+</tr>
+<tr>
+<td>Vertex AI (Gemini) access</td>
+<td>All voice, world, image and text models</td>
+<td>Granted to the service accounts by Terraform (<code>roles/aiplatform.user</code>); model access and quota per project</td>
+<td>Nothing to copy: ADC</td>
+<td>Never set <code>GEMINI_API_KEY</code> in the cloud</td>
+</tr>
+<tr>
+<td>Teacher invite link</td>
+<td>Lets a teacher create their account and join a school</td>
+<td>Operator console → Schools → the school → Invite (step 9)</td>
+<td>Sent to the teacher by you</td>
+<td>Treat as private; it expires</td>
+</tr>
+<tr>
+<td>Student school code, username and PIN</td>
+<td>How a student signs in; there is no student email</td>
+<td>Teacher console → Students (step 9)</td>
+<td>Given to the student</td>
+<td>Yes for the PIN</td>
+</tr>
+<tr>
+<td>Stripe secret key <code>sk_test_…</code> (optional)</td>
+<td>Creates checkout and billing-portal sessions</td>
+<td>Stripe Dashboard, test mode → Developers → API keys → Secret key</td>
+<td>Secret Manager <code>stripe-secret-key</code> (step 10)</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>Stripe webhook signing secret <code>whsec_…</code> (optional)</td>
+<td>Verifies Stripe&#39;s webhook calls</td>
+<td>Stripe Dashboard, test mode → Developers → Webhooks → your endpoint → Signing secret</td>
+<td>Secret Manager <code>stripe-webhook-secret</code> (step 10)</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>Stripe price ID <code>price_…</code> (optional)</td>
+<td>The Family plan&#39;s subscription price</td>
+<td>Stripe Dashboard, test mode → Product catalog → your product → Pricing</td>
+<td><code>stripe_price_id</code> in tfvars (step 10)</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Monitoring channel ID</td>
+<td>Where alerts go</td>
+<td><code>gcloud beta monitoring channels list</code> (step 10)</td>
+<td><code>notification_channels</code> in tfvars</td>
+<td>No</td>
+</tr>
+<tr>
+<td>GitHub variables for nightly evaluations: <code>GCP_PROJECT_ID</code>, <code>SCENE_MODEL</code>, <code>FAST_MODEL</code>, <code>WIF_PROVIDER</code>, <code>EVAL_SERVICE_ACCOUNT</code></td>
+<td>Let GitHub Actions call staging Vertex AI without a key</td>
+<td>Commands in step 10</td>
+<td>GitHub → Settings → Environments → <code>staging</code> → Variables</td>
+<td>No; Workload Identity Federation replaces keys</td>
+</tr>
+</tbody></table>
+</div><p>Payments are optional. Without Stripe, parents can take the Family plan <strong>without payment</strong> (on by default, <code>subscriptions_without_payment</code>), so a release does not need any Stripe value. The only secrets that live in the cloud are the two Stripe values, and only in Secret Manager, and only once you turn real billing on. The release accepts <strong>test-mode Stripe keys only</strong>: the API refuses a key that does not start with <code>sk_test_</code> and rejects live-mode webhook events.</p>
+<h2 id="configuration-reference"><a class="anchor" href="#configuration-reference" aria-hidden="true">#</a>Configuration reference</h2><h3 id="terraform-variables-infra-terraform-lt-env-gt-tfvars"><a class="anchor" href="#terraform-variables-infra-terraform-lt-env-gt-tfvars" aria-hidden="true">#</a>Terraform variables (<code>infra/terraform/&lt;env&gt;.tfvars</code>)</h3><div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Required</th>
+<th>Value</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>project_id</code></td>
+<td>Yes</td>
+<td>The environment&#39;s project ID</td>
+<td></td>
+</tr>
+<tr>
+<td><code>web_url</code></td>
+<td>Yes</td>
+<td>The web app&#39;s exact HTTPS origin, no trailing slash</td>
+<td>Equal to <code>WEB_URL</code> from step 1. Drives CORS, origin checks, Stripe redirects, invite links and the web uptime check</td>
+</tr>
+<tr>
+<td><code>asset_bucket</code></td>
+<td>Yes</td>
+<td>A globally unique bucket name</td>
+<td>Terraform creates the bucket</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>Yes</td>
+<td><code>us-central1-docker.pkg.dev/&lt;project&gt;/just-imagine/services@sha256:…</code></td>
+<td>Passed with <code>-var</code> at plan time (step 6c); always a digest, never a tag</td>
+</tr>
+<tr>
+<td><code>enable_billing</code></td>
+<td>No, default <code>false</code></td>
+<td><code>true</code> only after the Stripe secrets exist</td>
+<td>Adds the two Stripe secrets to the API</td>
+</tr>
+<tr>
+<td><code>subscriptions_without_payment</code></td>
+<td>No, default <code>true</code></td>
+<td><code>true</code> or <code>false</code></td>
+<td>While billing is off, parents can start and stop the Family plan without paying. Ignored when <code>enable_billing</code> is <code>true</code></td>
+</tr>
+<tr>
+<td><code>stripe_price_id</code></td>
+<td>No, default <code>&quot;&quot;</code></td>
+<td><code>price_…</code> from Stripe test mode</td>
+<td></td>
+</tr>
+<tr>
+<td><code>notification_channels</code></td>
+<td>No, default <code>[]</code></td>
+<td>Monitoring channel resource names</td>
+<td>Alerts are silent until set</td>
+</tr>
+<tr>
+<td><code>asset_domain</code></td>
+<td>No, default <code>&quot;&quot;</code></td>
+<td>A hostname you control, for example <code>assets.example.org</code></td>
+<td>Turns on Cloud CDN with a managed certificate</td>
+</tr>
+<tr>
+<td><code>models</code></td>
+<td>No</td>
+<td>Map of model settings</td>
+<td>Defaults below. Every key in this map is passed to all three services as an environment variable</td>
+</tr>
+</tbody></table>
+</div><h3 id="backend-services-cloud-run-set-by-terraform"><a class="anchor" href="#backend-services-cloud-run-set-by-terraform" aria-hidden="true">#</a>Backend services (Cloud Run, set by Terraform)</h3><p>You do not type these; Terraform sets them from the tfvars. Check them after step 6 with <code>gcloud run services describe imagine-&lt;name&gt; --region us-central1 --format=yaml(spec.template.spec.containers[0].env)</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Variable</th>
+<th align="center">api</th>
+<th align="center">gateway</th>
+<th align="center">builder</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>GOOGLE_CLOUD_PROJECT</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td><code>project_id</code></td>
+</tr>
+<tr>
+<td><code>WEB_URL</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td><code>web_url</code></td>
+</tr>
+<tr>
+<td><code>BUILDER_URL</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td><code>https://imagine-builder-&lt;project-number&gt;.us-central1.run.app</code></td>
+</tr>
+<tr>
+<td><code>BUILDER_AUDIENCE</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td>Same as <code>BUILDER_URL</code>; the builder checks Cloud Tasks tokens against it</td>
+</tr>
+<tr>
+<td><code>API_AUDIENCE</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td><code>https://imagine-api-&lt;project-number&gt;.us-central1.run.app</code></td>
+</tr>
+<tr>
+<td><code>TASK_SERVICE_ACCOUNT</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td><code>imagine-tasks@&lt;project&gt;.iam.gserviceaccount.com</code></td>
+</tr>
+<tr>
+<td><code>ASSET_BUCKET</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td><code>asset_bucket</code></td>
+</tr>
+<tr>
+<td><code>ASSET_BASE_URL</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td><code>https://storage.googleapis.com/&lt;bucket&gt;</code>, or <code>https://&lt;asset_domain&gt;</code> with CDN</td>
+</tr>
+<tr>
+<td><code>STRIPE_PRICE_ID</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td><code>stripe_price_id</code></td>
+</tr>
+<tr>
+<td><code>OTEL_ENABLED</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td><code>1</code> (Cloud Trace)</td>
+</tr>
+<tr>
+<td><code>LIVE_MODEL</code>, <code>FAST_MODEL</code>, <code>SCENE_MODEL</code>, <code>HERO_MODEL</code>, <code>PROP_MODEL</code></td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td>From <code>models</code></td>
+</tr>
+<tr>
+<td><code>COMPANION_VERTEX</code></td>
+<td align="center">✓</td>
+<td align="center"></td>
+<td align="center"></td>
+<td><code>1</code>: companion text and portraits use Vertex AI</td>
+</tr>
+<tr>
+<td><code>ADMIN_HEALTH_TARGETS</code></td>
+<td align="center">✓</td>
+<td align="center"></td>
+<td align="center"></td>
+<td>Builder and gateway addresses for the operator System page</td>
+</tr>
+<tr>
+<td><code>SUBSCRIPTIONS_WITHOUT_PAYMENT</code></td>
+<td align="center">✓</td>
+<td align="center"></td>
+<td align="center"></td>
+<td><code>1</code> when <code>subscriptions_without_payment</code> is on and billing is off, else <code>0</code></td>
+</tr>
+<tr>
+<td><code>STRIPE_SECRET_KEY</code></td>
+<td align="center">✓</td>
+<td align="center"></td>
+<td align="center"></td>
+<td>Secret Manager <code>stripe-secret-key</code>, only when <code>enable_billing = true</code></td>
+</tr>
+<tr>
+<td><code>STRIPE_WEBHOOK_SECRET</code></td>
+<td align="center">✓</td>
+<td align="center"></td>
+<td align="center"></td>
+<td>Secret Manager <code>stripe-webhook-secret</code>, only when <code>enable_billing = true</code></td>
+</tr>
+</tbody></table>
+</div><p>Cloud Run itself sets <code>PORT=8080</code>, <code>K_SERVICE</code> and <code>K_REVISION</code>. Queue names default to <code>world-builds</code> (<code>BUILDER_QUEUE</code>) and <code>deletions</code> (<code>DELETION_QUEUE</code>), matching what Terraform creates; leave them unset.</p>
+<h3 id="models"><a class="anchor" href="#models" aria-hidden="true">#</a>Models</h3><p>Model IDs are settings, not a guarantee that a project can call them. Before step 9, confirm each one in Vertex AI (Model Garden, or a test call) for this project and region.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Used for</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>LIVE_MODEL</code></td>
+<td><code>gemini-3.8-live</code></td>
+<td>Live voice</td>
+<td><code>us-central1</code></td>
+</tr>
+<tr>
+<td><code>SCENE_MODEL</code></td>
+<td><code>gemini-4-argon</code></td>
+<td>World builder</td>
+<td><code>us-central1</code></td>
+</tr>
+<tr>
+<td><code>FAST_MODEL</code></td>
+<td><code>gemini-3.8-flash</code></td>
+<td>Patches, summaries, moderation, lesson writing help</td>
+<td><code>us-central1</code></td>
+</tr>
+<tr>
+<td><code>HERO_MODEL</code></td>
+<td><code>gemini-nano-banana-2.1</code></td>
+<td>Hero sprites and backdrops</td>
+<td><code>us-central1</code></td>
+</tr>
+<tr>
+<td><code>PROP_MODEL</code></td>
+<td><code>gemini-3.1-flash-lite-image</code></td>
+<td>Props</td>
+<td><code>us-central1</code></td>
+</tr>
+<tr>
+<td><code>GAME_MODEL</code></td>
+<td><code>gemini-4-argon</code></td>
+<td>Generated games</td>
+<td><code>GAME_MODEL_LOCATION</code></td>
+</tr>
+<tr>
+<td><code>GAME_MODEL_LOCATION</code></td>
+<td><code>global</code></td>
+<td>Location for the game model</td>
+<td></td>
+</tr>
+<tr>
+<td><code>COMPANION_IMAGE_MODEL</code></td>
+<td><code>gemini-nano-banana-2.1</code></td>
+<td>Companion portraits</td>
+<td><code>us-central1</code></td>
+</tr>
+</tbody></table>
+</div><p>The first five are set by Terraform. The last three use the defaults built into the services; to change any of them, add the key to <code>models</code> in the tfvars, for example <code>models = { …the five defaults…, GAME_MODEL_LOCATION = &quot;us-central1&quot; }</code>. Include all five defaults when you override <code>models</code>, because the map replaces the default.</p>
+<h3 id="web-app-app-hosting"><a class="anchor" href="#web-app-app-hosting" aria-hidden="true">#</a>Web app (App Hosting)</h3><p>Set in <code>apps/web/apphosting.yaml</code> (shared) and <code>apps/web/apphosting.&lt;env&gt;.yaml</code> (one per environment, step 8). Every value here is public, so both files can be committed.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Available at</th>
+<th>Value</th>
+<th>Where it comes from</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>NEXT_PUBLIC_FAKE</code></td>
+<td>Build, runtime</td>
+<td><code>0</code></td>
+<td>Already in <code>apphosting.yaml</code>; never change it</td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_API_URL</code></td>
+<td>Build</td>
+<td><code>https://imagine-api-&lt;project-number&gt;.us-central1.run.app</code></td>
+<td>Step 1 (<code>API_URL</code>)</td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_GATEWAY_URL</code></td>
+<td>Build</td>
+<td><code>wss://imagine-gateway-&lt;project-number&gt;.us-central1.run.app</code></td>
+<td>Step 1 (<code>GATEWAY_URL</code>); note <code>wss://</code></td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_FIREBASE_API_KEY</code></td>
+<td>Build</td>
+<td><code>apiKey</code></td>
+<td>Step 3</td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN</code></td>
+<td>Build</td>
+<td><code>authDomain</code></td>
+<td>Step 3</td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_FIREBASE_PROJECT_ID</code></td>
+<td>Build</td>
+<td><code>projectId</code></td>
+<td>Step 3</td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_FIREBASE_APP_ID</code></td>
+<td>Build</td>
+<td><code>appId</code></td>
+<td>Step 3</td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_FIREBASE_EMULATOR</code></td>
+<td>Build</td>
+<td><code>0</code></td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td><code>WEB_URL</code></td>
+<td>Runtime</td>
+<td>The same origin as <code>web_url</code></td>
+<td>Step 1; the session routes check request origins against it</td>
+</tr>
+<tr>
+<td><code>GOOGLE_CLOUD_PROJECT</code></td>
+<td>Runtime</td>
+<td>The project ID</td>
+<td>Step 1; tells the server&#39;s Firebase Admin SDK which project to use</td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_CHARACTER_ASSET_BASE_URL</code></td>
+<td>Build</td>
+<td>Leave unset</td>
+<td>Optional base URL for final Rive character files</td>
+</tr>
+</tbody></table>
+</div><p><code>NEXT_PUBLIC_*</code> values are compiled into the browser bundle at build time: after changing one, start a new rollout.</p>
+<h3 id="never-set-in-the-cloud"><a class="anchor" href="#never-set-in-the-cloud" aria-hidden="true">#</a>Never set in the cloud</h3><div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>GEMINI_API_KEY</code></td>
+<td>Production uses Vertex AI through each service account. A key would bypass the project&#39;s identity and quota controls</td>
+</tr>
+<tr>
+<td><code>LOCAL_DEV</code></td>
+<td>Local Docker mode only; it refuses to run on Cloud Run</td>
+</tr>
+<tr>
+<td><code>FIRESTORE_EMULATOR_HOST</code>, <code>FIREBASE_AUTH_EMULATOR_HOST</code>, <code>NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_PORT</code>, <code>NEXT_PUBLIC_FIRESTORE_EMULATOR_PORT</code></td>
+<td>Point at local emulators instead of the real database</td>
+</tr>
+<tr>
+<td><code>NEXT_PUBLIC_FIREBASE_EMULATOR=1</code>, <code>NEXT_PUBLIC_FAKE=1</code>, <code>JUST_IMAGINE_SAMPLE_BUILD</code></td>
+<td>Local, CI and demo modes only</td>
+</tr>
+<tr>
+<td><code>ASSET_DIRECTORY</code></td>
+<td>Local disk storage for the Docker stack</td>
+</tr>
+<tr>
+<td>Any Admin SDK key file, <code>GOOGLE_APPLICATION_CREDENTIALS</code></td>
+<td>Services use their attached service accounts; key files are a leak waiting to happen</td>
+</tr>
+</tbody></table>
+</div><h2 id="step-1-set-your-names-once"><a class="anchor" href="#step-1-set-your-names-once" aria-hidden="true">#</a>Step 1: Set your names once</h2><p>Open one terminal and keep it for the whole deployment. Set these, replacing every value in angle brackets:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>export PROJECT_ID='&lt;staging-project-id>'
 export REGION='us-central1'
 export BACKEND_ID='web'                               # App Hosting backend ID
 export ASSET_BUCKET='&lt;globally-unique-assets-bucket>'
-export ENV_NAME='staging'                             # App Hosting environment name</code></pre></div><p>If the project does not exist yet, create it and link billing:</p>
+export ENV_NAME='staging'                             # App Hosting environment name</code></pre></div><p>If the project does not exist yet, create it and link billing (App Hosting also needs billing, the Firebase Blaze plan):</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>gcloud projects create "$PROJECT_ID"
 gcloud billing accounts list
-gcloud billing projects link "$PROJECT_ID" --billing-account='&lt;BILLING_ACCOUNT_ID>'</code></pre></div><p>Sign in twice: once for the CLI and once for Application Default Credentials, which Terraform and the admin scripts use:</p>
+gcloud billing projects link "$PROJECT_ID" --billing-account='&lt;BILLING_ACCOUNT_ID>'</code></pre></div><p>Sign in twice: once for the CLI, once for Application Default Credentials, which Terraform and the admin scripts use:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>gcloud auth login
 gcloud auth application-default login
 gcloud config set project "$PROJECT_ID"
-gcloud auth application-default set-quota-project "$PROJECT_ID"</code></pre></div><p>Now derive the addresses every later step needs:</p>
+gcloud auth application-default set-quota-project "$PROJECT_ID"</code></pre></div><p>Derive the addresses every later step needs:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>export PROJECT_NUMBER="$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')"
 export API_URL="https://imagine-api-$PROJECT_NUMBER.$REGION.run.app"
 export GATEWAY_URL="wss://imagine-gateway-$PROJECT_NUMBER.$REGION.run.app"
 export WEB_URL="https://$BACKEND_ID--$PROJECT_ID.$REGION.hosted.app"
-echo "$API_URL"; echo "$GATEWAY_URL"; echo "$WEB_URL"</code></pre></div><p>Terraform builds the Cloud Run addresses the same way (<code>https://imagine-&lt;service&gt;-&lt;project-number&gt;.us-central1.run.app</code>). If you will serve the web app from a custom domain, set <code>WEB_URL</code> to that exact <code>https://</code> origin instead. Every origin check in the system compares against this one value.</p>
+echo "$API_URL"; echo "$GATEWAY_URL"; echo "$WEB_URL"</code></pre></div><p>Terraform builds the Cloud Run addresses the same way (<code>https://imagine-&lt;service&gt;-&lt;project-number&gt;.us-central1.run.app</code>). If you will serve the web app from a custom domain, set <code>WEB_URL</code> to that exact <code>https://</code> origin instead: every origin check compares against this one value.</p>
 <h2 id="step-2-add-firebase-to-the-project"><a class="anchor" href="#step-2-add-firebase-to-the-project" aria-hidden="true">#</a>Step 2: Add Firebase to the project</h2><div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>pnpm exec firebase login
-pnpm exec firebase projects:addfirebase "$PROJECT_ID"</code></pre></div><p>Do <strong>not</strong> create the Firestore database in the console. Terraform creates <code>(default)</code> in <code>nam5</code> with deletion protection. If one already exists, import it into Terraform state before step 6 (<code>terraform import google_firestore_database.default &quot;projects/$PROJECT_ID/databases/(default)&quot;</code>).</p>
-<h2 id="step-3-turn-on-sign-in-and-register-the-web-app"><a class="anchor" href="#step-3-turn-on-sign-in-and-register-the-web-app" aria-hidden="true">#</a>Step 3: Turn on sign-in and register the web app</h2><p>In the Firebase console for this project, open <strong>Authentication</strong> and choose <strong>Get started</strong>. Then:</p>
+pnpm exec firebase projects:addfirebase "$PROJECT_ID"</code></pre></div><p>Do <strong>not</strong> create the Firestore database in the console. Terraform creates <code>(default)</code> in <code>nam5</code> with deletion protection. If one already exists, import it into Terraform state before step 6: <code>terraform -chdir=infra/terraform import -var-file=staging.tfvars -var=&#39;image=bootstrap-only&#39; google_firestore_database.default &quot;projects/$PROJECT_ID/databases/(default)&quot;</code>.</p>
+<h2 id="step-3-turn-on-sign-in-and-register-the-web-app"><a class="anchor" href="#step-3-turn-on-sign-in-and-register-the-web-app" aria-hidden="true">#</a>Step 3: Turn on sign-in and register the web app</h2><p>Sign-in must work for every role before release:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Signs in with</th>
+<th>Needs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Parent</td>
+<td>Email and password, or Google</td>
+<td>Both providers, an authorized domain, the Google consent screen in production</td>
+</tr>
+<tr>
+<td>Teacher</td>
+<td>Email and password, or Google, after accepting an invite</td>
+<td>The same, plus the <code>WEB_URL</code> the invite link uses</td>
+</tr>
+<tr>
+<td>Student</td>
+<td>School code, username and PIN (no email)</td>
+<td>The API signs a Firebase custom token; Terraform grants it <code>roles/iam.serviceAccountTokenCreator</code> on itself and enables the IAM Credentials API</td>
+</tr>
+<tr>
+<td>Operator</td>
+<td>Email and password, plus the operator claim</td>
+<td>Step 9</td>
+</tr>
+</tbody></table>
+</div><p><strong>3a. Turn on the providers.</strong> In the Firebase console for this project, open <strong>Authentication</strong> and choose <strong>Get started</strong>. Then:</p>
 <ol>
-<li>Under <strong>Sign-in method</strong>, enable <strong>Email/Password</strong> and <strong>Google</strong>. Parents use both; operators use email and password.</li>
-<li>Under <strong>Settings → Authorized domains</strong>, add the host part of <code>WEB_URL</code> (for example <code>web--my-project.us-central1.hosted.app</code>) and any custom domain.</li>
+<li>Under <strong>Sign-in method</strong>, enable <strong>Email/Password</strong>.</li>
+<li>Enable <strong>Google</strong>. The console asks for a <strong>project support email</strong>; choose a team address, not a personal one.</li>
+<li>Under <strong>Settings → Authorized domains</strong>, add the host part of <code>WEB_URL</code> (for example <code>web--my-project.us-central1.hosted.app</code>) and any custom domain. <code>localhost</code> and <code>&lt;project&gt;.firebaseapp.com</code> are listed already; leave them.</li>
 </ol>
-<p>Register a web app and print its public configuration:</p>
+<p><strong>3b. Make Google sign-in work for every Google account.</strong> In the Google Cloud console, open <strong>Google Auth Platform</strong> (formerly <strong>APIs &amp; Services → OAuth consent screen</strong>) for this project:</p>
+<ol>
+<li><strong>Branding:</strong> set the app name to <code>Just Imagine</code>, the user support email and the developer contact email. Add the <code>WEB_URL</code> host and <code>&lt;project&gt;.firebaseapp.com</code> under <strong>Authorized domains</strong>, and the web app&#39;s privacy page (<code>WEB_URL/privacy</code>) as the privacy policy link.</li>
+<li><strong>Audience:</strong> user type <strong>External</strong>, then <strong>Publish app</strong> so the publishing status is <strong>In production</strong>. While it says <strong>Testing</strong>, only the test users listed there can sign in with Google.</li>
+<li><strong>Clients:</strong> Firebase created a <strong>Web client (auto created by Google Service)</strong>. Open it and check that <strong>Authorized JavaScript origins</strong> include <code>https://&lt;authDomain&gt;</code> and that <strong>Authorized redirect URIs</strong> include <code>https://&lt;authDomain&gt;/__/auth/handler</code>. Firebase normally fills these in; add them if missing. A custom web domain does not change them, because sign-in runs through <code>authDomain</code>.</li>
+</ol>
+<p>Just Imagine asks Google only for the basic profile and email, so publishing does not need Google&#39;s verification review.</p>
+<p><strong>3c. Register the web app</strong> and print its public configuration:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>pnpm exec firebase apps:create WEB 'Just Imagine Web' --project "$PROJECT_ID"
-pnpm exec firebase apps:sdkconfig WEB --project "$PROJECT_ID"</code></pre></div><p>Keep the printed <code>apiKey</code>, <code>authDomain</code>, <code>projectId</code> and <code>appId</code> for step 8. These values are public by design; they identify the project to the browser and grant no access on their own.</p>
+pnpm exec firebase apps:sdkconfig WEB --project "$PROJECT_ID"</code></pre></div><p>Keep the printed <code>apiKey</code>, <code>authDomain</code> (normally <code>&lt;project&gt;.firebaseapp.com</code>), <code>projectId</code> and <code>appId</code> for step 8. They are public by design and grant no access on their own.</p>
+<p><strong>3d. Limit where the key works.</strong> In the Google Cloud console, open <strong>APIs &amp; Services → Credentials</strong> and select the <strong>Browser key</strong> Firebase created. Under <strong>Application restrictions</strong>, choose <strong>Websites</strong> and add <code>https://&lt;WEB_URL host&gt;/*</code>, <code>https://&lt;authDomain&gt;/*</code> and any custom domain. Leave <strong>API restrictions</strong> off. If your organisation requires them, allow at least the <strong>Identity Toolkit API</strong>, <strong>Token Service API</strong> and <strong>Cloud Firestore API</strong>: the browser uses them to sign in and to read worlds.</p>
 <h2 id="step-4-give-terraform-a-state-bucket"><a class="anchor" href="#step-4-give-terraform-a-state-bucket" aria-hidden="true">#</a>Step 4: Give Terraform a state bucket</h2><p>The repository does not configure a Terraform backend. Store state in a versioned Cloud Storage bucket so it is shared and recoverable:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>gcloud storage buckets create "gs://$PROJECT_ID-tfstate" \
   --location="$REGION" --uniform-bucket-level-access
-gcloud storage buckets update "gs://$PROJECT_ID-tfstate" --versioning</code></pre></div><p>Create <code>infra/terraform/backend.tf</code> with an empty backend block:</p>
+gcloud storage buckets update "gs://$PROJECT_ID-tfstate" --versioning</code></pre></div><p>Create <code>infra/terraform/backend.tf</code> with an empty backend block (do not commit it):</p>
 <div class="code"><div class="code-bar"><span>hcl</span><button type="button" class="copy">Copy</button></div><pre><code>terraform {
   backend "gcs" {}
-}</code></pre></div><p>Then initialise against this environment&#39;s bucket:</p>
+}</code></pre></div><p>Initialise against this environment&#39;s bucket:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>terraform -chdir=infra/terraform init \
   -backend-config="bucket=$PROJECT_ID-tfstate" \
-  -backend-config="prefix=just-imagine"</code></pre></div><p>When you later switch to the production project, run <code>init</code> again with <code>-reconfigure</code> and the production bucket. State, plans and <code>.tfvars</code> files can contain project details; the repository&#39;s <code>.gitignore</code> already excludes <code>*.tfstate</code>, <code>*.tfplan</code> and <code>*.tfvars</code>.</p>
-<h2 id="step-5-write-the-environment-39-s-variables"><a class="anchor" href="#step-5-write-the-environment-39-s-variables" aria-hidden="true">#</a>Step 5: Write the environment&#39;s variables</h2><p>Create <code>infra/terraform/staging.tfvars</code> (it is git-ignored):</p>
+  -backend-config="prefix=just-imagine"</code></pre></div><p>When you later switch to the production project, run <code>init</code> again with <code>-reconfigure</code> and the production bucket. State, plans and <code>.tfvars</code> files can contain project details; <code>.gitignore</code> already excludes <code>*.tfstate</code>, <code>*.tfplan</code> and <code>*.tfvars</code>.</p>
+<h2 id="step-5-write-the-environment-39-s-variables"><a class="anchor" href="#step-5-write-the-environment-39-s-variables" aria-hidden="true">#</a>Step 5: Write the environment&#39;s variables</h2><p>Create <code>infra/terraform/staging.tfvars</code> (git-ignored). See the <a href="#configuration-reference">Terraform variables</a> table for every option:</p>
 <div class="code"><div class="code-bar"><span>hcl</span><button type="button" class="copy">Copy</button></div><pre><code>project_id   = "&lt;staging-project-id>"
 web_url      = "https://web--&lt;staging-project-id>.us-central1.hosted.app"
 asset_bucket = "&lt;globally-unique-assets-bucket>"
 
-# Leave billing off until Stripe test secrets exist (step 10).
+# Leave billing off until the Stripe test secrets exist (step 10).
 enable_billing  = false
 stripe_price_id = ""
 
-# Optional: Monitoring channel IDs for alerts (step 10).
+# Optional: Monitoring channel resource names for alerts (step 10).
 notification_channels = []
 
 # Optional: a DNS name for Cloud CDN in front of the assets bucket (step 10).
-asset_domain = ""</code></pre></div><p><code>web_url</code> must equal the <code>WEB_URL</code> you printed in step 1, with no trailing slash. The model IDs default to the project&#39;s standard set in <a href="https://github.com/mubinui/just-imagine/blob/main/infra/terraform/variables.tf"><code>variables.tf</code></a>; override <code>models</code> here only if your project needs different ones.</p>
-<h2 id="step-6-create-the-registry-build-the-image-apply-terraform"><a class="anchor" href="#step-6-create-the-registry-build-the-image-apply-terraform" aria-hidden="true">#</a>Step 6: Create the registry, build the image, apply Terraform</h2><p><strong>6a. Create only the image registry.</strong> On a brand-new project, Cloud Build has nowhere to push yet. Apply just the registry (and the APIs it depends on). This is the one time a targeted apply is used:</p>
+asset_domain = ""</code></pre></div><p><code>web_url</code> must equal <code>WEB_URL</code> from step 1, with no trailing slash. Omit <code>models</code> to use the defaults.</p>
+<h2 id="step-6-create-the-registry-build-the-image-apply-terraform"><a class="anchor" href="#step-6-create-the-registry-build-the-image-apply-terraform" aria-hidden="true">#</a>Step 6: Create the registry, build the image, apply Terraform</h2><p><strong>6a. Create only the image registry.</strong> On a brand-new project Cloud Build has nowhere to push yet. Apply just the registry (and the APIs it depends on); this is the one time a targeted apply is used:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>terraform -chdir=infra/terraform plan -var-file=staging.tfvars \
   -var='image=bootstrap-only' \
   -target=google_artifact_registry_repository.images -out=registry.tfplan
-terraform -chdir=infra/terraform apply registry.tfplan</code></pre></div><p><strong>6b. Build and push the services image.</strong> Use a clean checkout of the commit you are releasing. Cloud Build uploads the working tree, and the tag records the Git revision:</p>
-<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>git status --short        # must print nothing
+terraform -chdir=infra/terraform apply registry.tfplan</code></pre></div><p><strong>6b. Build and push the services image</strong> from a clean checkout of the <code>main</code> commit you are releasing. Cloud Build uploads the working tree, and the tag records the Git revision:</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>git switch main &amp;&amp; git pull --ff-only
+git status --short        # must print nothing
 export REVISION="$(git rev-parse HEAD)"
 gcloud builds submit . --project "$PROJECT_ID" \
   --config cloudbuild.yaml --substitutions="COMMIT_SHA=$REVISION"</code></pre></div><p>If the push fails with a permission error, grant the build&#39;s service account <code>roles/artifactregistry.writer</code> on the project and submit again.</p>
@@ -292,12 +849,17 @@ echo "$IMAGE"            # ...services@sha256:...</code></pre></div><p><strong>6
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>terraform -chdir=infra/terraform plan -var-file=staging.tfvars \
   -var="image=$IMAGE" -out=staging.tfplan
 terraform -chdir=infra/terraform apply staging.tfplan
-terraform -chdir=infra/terraform output service_urls</code></pre></div><p>The <code>service_urls</code> output must match the <code>API_URL</code> and gateway address from step 1. Apply creates the service accounts, Firestore, the assets bucket, both queues, the Scheduler job, Secret Manager entries, the three Cloud Run services and the Monitoring resources. Cloud Run services and Firestore have deletion protection; leave it on.</p>
+terraform -chdir=infra/terraform output service_urls</code></pre></div><p><code>service_urls</code> must match <code>API_URL</code> and the gateway address from step 1. Apply creates the service accounts and their roles, Firestore, the assets bucket, both queues, the Scheduler job, the Secret Manager entries, the three Cloud Run services with every variable in the <a href="#backend-services-cloud-run-set-by-terraform">backend table</a>, and the Monitoring resources. Cloud Run services and Firestore have deletion protection; leave it on.</p>
 <p><strong>6e. Publish the Firestore rules and indexes:</strong></p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>pnpm exec firebase deploy --project "$PROJECT_ID" --only firestore:rules,firestore:indexes</code></pre></div><h2 id="step-7-check-the-backend-before-the-web-app"><a class="anchor" href="#step-7-check-the-backend-before-the-web-app" aria-hidden="true">#</a>Step 7: Check the backend before the web app</h2><div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>curl -fsS "$API_URL/health" &amp;&amp; echo ' api ok'
-gcloud run services list --project "$PROJECT_ID" --region "$REGION"</code></pre></div><p>All three services should show a ready revision. The builder is private, so an unauthenticated request to it returns 403; that is correct. Confirm the Cloud Tasks identity can invoke it:</p>
-<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>gcloud run services get-iam-policy imagine-builder --region "$REGION" --project "$PROJECT_ID"</code></pre></div><p>The policy should list <code>serviceAccount:imagine-tasks@$PROJECT_ID.iam.gserviceaccount.com</code> with <code>roles/run.invoker</code>. A health response proves the process started, not that models answer; step 9 tests that.</p>
-<h2 id="step-8-deploy-the-web-app-on-app-hosting"><a class="anchor" href="#step-8-deploy-the-web-app-on-app-hosting" aria-hidden="true">#</a>Step 8: Deploy the web app on App Hosting</h2><p><strong>8a. Add the build and runtime settings.</strong> App Hosting reads <a href="https://github.com/mubinui/just-imagine/blob/main/apps/web/apphosting.yaml"><code>apps/web/apphosting.yaml</code></a> for every environment and an <code>apphosting.&lt;environment&gt;.yaml</code> file for one environment. Create <code>apps/web/apphosting.staging.yaml</code> with the values from steps 1 and 3:</p>
+gcloud run services list --project "$PROJECT_ID" --region "$REGION"
+for s in api gateway builder; do
+  echo "== imagine-$s"
+  gcloud run services describe "imagine-$s" --project "$PROJECT_ID" --region "$REGION" \
+    --format='value(spec.template.spec.containers[0].env)' | tr ';' '\n' | sed 's/,.*value=/ = /'
+done</code></pre></div><p>All three services should show a ready revision, and each should list the variables from the <a href="#backend-services-cloud-run-set-by-terraform">backend table</a>. The builder is private, so an unauthenticated request to it returns 403; that is correct. Confirm Cloud Tasks may invoke it:</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>gcloud run services get-iam-policy imagine-builder --region "$REGION" --project "$PROJECT_ID"</code></pre></div><p>The policy must list <code>serviceAccount:imagine-tasks@$PROJECT_ID.iam.gserviceaccount.com</code> with <code>roles/run.invoker</code>. A health response proves the process started, not that models answer; step 9 tests that.</p>
+<h2 id="step-8-deploy-the-web-app-on-app-hosting"><a class="anchor" href="#step-8-deploy-the-web-app-on-app-hosting" aria-hidden="true">#</a>Step 8: Deploy the web app on App Hosting</h2><p><strong>8a. Add the build and runtime settings.</strong> App Hosting reads <a href="https://github.com/mubinui/just-imagine/blob/main/apps/web/apphosting.yaml"><code>apps/web/apphosting.yaml</code></a> for every environment and <code>apphosting.&lt;environment&gt;.yaml</code> for one. Create <code>apps/web/apphosting.staging.yaml</code> with the values from steps 1 and 3 (see the <a href="#web-app-app-hosting">web app table</a>):</p>
 <div class="code"><div class="code-bar"><span>yaml</span><button type="button" class="copy">Copy</button></div><pre><code>env:
   - variable: NEXT_PUBLIC_API_URL
     value: https://imagine-api-&lt;project-number>.us-central1.run.app
@@ -322,39 +884,104 @@ gcloud run services list --project "$PROJECT_ID" --region "$REGION"</code></pre>
     availability: [BUILD]
   - variable: WEB_URL
     value: https://web--&lt;staging-project-id>.us-central1.hosted.app
-    availability: [RUNTIME]</code></pre></div><p>These are all public values, so the file can be committed. The shared <code>apphosting.yaml</code> already sets <code>NEXT_PUBLIC_FAKE=0</code>. Never add <code>LOCAL_DEV</code>, emulator hosts, Admin credentials or Stripe keys. Commit and push the file before creating the backend.</p>
+    availability: [RUNTIME]
+  - variable: GOOGLE_CLOUD_PROJECT
+    value: &lt;staging-project-id>
+    availability: [RUNTIME]</code></pre></div><p>Every value is public, so commit the file on <code>main</code> and push it before creating the backend. The shared <code>apphosting.yaml</code> already sets <code>NEXT_PUBLIC_FAKE=0</code>. Never add anything from <a href="#never-set-in-the-cloud">Never set in the cloud</a>.</p>
 <p><strong>8b. Create the backend:</strong></p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>pnpm exec firebase apphosting:backends:create --project "$PROJECT_ID" \
-  --backend "$BACKEND_ID" --primary-region "$REGION" --root-dir apps/web</code></pre></div><p>When prompted, connect GitHub, choose the <code>mubinui/just-imagine</code> repository, and set the live branch to <code>main</code> (or your release branch). The backend ID, region and root directory must match step 1, or <code>WEB_URL</code> will be wrong.</p>
-<p>In the Firebase console, open the backend&#39;s <strong>Settings → Environment</strong> and set the environment name to <code>staging</code>, so the <code>apphosting.staging.yaml</code> file applies. App Hosting builds from the monorepo root, so the pnpm workspace and lockfile are available to the build.</p>
-<p><strong>8c. Give the web runtime its permissions.</strong> The web server is not only static pages: <code>/api/session</code> reads and writes family records and asks Firebase Auth to mint session cookies, and parent pages check for revoked sessions. Grant the App Hosting runtime identity access:</p>
+  --backend "$BACKEND_ID" --primary-region "$REGION" --root-dir apps/web</code></pre></div><p>When prompted, connect GitHub, choose <code>mubinui/just-imagine</code>, and set the live branch to <strong><code>main</code></strong>. The backend ID, region and root directory must match step 1, or <code>WEB_URL</code> will be wrong.</p>
+<p>In the Firebase console, open the backend&#39;s <strong>Settings → Environment</strong> and set the environment name to <code>staging</code>, so <code>apphosting.staging.yaml</code> applies. App Hosting builds from the monorepo root, so the pnpm workspace and lockfile are available; it reads Node and pnpm versions from the root <code>package.json</code> (<code>engines.node &gt;=22.12.0</code>, <code>packageManager pnpm@10.34.7</code>).</p>
+<p><strong>8c. Give the web runtime its permissions.</strong> The web server is not only static pages: <code>/api/session</code> reads and writes family records and asks Firebase Auth to mint session cookies, and parent pages check for revoked sessions:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>export WEB_SA="firebase-app-hosting-compute@$PROJECT_ID.iam.gserviceaccount.com"
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:$WEB_SA" --role='roles/datastore.user'
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
-  --member="serviceAccount:$WEB_SA" --role='roles/firebaseauth.admin'</code></pre></div><p>If you prefer least privilege, replace <code>roles/firebaseauth.admin</code> with a custom role holding <code>firebaseauth.users.get</code> and <code>firebaseauth.users.createSession</code>. Check the backend&#39;s settings for its actual service account; use that one if it differs.</p>
+  --member="serviceAccount:$WEB_SA" --role='roles/firebaseauth.admin'</code></pre></div><p>For least privilege, replace <code>roles/firebaseauth.admin</code> with a custom role holding <code>firebaseauth.users.get</code> and <code>firebaseauth.users.createSession</code>. Check the backend&#39;s settings for its actual service account and use that one if it differs.</p>
 <p><strong>8d. Roll out.</strong> Start a rollout from the console, or run:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>pnpm exec firebase apphosting:rollouts:create "$BACKEND_ID" \
-  --git-branch main --project "$PROJECT_ID"</code></pre></div><p>Open <code>WEB_URL</code> when the rollout finishes. If the browser cannot reach the API or voice, the public URLs in the build are wrong; fix <code>apphosting.staging.yaml</code> and roll out again, because <code>NEXT_PUBLIC_*</code> values are fixed at build time.</p>
-<h2 id="step-9-accept-the-staging-release"><a class="anchor" href="#step-9-accept-the-staging-release" aria-hidden="true">#</a>Step 9: Accept the staging release</h2><p><strong>Make yourself an operator.</strong> Sign up on the web app with email and password, then grant the operator claim (it refuses to touch a real project without <code>--yes</code>):</p>
+  --git-branch main --project "$PROJECT_ID"</code></pre></div><p>Open <code>WEB_URL</code> when the rollout finishes. If the browser cannot reach the API or voice, the public URLs in the build are wrong: fix <code>apphosting.staging.yaml</code> and roll out again, because <code>NEXT_PUBLIC_*</code> values are fixed at build time.</p>
+<h2 id="step-9-accept-the-staging-release"><a class="anchor" href="#step-9-accept-the-staging-release" aria-hidden="true">#</a>Step 9: Accept the staging release</h2><p>Work through every role with synthetic accounts, never a real child. The <a href="#testing-guide">testing guide</a> has the full acceptance list; these are the steps that set the roles up.</p>
+<p><strong>9a. Make yourself an operator.</strong> Sign up on the web app with email and password, then grant the operator claim (the script refuses to touch a real project without <code>--yes</code>):</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>GOOGLE_CLOUD_PROJECT="$PROJECT_ID" \
-  node scripts/grant-admin.mjs '&lt;your-email>' --project "$PROJECT_ID" --yes</code></pre></div><p>Sign out and back in, then open <code>/admin</code>. Operator → System holds the audited kill switch that stops new sessions and builds.</p>
-<p><strong>Optional demo school data (staging only):</strong></p>
-<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>GOOGLE_CLOUD_PROJECT="$PROJECT_ID" node scripts/seed-schools.mjs --staging</code></pre></div><p><strong>Walk through the product with a synthetic family</strong>, never a real child:</p>
-<ul>
-<li class="task"><label><input type="checkbox"> <span>Parent signs up with email and with Google, gives consent, creates a child profile.</span></label></li><li class="task"><label><input type="checkbox"> <span>Child picks a profile; Studio loads; the first voice reply arrives.</span></label></li><li class="task"><label><input type="checkbox"> <span>A spoken idea becomes a world; the world loads from Firestore and its assets load from the bucket.</span></label></li><li class="task"><label><input type="checkbox"> <span>Voice ends cleanly, and reconnects after a network drop.</span></label></li><li class="task"><label><input type="checkbox"> <span>Learn, Stories and the gallery open; a learning game plays.</span></label></li><li class="task"><label><input type="checkbox"> <span>A teacher copies, publishes and grades a lesson (if schools are in scope).</span></label></li><li class="task"><label><input type="checkbox"> <span>Deleting the child removes their data; the <code>deletions</code> queue drains.</span></label></li><li class="task"><label><input type="checkbox"> <span>Operator pages load without showing child names.</span></label></li><li class="task"><label><input type="checkbox"> <span>Cloud Monitoring shows the dashboard and the uptime checks for the web app and API.</span></label></li></ul>
-<h2 id="step-10-optional-features"><a class="anchor" href="#step-10-optional-features" aria-hidden="true">#</a>Step 10: Optional features</h2><p><strong>Alerts.</strong> Create a notification channel, then put its ID in <code>notification_channels</code> and apply again:</p>
+  node scripts/grant-admin.mjs '&lt;your-email>' --project "$PROJECT_ID" --yes</code></pre></div><p>Sign out, then sign in at <code>WEB_URL/admin/sign-in</code>. <strong>Operator → System</strong> must show the API, builder and gateway up and list the configured models; it also holds the audited kill switch that stops new sessions and builds.</p>
+<p><strong>9b. Parent and child.</strong> In a private window, open <code>WEB_URL</code>, sign up once with email and once with <strong>Continue with Google</strong>, give consent, and add a child. Open <strong>Plan &amp; billing</strong>: with payments off it says the Family plan needs no payment; <strong>Start the Family plan</strong> must switch the plan to Family, and <strong>Return to the free plan</strong> back.</p>
+<p><strong>9c. School, teacher and student.</strong> In the operator console, open <strong>Schools</strong>, create a school, and <strong>Invite</strong> a teacher&#39;s email. Copy the invite link it shows (<code>WEB_URL/school/join?invite=…</code>) and open it in another private window: the teacher creates an account (email or Google) and lands in the teacher console. There, create a class, add a student and note the school code, username and PIN shown once. In a third window, sign in at <code>WEB_URL/study/sign-in</code> with those three values.</p>
+<p><strong>Optional demo school data (staging only, never production):</strong></p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>GOOGLE_CLOUD_PROJECT="$PROJECT_ID" node scripts/seed-schools.mjs --staging</code></pre></div><p>It writes the demo students&#39; sign-in details once to an owner-only file (default <code>/tmp/just-imagine-school-pins.json</code>, or <code>SCHOOL_PIN_OUTPUT</code>). Keep that file out of tickets and chat, and delete it when you are done.</p>
+<h2 id="step-10-optional-features"><a class="anchor" href="#step-10-optional-features" aria-hidden="true">#</a>Step 10: Optional features</h2><p><strong>Alerts.</strong> Create a notification channel, put its resource name in <code>notification_channels</code>, and apply again:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>gcloud beta monitoring channels create --project "$PROJECT_ID" \
   --display-name='Just Imagine on-call' --type=email \
   --channel-labels=email_address='&lt;on-call-email>'
-gcloud beta monitoring channels list --project "$PROJECT_ID" --format='value(name)'</code></pre></div><p><strong>Billing (Stripe test mode only).</strong> The release rejects live Stripe keys and events. Add the secret values, then set <code>enable_billing = true</code> and <code>stripe_price_id</code> in the <code>.tfvars</code> file and apply:</p>
-<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>printf '%s' '&lt;sk_test_...>' | gcloud secrets versions add stripe-secret-key --data-file=- --project "$PROJECT_ID"
-printf '%s' '&lt;whsec_...>'   | gcloud secrets versions add stripe-webhook-secret --data-file=- --project "$PROJECT_ID"</code></pre></div><p><strong>Cloud CDN for assets.</strong> Set <code>asset_domain</code> to a hostname you control and apply. Point that hostname&#39;s DNS <code>A</code> record at the <code>assets_ip</code> output. The managed certificate becomes active only after DNS resolves, which can take a while; assets keep using <code>storage.googleapis.com</code> until you switch.</p>
-<p><strong>Custom web domain.</strong> Add it under App Hosting → Settings → Domains, add it to Firebase Auth authorized domains, change <code>web_url</code> in the <code>.tfvars</code> file and <code>WEB_URL</code> in <code>apphosting.&lt;env&gt;.yaml</code> to the new origin, then apply Terraform and roll out the web app again.</p>
-<p><strong>Nightly model evaluations.</strong> The <code>builder-evaluations</code> workflow runs a billable evaluation against staging Vertex AI each night. It needs a GitHub environment named <code>staging</code> with the variables <code>GCP_PROJECT_ID</code>, <code>SCENE_MODEL</code>, <code>FAST_MODEL</code>, <code>WIF_PROVIDER</code> (a Workload Identity Federation provider for this repository) and <code>EVAL_SERVICE_ACCOUNT</code> (a service account with <code>roles/aiplatform.user</code>). Until those exist, the scheduled job fails at its configuration check.</p>
+gcloud beta monitoring channels list --project "$PROJECT_ID" --format='value(name)'</code></pre></div><p><strong>Subscriptions without payment (the default).</strong> Nothing to configure. With <code>enable_billing = false</code> and <code>subscriptions_without_payment = true</code>, Terraform sets <code>SUBSCRIPTIONS_WITHOUT_PAYMENT=1</code> on the API: parents start and stop the Family plan on <strong>Plan &amp; billing</strong> with no card, and the operator overview counts these plans as <strong>Family plans without payment</strong>. To offer only the free plan instead, set <code>subscriptions_without_payment = false</code> and apply.</p>
+<p><strong>Real billing with Stripe (optional, test mode only).</strong> Turning this on replaces subscriptions without payment.</p>
+<ol>
+<li><p>In the Stripe Dashboard, switch to <strong>test mode</strong>.</p>
+</li>
+<li><p><strong>Product catalog → Add product</strong>: the Family plan with a recurring price. Copy its price ID (<code>price_…</code>).</p>
+</li>
+<li><p><strong>Developers → API keys</strong>: copy the <strong>Secret key</strong> (<code>sk_test_…</code>).</p>
+</li>
+<li><p><strong>Developers → Webhooks → Add endpoint</strong>: URL <code>$API_URL/v1/billing/webhook</code>, events <code>checkout.session.completed</code>, <code>customer.subscription.updated</code> and <code>customer.subscription.deleted</code>. Copy the endpoint&#39;s <strong>Signing secret</strong> (<code>whsec_…</code>).</p>
+</li>
+<li><p>Store the two secrets, typed straight from the clipboard so they never land in shell history:</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>read -rs STRIPE_KEY &amp;&amp; printf '%s' "$STRIPE_KEY" | gcloud secrets versions add stripe-secret-key --data-file=- --project "$PROJECT_ID"
+read -rs STRIPE_WHSEC &amp;&amp; printf '%s' "$STRIPE_WHSEC" | gcloud secrets versions add stripe-webhook-secret --data-file=- --project "$PROJECT_ID"
+unset STRIPE_KEY STRIPE_WHSEC</code></pre></div></li>
+<li><p>Set <code>enable_billing = true</code> and <code>stripe_price_id = &quot;price_…&quot;</code> in the tfvars, then plan and apply (step 6d).</p>
+</li>
+</ol>
+<p><strong>Cloud CDN for assets.</strong> Set <code>asset_domain</code> to a hostname you control and apply. Point that hostname&#39;s DNS <code>A</code> record at the <code>assets_ip</code> output. The managed certificate becomes active only after DNS resolves, which can take a while; assets keep using <code>storage.googleapis.com</code> until you switch.</p>
+<p><strong>Custom web domain.</strong> Add it under App Hosting → Settings → Domains, to Firebase Auth authorized domains, to the Google Auth Platform authorized domains and to the Browser key&#39;s website restrictions. Then change <code>web_url</code> in the tfvars and <code>WEB_URL</code> in <code>apphosting.&lt;env&gt;.yaml</code> to the new origin, apply Terraform and roll out the web app again.</p>
+<p><strong>Nightly model evaluations.</strong> The <code>builder-evaluations</code> workflow runs a billable evaluation against staging Vertex AI each night, signing in with Workload Identity Federation instead of a key. Create the identity once:</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>gcloud iam workload-identity-pools create github --project "$PROJECT_ID" \
+  --location=global --display-name='GitHub Actions'
+gcloud iam workload-identity-pools providers create-oidc just-imagine --project "$PROJECT_ID" \
+  --location=global --workload-identity-pool=github \
+  --issuer-uri='https://token.actions.githubusercontent.com' \
+  --attribute-mapping='google.subject=assertion.sub,attribute.repository=assertion.repository' \
+  --attribute-condition="assertion.repository=='mubinui/just-imagine'"
+gcloud iam service-accounts create imagine-evals --project "$PROJECT_ID" \
+  --display-name='Nightly builder evaluations'
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="serviceAccount:imagine-evals@$PROJECT_ID.iam.gserviceaccount.com" \
+  --role='roles/aiplatform.user'
+gcloud iam service-accounts add-iam-policy-binding \
+  "imagine-evals@$PROJECT_ID.iam.gserviceaccount.com" --project "$PROJECT_ID" \
+  --role='roles/iam.workloadIdentityUser' \
+  --member="principalSet://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/github/attribute.repository/mubinui/just-imagine"</code></pre></div><p>Then in GitHub, open <strong>Settings → Environments</strong>, create <code>staging</code>, and add these <strong>variables</strong> (not secrets; none of them grants access by itself):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>GCP_PROJECT_ID</code></td>
+<td>The staging project ID</td>
+</tr>
+<tr>
+<td><code>SCENE_MODEL</code></td>
+<td><code>gemini-4-argon</code> (or your <code>SCENE_MODEL</code>)</td>
+</tr>
+<tr>
+<td><code>FAST_MODEL</code></td>
+<td><code>gemini-3.8-flash</code> (or your <code>FAST_MODEL</code>)</td>
+</tr>
+<tr>
+<td><code>WIF_PROVIDER</code></td>
+<td><code>projects/&lt;project-number&gt;/locations/global/workloadIdentityPools/github/providers/just-imagine</code></td>
+</tr>
+<tr>
+<td><code>EVAL_SERVICE_ACCOUNT</code></td>
+<td><code>imagine-evals@&lt;staging-project-id&gt;.iam.gserviceaccount.com</code></td>
+</tr>
+</tbody></table>
+</div><p>Until they exist, the scheduled job stops at its configuration check.</p>
 <h2 id="step-11-promote-to-production"><a class="anchor" href="#step-11-promote-to-production" aria-hidden="true">#</a>Step 11: Promote to production</h2><p>Production is a separate project that receives the <strong>same image digest</strong> staging accepted. Nothing is rebuilt.</p>
 <ol>
-<li><p>Repeat steps 1 to 5 for the production project, with its own names, state bucket and <code>production.tfvars</code>. Run <code>terraform init -reconfigure</code> with the production bucket.</p>
+<li><p>Repeat steps 1 to 5 for the production project, with its own names, state bucket and <code>production.tfvars</code>, and run <code>terraform init -reconfigure</code> with the production bucket. Repeat step 3 too: production has its own Firebase web config and authorized domains.</p>
 </li>
 <li><p>Let production pull the staging image. Grant the production Cloud Run service agent read access on the staging registry:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>export PROD_NUMBER="$(gcloud projects describe '&lt;prod-project-id>' --format='value(projectNumber)')"
@@ -365,14 +992,150 @@ gcloud artifacts repositories add-iam-policy-binding just-imagine \
 </li>
 <li><p>Run step 6d with <code>-var-file=production.tfvars</code> and <code>-var=&quot;image=&lt;accepted-digest&gt;&quot;</code>, then step 6e against the production project. The production Terraform also creates a <code>just-imagine</code> registry, unused when you pull from staging.</p>
 </li>
-<li><p>Create the production App Hosting backend (step 8) with an <code>apphosting.production.yaml</code>, and roll out the <strong>same Git commit</strong> staging accepted.</p>
+<li><p>Create the production App Hosting backend (step 8) with an <code>apphosting.production.yaml</code> holding production values, and roll out the <strong>same Git commit</strong> staging accepted.</p>
 </li>
-<li><p>Run step 9&#39;s checks with a synthetic production family.</p>
+<li><p>Do <strong>not</strong> run the demo school seed in production. Run step 9&#39;s checks with a synthetic production family.</p>
+</li>
+<li><p>Billing in production stays off until live payments are approved and the API&#39;s test-mode guard is lifted in a reviewed release.</p>
 </li>
 </ol>
-<p><strong>Later backend releases</strong> use <a href="https://github.com/mubinui/just-imagine/blob/main/cloudbuild.promote.yaml"><code>cloudbuild.promote.yaml</code></a>. Create a manual Cloud Build trigger in the production project that uses this file, requires approval, and takes <code>_IMAGE_DIGEST</code> as a substitution. Its build service account needs <code>roles/run.admin</code>, plus <code>roles/iam.serviceAccountUser</code> on the three <code>imagine-*</code> service accounts. The file refuses anything that is not an <code>@sha256:</code> digest. After each promotion, update the digest in <code>production.tfvars</code> so the next Terraform plan shows no drift.</p>
+<p><strong>Later backend releases</strong> use <a href="https://github.com/mubinui/just-imagine/blob/main/cloudbuild.promote.yaml"><code>cloudbuild.promote.yaml</code></a>. Create a manual Cloud Build trigger in the production project that uses this file, requires approval and takes <code>_IMAGE_DIGEST</code> as a substitution. Its build service account needs <code>roles/run.admin</code>, plus <code>roles/iam.serviceAccountUser</code> on the three <code>imagine-*</code> service accounts. The file refuses anything that is not an <code>@sha256:</code> digest. After each promotion, update the digest in <code>production.tfvars</code> so the next Terraform plan shows no drift.</p>
+<h2 id="release-checklist"><a class="anchor" href="#release-checklist" aria-hidden="true">#</a>Release checklist</h2><p>Tick every line before calling an environment done.</p>
+<p><strong>Project and access</strong></p>
+<ul>
+<li class="task"><label><input type="checkbox"> <span>Separate staging and production projects, billing linked, Firebase added.</span></label></li><li class="task"><label><input type="checkbox"> <span>Deploying from a green <code>main</code> commit; nothing from <code>demo</code>.</span></label></li></ul>
+<p><strong>Sign-in</strong></p>
+<ul>
+<li class="task"><label><input type="checkbox"> <span>Email/Password and Google enabled, with a project support email.</span></label></li><li class="task"><label><input type="checkbox"> <span>Google Auth Platform branding set and the app <strong>In production</strong>, so any Google account can sign in.</span></label></li><li class="task"><label><input type="checkbox"> <span><code>WEB_URL</code> host (and any custom domain) in Firebase Auth authorized domains.</span></label></li><li class="task"><label><input type="checkbox"> <span>Browser key restricted to the web and auth domains.</span></label></li></ul>
+<p><strong>Terraform</strong></p>
+<ul>
+<li class="task"><label><input type="checkbox"> <span>State in the versioned <code>&lt;project&gt;-tfstate</code> bucket.</span></label></li><li class="task"><label><input type="checkbox"> <span><code>project_id</code>, <code>web_url</code>, <code>asset_bucket</code> set; <code>image</code> is a <code>@sha256:</code> digest.</span></label></li><li class="task"><label><input type="checkbox"> <span><code>service_urls</code> output matches <code>API_URL</code> and <code>GATEWAY_URL</code>.</span></label></li><li class="task"><label><input type="checkbox"> <span>Firestore rules and indexes deployed.</span></label></li></ul>
+<p><strong>Services</strong></p>
+<ul>
+<li class="task"><label><input type="checkbox"> <span>All three Cloud Run services ready, each with the variables in the backend table.</span></label></li><li class="task"><label><input type="checkbox"> <span><code>imagine-tasks</code> holds <code>roles/run.invoker</code> on <code>imagine-builder</code>.</span></label></li><li class="task"><label><input type="checkbox"> <span>No <code>GEMINI_API_KEY</code>, <code>LOCAL_DEV</code> or emulator variable on any service.</span></label></li><li class="task"><label><input type="checkbox"> <span>Every model in the model table answers in this project.</span></label></li></ul>
+<p><strong>Web</strong></p>
+<ul>
+<li class="task"><label><input type="checkbox"> <span><code>apphosting.&lt;env&gt;.yaml</code> has all nine variables, with <code>wss://</code> for the gateway.</span></label></li><li class="task"><label><input type="checkbox"> <span>Backend live branch is <code>main</code> and its environment name matches the file.</span></label></li><li class="task"><label><input type="checkbox"> <span>App Hosting runtime identity has <code>roles/datastore.user</code> and <code>roles/firebaseauth.admin</code> (or the custom role).</span></label></li></ul>
+<p><strong>Every role signs in</strong></p>
+<ul>
+<li class="task"><label><input type="checkbox"> <span>Parent with email and with Google; child profile created.</span></label></li><li class="task"><label><input type="checkbox"> <span>Teacher through an invite link, with email or Google.</span></label></li><li class="task"><label><input type="checkbox"> <span>Student with school code, username and PIN.</span></label></li><li class="task"><label><input type="checkbox"> <span>Operator at <code>/admin/sign-in</code>.</span></label></li><li class="task"><label><input type="checkbox"> <span>Family plan starts and stops without payment (unless Stripe is on).</span></label></li></ul>
+<p><strong>Operations</strong></p>
+<ul>
+<li class="task"><label><input type="checkbox"> <span>An operator account exists; System shows every service up.</span></label></li><li class="task"><label><input type="checkbox"> <span>Notification channels set and applied.</span></label></li><li class="task"><label><input type="checkbox"> <span>Stripe (if enabled): test-mode secrets in Secret Manager, webhook endpoint with three events, <code>stripe_price_id</code> set.</span></label></li><li class="task"><label><input type="checkbox"> <span>Current Cloud Run revisions and App Hosting rollout written down for rollback.</span></label></li></ul>
+<h2 id="run-and-operate"><a class="anchor" href="#run-and-operate" aria-hidden="true">#</a>Run and operate</h2><h3 id="run-it-on-your-machine"><a class="anchor" href="#run-it-on-your-machine" aria-hidden="true">#</a>Run it on your machine</h3><div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Command</th>
+<th>Open</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Full local stack</td>
+<td><code>pnpm local:start</code></td>
+<td><a href="http://localhost:3300">http://localhost:3300</a></td>
+<td>Web, API, builder, gateway, Auth and Firestore emulators in Docker. Data persists in Docker volumes</td>
+</tr>
+<tr>
+<td>Sample mode</td>
+<td><code>pnpm --filter @just-imagine/fixtures dev</code>, then <code>pnpm --filter @just-imagine/web dev:fake</code></td>
+<td><a href="http://localhost:3000">http://localhost:3000</a></td>
+<td>Sample worlds only, no sign-in, voice or payments</td>
+</tr>
+</tbody></table>
+</div><p>For the full stack, Docker Desktop (or Engine with Compose) is the only requirement. <code>pnpm local:start</code> copies the root <code>.env.example</code> to a private <code>.env.local</code> the first time; add a <code>GEMINI_API_KEY</code> there for live voice and AI on your machine only. Then:</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>pnpm local:status          # container health
+pnpm local:logs            # follow every service
+pnpm local:reload-key      # after changing a key or model in .env.local
+pnpm local:stop            # stop and keep all data</code></pre></div><p>Never point the local stack at a cloud project, and never copy a cloud credential into <code>.env.local</code>. <a href="https://github.com/mubinui/just-imagine/blob/main/docs/handoff/local-development.md">local-development.md</a> has the details.</p>
+<h3 id="operate-the-cloud-environment"><a class="anchor" href="#operate-the-cloud-environment" aria-hidden="true">#</a>Operate the cloud environment</h3><p><strong>Logs.</strong> Every service writes structured JSON to Cloud Logging:</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="imagine-api" AND severity>=WARNING' \
+  --project "$PROJECT_ID" --freshness=1h --limit=50</code></pre></div><p>Replace <code>imagine-api</code> with <code>imagine-gateway</code> or <code>imagine-builder</code>. Web logs are in the App Hosting backend&#39;s <strong>Logs</strong> tab.</p>
+<p><strong>Stop new sessions and builds in an emergency.</strong> Operator console → <strong>System → Kill switch</strong>, with a reason. It is audited and takes effect at once; turn it off the same way.</p>
+<p><strong>Scale.</strong> Instance limits live in <code>infra/terraform/main.tf</code> (<code>services</code>): gateway 1 to 50, API and builder 0 to 20. Change them there and apply; do not edit Cloud Run by hand, or the next plan reverts it.</p>
+<p><strong>Rotate a Stripe secret</strong> (only if billing is on): add a new version with the step 10 command, then start a new API revision so its instances read <code>latest</code>:</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>gcloud run services update imagine-api --region "$REGION" --project "$PROJECT_ID" \
+  --revision-suffix="rotate-$(date +%s)"</code></pre></div><p><strong>Release a new backend version.</strong> Repeat steps 6b to 6d with the new <code>main</code> commit in staging, accept it (the <a href="#testing-guide">testing guide</a>), then promote the same digest (step 11). Roll out the web app from the same commit.</p>
+<p><strong>Watch.</strong> The Monitoring dashboard <strong>Just Imagine operations</strong> shows first-audio latency, builder failures and gateway errors; uptime checks cover the web app and <code>/health</code> on the API. Alerts go to <code>notification_channels</code>.</p>
+<h2 id="testing-guide"><a class="anchor" href="#testing-guide" aria-hidden="true">#</a>Testing guide</h2><h3 id="before-a-release-on-your-machine-and-in-ci"><a class="anchor" href="#before-a-release-on-your-machine-and-in-ci" aria-hidden="true">#</a>Before a release (on your machine and in CI)</h3><div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>pnpm install --frozen-lockfile
+node --test scripts/local.test.mjs scripts/env-contract.test.mjs   # deployment contract
+pnpm format:check
+pnpm lint
+pnpm typecheck
+env -u FIRESTORE_EMULATOR_HOST -u FIREBASE_AUTH_EMULATOR_HOST pnpm test   # unit + emulator suites</code></pre></div><p><code>pnpm test</code> starts disposable Firestore and Auth emulators itself (Java 21 needed) and runs the server-core, API, builder and gateway suites against them. It never touches a real project.</p>
+<p><strong>Browser tests</strong> run the web app in sample mode:</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>NEXT_PUBLIC_FAKE=1 JUST_IMAGINE_SAMPLE_BUILD=1 pnpm build
+pnpm --filter @just-imagine/web exec playwright install chromium
+pnpm --filter @just-imagine/fixtures dev &amp;                          # fixture gateway on 8787
+NEXT_PUBLIC_FAKE=1 pnpm --filter @just-imagine/web start --port 3100 &amp;
+pnpm --filter @just-imagine/web e2e</code></pre></div><p>The <code>ci</code> workflow runs all of this on every push to <code>main</code>. Deploy only a commit whose run is green.</p>
+<h3 id="after-deploying-staging-then-production"><a class="anchor" href="#after-deploying-staging-then-production" aria-hidden="true">#</a>After deploying (staging, then production)</h3><p><strong>Smoke checks</strong> (one minute):</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>curl -fsS "$API_URL/health" &amp;&amp; echo ' api ok'
+curl -s -o /dev/null -w 'web %{http_code}\n' "$WEB_URL/"
+curl -s -o /dev/null -w 'gateway %{http_code} (426 is correct)\n' "${GATEWAY_URL/wss:/https:}/"
+gcloud tasks queues list --location "$REGION" --project "$PROJECT_ID"</code></pre></div><p><strong>Acceptance</strong> with synthetic accounts. Tick each line in staging, and the sign-in and plan lines again in production:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Parent sign-in</td>
+<td>Email sign-up with consent; Google sign-in with a second account; sign out and back in</td>
+</tr>
+<tr>
+<td>Child</td>
+<td>Add a child; the child picks the profile; Studio loads</td>
+</tr>
+<tr>
+<td>Voice</td>
+<td>Talk to the friend: the first reply arrives within a few seconds; voice ends cleanly and reconnects after a network drop</td>
+</tr>
+<tr>
+<td>Worlds</td>
+<td>A spoken idea becomes a world; it opens from <strong>My worlds</strong>; its pictures load from the asset bucket</td>
+</tr>
+<tr>
+<td>Learn and stories</td>
+<td>Learn islands open, a learning game plays, a story builds and reads</td>
+</tr>
+<tr>
+<td>Plan</td>
+<td><strong>Start the Family plan</strong> without payment and <strong>Return to the free plan</strong> (or a Stripe test checkout if billing is on)</td>
+</tr>
+<tr>
+<td>School</td>
+<td>Operator creates a school and invites a teacher; the teacher joins through the link with email or Google</td>
+</tr>
+<tr>
+<td>Teacher</td>
+<td>Creates a class and a student; copies, edits and publishes a lesson; sees results</td>
+</tr>
+<tr>
+<td>Student</td>
+<td>Signs in with school code, username and PIN; opens a lesson, runs a simulation, submits the quiz; the score shows for the teacher</td>
+</tr>
+<tr>
+<td>Operator</td>
+<td>System shows every service up and the right models; overview figures load without child names; the kill switch turns on and off</td>
+</tr>
+<tr>
+<td>Deletion</td>
+<td>Deleting a child, then the family, removes their data; the <code>deletions</code> queue drains</td>
+</tr>
+<tr>
+<td>Monitoring</td>
+<td>The dashboard has data; both uptime checks pass</td>
+</tr>
+</tbody></table>
+</div><p>Keep job IDs, error categories and timings as evidence. Never copy keys, tokens, PINs, transcripts, child photos or audio into tickets.</p>
 <h2 id="rolling-back"><a class="anchor" href="#rolling-back" aria-hidden="true">#</a>Rolling back</h2><p>Before every release, write down the current Cloud Run revisions and the current App Hosting rollout:</p>
-<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>gcloud run revisions list --service imagine-api --region "$REGION" --project "$PROJECT_ID"</code></pre></div><p>To return a service to a known good revision:</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>for s in api gateway builder; do
+  gcloud run revisions list --service "imagine-$s" --region "$REGION" --project "$PROJECT_ID" --limit 3
+done</code></pre></div><p>To return a service to a known good revision:</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>gcloud run services update-traffic imagine-api \
   --project "$PROJECT_ID" --region "$REGION" \
   --to-revisions='&lt;PREVIOUS_GOOD_REVISION>=100'</code></pre></div><p>Repeat for <code>imagine-gateway</code> and <code>imagine-builder</code> as needed, and roll the web app back to the matching rollout in the App Hosting console. Check first that stored lessons, attempts, jobs and generated worlds are still readable by the older code. Never restore old database documents over current user data.</p>
@@ -392,16 +1155,20 @@ gcloud artifacts repositories add-iam-policy-binding just-imagine \
 <td>Import it (step 2) instead of creating a second database</td>
 </tr>
 <tr>
+<td>Web build fails with &quot;Refusing a production build in sample mode&quot;</td>
+<td>Something set <code>NEXT_PUBLIC_FAKE=1</code>; deployments must use <code>0</code></td>
+</tr>
+<tr>
 <td>Browser shows CORS or origin errors</td>
-<td><code>web_url</code> in <code>.tfvars</code>, <code>WEB_URL</code> in App Hosting and the address bar are the exact same origin</td>
+<td><code>web_url</code> in tfvars, <code>WEB_URL</code> in App Hosting and the address bar are the exact same origin</td>
 </tr>
 <tr>
 <td>Sign-in popup fails</td>
-<td>The web host is in Firebase Auth authorized domains; Google provider is enabled</td>
+<td>The web host is an authorized domain; Google is enabled; the Browser key allows the web and auth domains</td>
 </tr>
 <tr>
 <td>Parent session fails after sign-in</td>
-<td>App Hosting runtime identity has the step 8c roles; the Firebase config belongs to this project</td>
+<td>The runtime identity has the step 8c roles; <code>GOOGLE_CLOUD_PROJECT</code> and the Firebase config belong to this project</td>
 </tr>
 <tr>
 <td>Web calls the wrong API or gateway</td>
@@ -413,19 +1180,35 @@ gcloud artifacts repositories add-iam-policy-binding just-imagine \
 </tr>
 <tr>
 <td>Worlds stay &quot;building&quot;</td>
-<td><code>world-builds</code> queue, the <code>imagine-tasks</code> invoker grant on the builder, and builder logs for the job ID</td>
+<td><code>world-builds</code> queue, the <code>imagine-tasks</code> invoker grant on the builder, builder logs for the job ID</td>
 </tr>
 <tr>
 <td>AI unavailable or timing out</td>
 <td>Vertex AI model access and quota in <code>us-central1</code> (and <code>global</code> for the game model); the error category in logs</td>
 </tr>
 <tr>
+<td>Checkout says billing is unavailable</td>
+<td><code>enable_billing = true</code> was applied, both secrets have a version, and the key starts with <code>sk_test_</code></td>
+</tr>
+<tr>
+<td>Stripe webhook returns 400</td>
+<td>The endpoint&#39;s signing secret matches <code>stripe-webhook-secret</code>; the event is from test mode</td>
+</tr>
+<tr>
 <td>Deletion stays pending</td>
-<td><code>deletions</code> queue, the Scheduler job&#39;s runs, and <code>/internal/deletions</code> logs on the API</td>
+<td><code>deletions</code> queue, the Scheduler job&#39;s runs, <code>/internal/deletions</code> logs on the API</td>
+</tr>
+<tr>
+<td>System page shows a service unconfigured</td>
+<td>The API revision predates <code>ADMIN_HEALTH_TARGETS</code>; apply Terraform again</td>
 </tr>
 <tr>
 <td>No alerts arrive</td>
 <td><code>notification_channels</code> is set and Terraform was applied after setting it</td>
+</tr>
+<tr>
+<td>Nightly evaluation fails at its configuration check</td>
+<td>The five GitHub <code>staging</code> environment variables exist</td>
 </tr>
 </tbody></table>
 </div><p>When collecting evidence for an incident, keep job IDs, error categories and timings. Never copy keys, tokens, transcripts, child photos or audio into logs or tickets.</p>

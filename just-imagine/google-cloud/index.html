@@ -1015,7 +1015,7 @@ gcloud artifacts repositories add-iam-policy-binding just-imagine \
 <li class="task"><label><input type="checkbox"> <span>All three Cloud Run services ready, each with the variables in the backend table.</span></label></li><li class="task"><label><input type="checkbox"> <span><code>imagine-tasks</code> holds <code>roles/run.invoker</code> on <code>imagine-builder</code>.</span></label></li><li class="task"><label><input type="checkbox"> <span>No <code>GEMINI_API_KEY</code>, <code>LOCAL_DEV</code> or emulator variable on any service.</span></label></li><li class="task"><label><input type="checkbox"> <span>Every model in the model table answers in this project.</span></label></li></ul>
 <p><strong>Web</strong></p>
 <ul>
-<li class="task"><label><input type="checkbox"> <span><code>apphosting.&lt;env&gt;.yaml</code> has all nine variables, with <code>wss://</code> for the gateway.</span></label></li><li class="task"><label><input type="checkbox"> <span>Backend live branch is <code>main</code> and its environment name matches the file.</span></label></li><li class="task"><label><input type="checkbox"> <span>App Hosting runtime identity has <code>roles/datastore.user</code> and <code>roles/firebaseauth.admin</code> (or the custom role).</span></label></li></ul>
+<li class="task"><label><input type="checkbox"> <span><code>apphosting.&lt;env&gt;.yaml</code> has all nine variables, with <code>wss://</code> for the gateway.</span></label></li><li class="task"><label><input type="checkbox"> <span>Backend live branch is <code>main</code> and its environment name matches the file.</span></label></li><li class="task"><label><input type="checkbox"> <span>The newest web rollout and the Cloud Run image tag are both the released <code>main</code> commit (see <a href="#testing-guide">Verify what is deployed</a>).</span></label></li><li class="task"><label><input type="checkbox"> <span>App Hosting runtime identity has <code>roles/datastore.user</code> and <code>roles/firebaseauth.admin</code> (or the custom role).</span></label></li></ul>
 <p><strong>Every role signs in</strong></p>
 <ul>
 <li class="task"><label><input type="checkbox"> <span>Parent with email and with Google; child profile created.</span></label></li><li class="task"><label><input type="checkbox"> <span>Teacher through an invite link, with email or Google.</span></label></li><li class="task"><label><input type="checkbox"> <span>Student with school code, username and PIN.</span></label></li><li class="task"><label><input type="checkbox"> <span>Operator at <code>/admin/sign-in</code>.</span></label></li><li class="task"><label><input type="checkbox"> <span>Family plan starts and stops without payment (unless Stripe is on).</span></label></li></ul>
@@ -1070,7 +1070,22 @@ pnpm --filter @just-imagine/web exec playwright install chromium
 pnpm --filter @just-imagine/fixtures dev &amp;                          # fixture gateway on 8787
 NEXT_PUBLIC_FAKE=1 pnpm --filter @just-imagine/web start --port 3100 &amp;
 pnpm --filter @just-imagine/web e2e</code></pre></div><p>The <code>ci</code> workflow runs all of this on every push to <code>main</code>. Deploy only a commit whose run is green.</p>
-<h3 id="after-deploying-staging-then-production"><a class="anchor" href="#after-deploying-staging-then-production" aria-hidden="true">#</a>After deploying (staging, then production)</h3><p><strong>Smoke checks</strong> (one minute):</p>
+<h3 id="after-deploying-staging-then-production"><a class="anchor" href="#after-deploying-staging-then-production" aria-hidden="true">#</a>After deploying (staging, then production)</h3><p><strong>Verify what is deployed first.</strong> The web app and the backend are built separately, so check both against the <code>main</code> commit you meant to release:</p>
+<div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>export RELEASE="$(git rev-parse origin/main)"     # the commit you meant to deploy
+git log -1 --oneline "$RELEASE"
+
+# Web: App Hosting's newest rollout must be from branch main at $RELEASE.
+#   Firebase console → App Hosting → &lt;backend> → Rollouts (commit and branch per rollout)
+#   Firebase console → App Hosting → &lt;backend> → Settings → Deployment → Live branch = main
+
+# Backend: the image every service runs, and the commit it was built from.
+for s in api gateway builder; do
+  gcloud run services describe "imagine-$s" --region "$REGION" --project "$PROJECT_ID" \
+    --format='value(spec.template.spec.containers[0].image)'
+done
+gcloud artifacts docker tags list "$REGION-docker.pkg.dev/$PROJECT_ID/just-imagine/services" \
+  --project "$PROJECT_ID" --format='table(tag,version)'</code></pre></div><p>All three services must run the same <code>@sha256:</code> digest, and that digest&#39;s tag in the list must be <code>$RELEASE</code>. If the web rollout or the image tag is an older commit or another branch, you are looking at old code: set the live branch to <code>main</code> and roll out again, or rebuild the image from a clean <code>main</code> checkout (steps 6b to 6d). Only <code>main</code> (and <code>demo</code>, which is never deployed) carries the current app; older <code>feat/*</code> branches on GitHub have the previous UI.</p>
+<p><strong>Smoke checks</strong> (one minute):</p>
 <div class="code"><div class="code-bar"><span>sh</span><button type="button" class="copy">Copy</button></div><pre><code>curl -fsS "$API_URL/health" &amp;&amp; echo ' api ok'
 curl -s -o /dev/null -w 'web %{http_code}\n' "$WEB_URL/"
 curl -s -o /dev/null -w 'gateway %{http_code} (426 is correct)\n' "${GATEWAY_URL/wss:/https:}/"
@@ -1169,6 +1184,10 @@ done</code></pre></div><p>To return a service to a known good revision:</p>
 <tr>
 <td>Parent session fails after sign-in</td>
 <td>The runtime identity has the step 8c roles; <code>GOOGLE_CLOUD_PROJECT</code> and the Firebase config belong to this project</td>
+</tr>
+<tr>
+<td>Old screens after a deploy</td>
+<td>The web rollout&#39;s branch and commit, and the Cloud Run image tag, match the released <code>main</code> commit (Testing guide → verify what is deployed); then reload on the device or use a private tab</td>
 </tr>
 <tr>
 <td>Web calls the wrong API or gateway</td>
